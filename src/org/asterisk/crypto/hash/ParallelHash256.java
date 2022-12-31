@@ -28,7 +28,7 @@ public class ParallelHash256 implements Digest {
 
     private static long[] precomputeState(byte[] customization) {
         if (customization.length > 118) {
-            throw new UnsupportedOperationException("Customization strings of over 150 bytes are not supported yet!");
+            throw new UnsupportedOperationException("Customization strings of over 118 bytes are not supported yet!");
         }
 
         long[] state = new long[25];
@@ -36,14 +36,14 @@ public class ParallelHash256 implements Digest {
         state[0] = PREFIX_0;
         state[1] = PREFIX_1;
 
-        byte[] buffer = new byte[BLOCK_SIZE];
+        byte[] buffer = new byte[BLOCK_SIZE - 16];
 
-        buffer[16] = 0x01;
-        buffer[17] = (byte) customization.length;
-        System.arraycopy(customization, 0, buffer, 18, customization.length);
+        buffer[0] = 0x01;
+        buffer[0] = (byte) customization.length;
+        System.arraycopy(customization, 0, buffer, 2, customization.length);
 
-        for (int i = 2; i < 17; i++) {
-            state[i] = Tools.load64BE(buffer, 8 * i);
+        for (int i = 0; i < 15; i++) {
+            state[i + 2] = Tools.load64BE(buffer, 8 * i);
         }
 
         KeccakP.keccak_f1600(state);
@@ -136,20 +136,6 @@ public class ParallelHash256 implements Digest {
             KeccakP.keccak_f1600(state);
         }
 
-        public void finish(long[] output) {
-            if (position == BLOCK_SIZE - 1) {
-                buffer.set(ValueLayout.JAVA_BYTE, position, (byte) 0x9f);
-            } else {
-                buffer.set(ValueLayout.JAVA_BYTE, position, (byte) 0x1f);
-                buffer.asSlice(position + 1, BLOCK_SIZE - 2 - position).fill((byte) 0);
-                buffer.set(ValueLayout.JAVA_BYTE, BLOCK_SIZE - 1, (byte) 0x80);
-            }
-
-            ingestOneBlock(buffer, 0);
-
-            System.arraycopy(state, 0, output, 0, 8);
-        }
-
         public void ingest(MemorySegment input, long offset, long length) {
             if (position > 0) {
                 int take = (int) Math.min(length, BLOCK_SIZE - position);
@@ -171,6 +157,20 @@ public class ParallelHash256 implements Digest {
                 MemorySegment.copy(input, offset, buffer, 0, length);
                 position = (int) length;
             }
+        }
+
+        public void finish(long[] output) {
+            if (position == BLOCK_SIZE - 1) {
+                buffer.set(ValueLayout.JAVA_BYTE, position, (byte) 0x9f);
+            } else {
+                buffer.set(ValueLayout.JAVA_BYTE, position, (byte) 0x1f);
+                buffer.asSlice(position + 1, BLOCK_SIZE - 2 - position).fill((byte) 0);
+                buffer.set(ValueLayout.JAVA_BYTE, BLOCK_SIZE - 1, (byte) 0x80);
+            }
+
+            ingestOneBlock(buffer, 0);
+
+            System.arraycopy(state, 0, output, 0, 8);
         }
 
         public void reset() {

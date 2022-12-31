@@ -24,6 +24,36 @@ public enum Colm0 {
 
     private static final int PARAM = 0x8000;
 
+    public static void rho(int[] x, int[] st) {
+        int st0 = st[0], st1 = st[1], st2 = st[2], st3 = st[3];
+
+        st[0] = x[0] ^ ((st0 << 1) | (st1 >>> 31));
+        st[1] = x[1] ^ ((st1 << 1) | (st2 >>> 31));
+        st[2] = x[2] ^ ((st2 << 1) | (st3 >>> 31));
+        st[3] = x[3] ^ ((st3 << 1) | ((st0 >> 31) & 0x87));
+
+        x[0] = st[0] ^ st0;
+        x[1] = st[1] ^ st1;
+        x[2] = st[2] ^ st2;
+        x[3] = st[3] ^ st3;
+
+    }
+
+    public static void rhoInv(int[] y, int[] st) {
+        int st0 = st[0], st1 = st[1], st2 = st[2], st3 = st[3];
+
+        st[0] ^= y[0];
+        st[1] ^= y[1];
+        st[2] ^= y[2];
+        st[3] ^= y[3];
+
+        y[0] = st[0] ^ ((st0 << 1) | (st1 >>> 31));
+        y[1] = st[1] ^ ((st1 << 1) | (st2 >>> 31));
+        y[2] = st[2] ^ ((st2 << 1) | (st3 >>> 31));
+        y[3] = st[3] ^ ((st3 << 1) | ((st0 >> 31) & 0x87));
+
+    }
+
     public int keyLength() {
         return 16;
     }

@@ -112,7 +112,7 @@ public class Blake2b implements Digest, Mac {
 
     @Override
     public Mac.Engine start(byte[] key) {
-        return Blake2b.this.startSalted(key, DEFAULT_SALT);
+        return startSalted(key, DEFAULT_SALT);
     }
 
     public Mac.Engine startSalted(byte[] key, byte[] salt) {

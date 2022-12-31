@@ -36,14 +36,14 @@ public class ParallelHash128 implements Digest {
         state[0] = PREFIX_0;
         state[1] = PREFIX_1;
 
-        byte[] buffer = new byte[BLOCK_SIZE];
+        byte[] buffer = new byte[BLOCK_SIZE - 16];
 
-        buffer[16] = 0x01;
-        buffer[17] = (byte) customization.length;
-        System.arraycopy(customization, 0, buffer, 18, customization.length);
+        buffer[0] = 0x01;
+        buffer[1] = (byte) customization.length;
+        System.arraycopy(customization, 0, buffer, 2, customization.length);
 
-        for (int i = 2; i < 21; i++) {
-            state[i] = Tools.load64BE(buffer, 8 * i);
+        for (int i = 0; i < 19; i++) {
+            state[i + 2] = Tools.load64BE(buffer, 8 * i);
         }
 
         KeccakP.keccak_f1600(state);

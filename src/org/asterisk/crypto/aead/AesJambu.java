@@ -90,9 +90,9 @@ public enum AesJambu implements AuthenticatedCipher {
             protected int encryptLastBlock(MemorySegment buffer, int length, MemorySegment ciphertext) {
                 if (length == 8) {
                     encryptOneBlock(buffer, 0, ciphertext, 0);
-
+                    length = 0;
                 }
-                if (length == 8 || length == 0) {
+                if (length == 0) {
                     aes.encryptBlock(state, 0, state, 0);
 
                     state[0] ^= 0x80000000;
