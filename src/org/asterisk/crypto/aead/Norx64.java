@@ -31,112 +31,113 @@ import static java.lang.foreign.MemorySession.global;
  *
  * @author Sayantan Chakraborty
  */
-public final class Norx32 implements AuthenticatedCipher {
+public final class Norx64 implements AuthenticatedCipher {
 
-    private static final int RATE = 48;
+    private static final int RATE = 96;
 
     private static final int HEADER = 0x01, PAYLOAD = 0x02, TRAILER = 0x04, TAG = 0x08, BRANCH = 0x10, MERGE = 0x20;
 
-    private static final ValueLayout.OfInt LAYOUT = Tools.LITTLE_ENDIAN_32_BIT;
+    private static final ValueLayout.OfLong LAYOUT = Tools.LITTLE_ENDIAN_64_BIT;
 
-    private static final int[] CONST = {
-        0xa3d8d930, 0x3fa8b72c, 0xed84eb49, 0xedca4787, 0x335463eb, 0xf994220b, 0xbe0bf5c9, 0xd7c49104
+    private static final long[] CONST = {
+        0xb15e641748de5e6bL, 0xaa95e955e10f8410L, 0x28d1034441a9dd40L, 0x7f31bbf964e93bf5L,
+        0xb5e9e22493dffb96L, 0xb980c852479fafbdL, 0xda24516bf55eafd4L, 0x86026ae8536f1501L
     };
 
-    public static void permute(int[] state, int rounds) {
+    public static void permute(long[] state, int rounds) {
         permute(state, state, rounds);
     }
 
-    public static void permute(int[] srcState, int[] destState, int rounds) {
-        int x0 = srcState[0];
-        int x1 = srcState[1];
-        int x2 = srcState[2];
-        int x3 = srcState[3];
-        int x4 = srcState[4];
-        int x5 = srcState[5];
-        int x6 = srcState[6];
-        int x7 = srcState[7];
-        int x8 = srcState[8];
-        int x9 = srcState[9];
-        int x10 = srcState[10];
-        int x11 = srcState[11];
-        int x12 = srcState[12];
-        int x13 = srcState[13];
-        int x14 = srcState[14];
-        int x15 = srcState[15];
+    public static void permute(long[] srcState, long[] destState, int rounds) {
+        long x0 = srcState[0];
+        long x1 = srcState[1];
+        long x2 = srcState[2];
+        long x3 = srcState[3];
+        long x4 = srcState[4];
+        long x5 = srcState[5];
+        long x6 = srcState[6];
+        long x7 = srcState[7];
+        long x8 = srcState[8];
+        long x9 = srcState[9];
+        long x10 = srcState[10];
+        long x11 = srcState[11];
+        long x12 = srcState[12];
+        long x13 = srcState[13];
+        long x14 = srcState[14];
+        long x15 = srcState[15];
 
         for (int i = 0; i < rounds; i++) {
             x0 = x0 ^ x4 ^ ((x0 & x4) << 1);
-            x12 = Integer.rotateRight(x0 ^ x12, 8);
+            x12 = Long.rotateRight(x0 ^ x12, 8);
             x8 = x8 ^ x12 ^ ((x8 & x12) << 1);
-            x4 = Integer.rotateRight(x4 ^ x8, 11);
+            x4 = Long.rotateRight(x4 ^ x8, 19);
             x0 = x0 ^ x4 ^ ((x0 & x4) << 1);
-            x12 = Integer.rotateRight(x0 ^ x12, RATE);
+            x12 = Long.rotateRight(x0 ^ x12, 40);
             x8 = x8 ^ x12 ^ ((x8 & x12) << 1);
-            x4 = Integer.rotateRight(x4 ^ x8, 31);
+            x4 = Long.rotateRight(x4 ^ x8, 63);
 
             x1 = x1 ^ x5 ^ ((x1 & x5) << 1);
-            x13 = Integer.rotateRight(x1 ^ x13, 8);
+            x13 = Long.rotateRight(x1 ^ x13, 8);
             x9 = x9 ^ x13 ^ ((x9 & x13) << 1);
-            x5 = Integer.rotateRight(x5 ^ x9, 11);
+            x5 = Long.rotateRight(x5 ^ x9, 19);
             x1 = x1 ^ x5 ^ ((x1 & x5) << 1);
-            x13 = Integer.rotateRight(x1 ^ x13, RATE);
+            x13 = Long.rotateRight(x1 ^ x13, 40);
             x9 = x9 ^ x13 ^ ((x9 & x13) << 1);
-            x5 = Integer.rotateRight(x5 ^ x9, 31);
+            x5 = Long.rotateRight(x5 ^ x9, 63);
 
             x2 = x2 ^ x6 ^ ((x2 & x6) << 1);
-            x14 = Integer.rotateRight(x2 ^ x14, 8);
+            x14 = Long.rotateRight(x2 ^ x14, 8);
             x10 = x10 ^ x14 ^ ((x10 & x14) << 1);
-            x6 = Integer.rotateRight(x6 ^ x10, 11);
+            x6 = Long.rotateRight(x6 ^ x10, 19);
             x2 = x2 ^ x6 ^ ((x2 & x6) << 1);
-            x14 = Integer.rotateRight(x2 ^ x14, RATE);
+            x14 = Long.rotateRight(x2 ^ x14, 40);
             x10 = x10 ^ x14 ^ ((x10 & x14) << 1);
-            x6 = Integer.rotateRight(x6 ^ x10, 31);
+            x6 = Long.rotateRight(x6 ^ x10, 63);
 
             x3 = x3 ^ x7 ^ ((x3 & x7) << 1);
-            x15 = Integer.rotateRight(x3 ^ x15, 8);
+            x15 = Long.rotateRight(x3 ^ x15, 8);
             x11 = x11 ^ x15 ^ ((x11 & x15) << 1);
-            x7 = Integer.rotateRight(x7 ^ x11, 11);
+            x7 = Long.rotateRight(x7 ^ x11, 19);
             x3 = x3 ^ x7 ^ ((x3 & x7) << 1);
-            x15 = Integer.rotateRight(x3 ^ x15, RATE);
+            x15 = Long.rotateRight(x3 ^ x15, 40);
             x11 = x11 ^ x15 ^ ((x11 & x15) << 1);
-            x7 = Integer.rotateRight(x7 ^ x11, 31);
+            x7 = Long.rotateRight(x7 ^ x11, 63);
 
             x0 = x0 ^ x5 ^ ((x0 & x5) << 1);
-            x15 = Integer.rotateRight(x0 ^ x15, 8);
+            x15 = Long.rotateRight(x0 ^ x15, 8);
             x10 = x10 ^ x15 ^ ((x10 & x15) << 1);
-            x5 = Integer.rotateRight(x5 ^ x10, 11);
+            x5 = Long.rotateRight(x5 ^ x10, 19);
             x0 = x0 ^ x5 ^ ((x0 & x5) << 1);
-            x15 = Integer.rotateRight(x0 ^ x15, RATE);
+            x15 = Long.rotateRight(x0 ^ x15, 40);
             x10 = x10 ^ x15 ^ ((x10 & x15) << 1);
-            x5 = Integer.rotateRight(x5 ^ x10, 31);
+            x5 = Long.rotateRight(x5 ^ x10, 63);
 
             x1 = x1 ^ x6 ^ ((x1 & x6) << 1);
-            x12 = Integer.rotateRight(x1 ^ x12, 8);
+            x12 = Long.rotateRight(x1 ^ x12, 8);
             x11 = x11 ^ x12 ^ ((x11 & x12) << 1);
-            x6 = Integer.rotateRight(x6 ^ x11, 11);
+            x6 = Long.rotateRight(x6 ^ x11, 19);
             x1 = x1 ^ x6 ^ ((x1 & x6) << 1);
-            x12 = Integer.rotateRight(x1 ^ x12, RATE);
+            x12 = Long.rotateRight(x1 ^ x12, 40);
             x11 = x11 ^ x12 ^ ((x11 & x12) << 1);
-            x6 = Integer.rotateRight(x6 ^ x11, 31);
+            x6 = Long.rotateRight(x6 ^ x11, 63);
 
             x2 = x2 ^ x7 ^ ((x2 & x7) << 1);
-            x13 = Integer.rotateRight(x2 ^ x13, 8);
+            x13 = Long.rotateRight(x2 ^ x13, 8);
             x8 = x8 ^ x13 ^ ((x8 & x13) << 1);
-            x7 = Integer.rotateRight(x7 ^ x8, 11);
+            x7 = Long.rotateRight(x7 ^ x8, 19);
             x2 = x2 ^ x7 ^ ((x2 & x7) << 1);
-            x13 = Integer.rotateRight(x2 ^ x13, RATE);
+            x13 = Long.rotateRight(x2 ^ x13, 40);
             x8 = x8 ^ x13 ^ ((x8 & x13) << 1);
-            x7 = Integer.rotateRight(x7 ^ x8, 31);
+            x7 = Long.rotateRight(x7 ^ x8, 63);
 
             x3 = x3 ^ x4 ^ ((x3 & x4) << 1);
-            x14 = Integer.rotateRight(x3 ^ x14, 8);
+            x14 = Long.rotateRight(x3 ^ x14, 8);
             x9 = x9 ^ x14 ^ ((x9 & x14) << 1);
-            x4 = Integer.rotateRight(x4 ^ x9, 11);
+            x4 = Long.rotateRight(x4 ^ x9, 19);
             x3 = x3 ^ x4 ^ ((x3 & x4) << 1);
-            x14 = Integer.rotateRight(x3 ^ x14, RATE);
+            x14 = Long.rotateRight(x3 ^ x14, 40);
             x9 = x9 ^ x14 ^ ((x9 & x14) << 1);
-            x4 = Integer.rotateRight(x4 ^ x9, 31);
+            x4 = Long.rotateRight(x4 ^ x9, 63);
         }
 
         destState[0] = x0;
@@ -167,19 +168,19 @@ public final class Norx32 implements AuthenticatedCipher {
         }
     }
 
-    private static int[] load(byte[] key) {
-        if (key.length < 16) {
-            throw new IllegalArgumentException("Norx32 requires a 16 byte key, " + key.length + " bytes provided");
+    private static long[] load(byte[] key) {
+        if (key.length < 32) {
+            throw new IllegalArgumentException("Norx64 requires a 32 byte key, " + key.length + " bytes provided");
         }
-        return new int[]{
-            Tools.load32LE(key, 0), Tools.load32LE(key, 4), Tools.load32LE(key, 8), Tools.load32LE(key, 12)
+        return new long[]{
+            Tools.load64LE(key, 0), Tools.load64LE(key, 8), Tools.load64LE(key, 16), Tools.load64LE(key, 24)
         };
     }
 
     private final int rounds, parallelism;
 
     @Tested
-    public Norx32(int rounds, int parallelism) {
+    public Norx64(int rounds, int parallelism) {
         if (rounds <= 0) {
             throw new IllegalArgumentException("Rounds <= 0 : " + rounds);
         }
@@ -194,11 +195,11 @@ public final class Norx32 implements AuthenticatedCipher {
     public EncryptEngine startEncryption(byte[] key, byte[] iv) {
         return switch (parallelism) {
             case 1 ->
-                new SerialNorx32Encrypter(key, iv);
+                new SerialNorx64Encrypter(key, iv);
             case 0 ->
-                new BushNorx32Encrypter(key, iv);
+                new BushNorx64Encrypter(key, iv);
             default ->
-                new ParallelNorx32Encrypter(key, iv);
+                new ParallelNorx64Encrypter(key, iv);
         };
     }
 
@@ -206,27 +207,27 @@ public final class Norx32 implements AuthenticatedCipher {
     public DecryptEngine startDecryption(byte[] key, byte[] iv) {
         return switch (parallelism) {
             case 1 ->
-                new SerialNorx32Decrypter(key, iv);
+                new SerialNorx64Decrypter(key, iv);
             case 0 ->
-                new BushNorx32Decrypter(key, iv);
+                new BushNorx64Decrypter(key, iv);
             default ->
-                new ParallelNorx32Decrypter(key, iv);
+                new ParallelNorx64Decrypter(key, iv);
         };
     }
 
     @Override
     public int keyLength() {
-        return 16;
+        return 32;
     }
 
     @Override
     public int ivLength() {
-        return 16;
+        return 32;
     }
 
     @Override
     public int tagLength() {
-        return 16;
+        return 32;
     }
 
     @Override
@@ -239,16 +240,16 @@ public final class Norx32 implements AuthenticatedCipher {
         return ciphertextSize;
     }
 
-    private int[] initialise(int[] k, byte[] iv) {
-        if (iv.length < 16) {
-            throw new IllegalArgumentException("Norx32 needs a 16 byte iv, " + iv.length + " bytes provided!");
+    private long[] initialise(long[] k, byte[] iv) {
+        if (iv.length < 32) {
+            throw new IllegalArgumentException("Norx64 needs a 32 byte iv, " + iv.length + " bytes provided!");
         }
 
-        int[] state = {
-            Tools.load32LE(iv, 0), Tools.load32LE(iv, 4), Tools.load32LE(iv, 8), Tools.load32LE(iv, 12),
+        long[] state = {
+            Tools.load64LE(iv, 0), Tools.load64LE(iv, 8), Tools.load64LE(iv, 16), Tools.load64LE(iv, 24),
             k[0], k[1], k[2], k[3],
             CONST[0], CONST[1], CONST[2], CONST[3],
-            CONST[4] ^ 32, CONST[5] ^ rounds, CONST[6] ^ parallelism, CONST[7] ^ 128
+            CONST[4] ^ 64, CONST[5] ^ rounds, CONST[6] ^ parallelism, CONST[7] ^ 256
         };
 
         permute(state, rounds);
@@ -259,10 +260,9 @@ public final class Norx32 implements AuthenticatedCipher {
         state[15] ^= k[3];
 
         return state;
-
     }
 
-    private void absorbBlock(int[] state, MemorySegment input, long offset, int stage) {
+    private void absorbBlock(long[] state, MemorySegment input, long offset, int stage) {
         assert stage == HEADER || stage == TRAILER;
 
         state[15] ^= stage;
@@ -270,20 +270,20 @@ public final class Norx32 implements AuthenticatedCipher {
         permute(state, rounds);
 
         state[0] ^= input.get(LAYOUT, offset + 0);
-        state[1] ^= input.get(LAYOUT, offset + 4);
-        state[2] ^= input.get(LAYOUT, offset + 8);
-        state[3] ^= input.get(LAYOUT, offset + 12);
-        state[4] ^= input.get(LAYOUT, offset + 16);
-        state[5] ^= input.get(LAYOUT, offset + 20);
-        state[6] ^= input.get(LAYOUT, offset + 24);
-        state[7] ^= input.get(LAYOUT, offset + 28);
-        state[8] ^= input.get(LAYOUT, offset + 32);
-        state[9] ^= input.get(LAYOUT, offset + 36);
-        state[10] ^= input.get(LAYOUT, offset + 40);
-        state[11] ^= input.get(LAYOUT, offset + 44);
+        state[1] ^= input.get(LAYOUT, offset + 8);
+        state[2] ^= input.get(LAYOUT, offset + 16);
+        state[3] ^= input.get(LAYOUT, offset + 24);
+        state[4] ^= input.get(LAYOUT, offset + 32);
+        state[5] ^= input.get(LAYOUT, offset + 40);
+        state[6] ^= input.get(LAYOUT, offset + 48);
+        state[7] ^= input.get(LAYOUT, offset + 56);
+        state[8] ^= input.get(LAYOUT, offset + 64);
+        state[9] ^= input.get(LAYOUT, offset + 72);
+        state[10] ^= input.get(LAYOUT, offset + 80);
+        state[11] ^= input.get(LAYOUT, offset + 88);
     }
 
-    byte[] finalise(int[] state, int[] k) {
+    byte[] finalise(long[] state, long[] k) {
         state[15] ^= TAG;
 
         permute(state, rounds);
@@ -300,17 +300,17 @@ public final class Norx32 implements AuthenticatedCipher {
         state[14] ^= k[2];
         state[15] ^= k[3];
 
-        byte[] buf = new byte[16];
-        Tools.store32LE(state[12], buf, 0);
-        Tools.store32LE(state[13], buf, 4);
-        Tools.store32LE(state[14], buf, 8);
-        Tools.store32LE(state[15], buf, 12);
+        byte[] buf = new byte[32];
+        Tools.store64LE(state[12], buf, 0);
+        Tools.store64LE(state[13], buf, 8);
+        Tools.store64LE(state[14], buf, 16);
+        Tools.store64LE(state[15], buf, 24);
 
         return buf;
     }
 
-    private void branch(int[] state, int[][] branches) {
-        int[] first = branches[0];
+    private void branch(long[] state, long[][] branches) {
+        long[] first = branches[0];
 
         System.arraycopy(state, 0, first, 0, 16);
 
@@ -341,7 +341,7 @@ public final class Norx32 implements AuthenticatedCipher {
 
     }
 
-    private void merge(int[][] branches, int[] state) {
+    private void merge(long[][] branches, long[] state) {
         Arrays.fill(state, 0);
 
         for (var branch : branches) {
@@ -369,123 +369,123 @@ public final class Norx32 implements AuthenticatedCipher {
         }
     }
 
-    private void encryptBlock(int[] state, MemorySegment plaintext, long pOffset, MemorySegment ciphertext, long cOffset) {
+    private void encryptBlock(long[] state, MemorySegment plaintext, long pOffset, MemorySegment ciphertext, long cOffset) {
         state[15] ^= PAYLOAD;
 
         permute(state, rounds);
 
         state[0] ^= plaintext.get(LAYOUT, pOffset + 0);
         ciphertext.set(LAYOUT, cOffset + 0, state[0]);
-        state[1] ^= plaintext.get(LAYOUT, pOffset + 4);
-        ciphertext.set(LAYOUT, cOffset + 4, state[1]);
-        state[2] ^= plaintext.get(LAYOUT, pOffset + 8);
-        ciphertext.set(LAYOUT, cOffset + 8, state[2]);
-        state[3] ^= plaintext.get(LAYOUT, pOffset + 12);
-        ciphertext.set(LAYOUT, cOffset + 12, state[3]);
-        state[4] ^= plaintext.get(LAYOUT, pOffset + 16);
-        ciphertext.set(LAYOUT, cOffset + 16, state[4]);
-        state[5] ^= plaintext.get(LAYOUT, pOffset + 20);
-        ciphertext.set(LAYOUT, cOffset + 20, state[5]);
-        state[6] ^= plaintext.get(LAYOUT, pOffset + 24);
-        ciphertext.set(LAYOUT, cOffset + 24, state[6]);
-        state[7] ^= plaintext.get(LAYOUT, pOffset + 28);
-        ciphertext.set(LAYOUT, cOffset + 28, state[7]);
-        state[8] ^= plaintext.get(LAYOUT, pOffset + 32);
-        ciphertext.set(LAYOUT, cOffset + 32, state[8]);
-        state[9] ^= plaintext.get(LAYOUT, pOffset + 36);
-        ciphertext.set(LAYOUT, cOffset + 36, state[9]);
-        state[10] ^= plaintext.get(LAYOUT, pOffset + 40);
-        ciphertext.set(LAYOUT, cOffset + 40, state[10]);
-        state[11] ^= plaintext.get(LAYOUT, pOffset + 44);
-        ciphertext.set(LAYOUT, cOffset + 44, state[11]);
+        state[1] ^= plaintext.get(LAYOUT, pOffset + 8);
+        ciphertext.set(LAYOUT, cOffset + 8, state[1]);
+        state[2] ^= plaintext.get(LAYOUT, pOffset + 16);
+        ciphertext.set(LAYOUT, cOffset + 16, state[2]);
+        state[3] ^= plaintext.get(LAYOUT, pOffset + 24);
+        ciphertext.set(LAYOUT, cOffset + 24, state[3]);
+        state[4] ^= plaintext.get(LAYOUT, pOffset + 32);
+        ciphertext.set(LAYOUT, cOffset + 32, state[4]);
+        state[5] ^= plaintext.get(LAYOUT, pOffset + 40);
+        ciphertext.set(LAYOUT, cOffset + 40, state[5]);
+        state[6] ^= plaintext.get(LAYOUT, pOffset + 48);
+        ciphertext.set(LAYOUT, cOffset + 48, state[6]);
+        state[7] ^= plaintext.get(LAYOUT, pOffset + 56);
+        ciphertext.set(LAYOUT, cOffset + 56, state[7]);
+        state[8] ^= plaintext.get(LAYOUT, pOffset + 64);
+        ciphertext.set(LAYOUT, cOffset + 64, state[8]);
+        state[9] ^= plaintext.get(LAYOUT, pOffset + 72);
+        ciphertext.set(LAYOUT, cOffset + 72, state[9]);
+        state[10] ^= plaintext.get(LAYOUT, pOffset + 80);
+        ciphertext.set(LAYOUT, cOffset + 80, state[10]);
+        state[11] ^= plaintext.get(LAYOUT, pOffset + 88);
+        ciphertext.set(LAYOUT, cOffset + 88, state[11]);
 
     }
 
-    private void decryptBlock(int[] state, MemorySegment ciphertext, long cOffset, MemorySegment plaintext, long pOffset) {
+    private void decryptBlock(long[] state, MemorySegment ciphertext, long cOffset, MemorySegment plaintext, long pOffset) {
         state[15] ^= PAYLOAD;
 
         permute(state, rounds);
 
-        int c;
+        long c;
 
         c = ciphertext.get(LAYOUT, cOffset + 0);
         plaintext.set(LAYOUT, pOffset + 0, c ^ state[0]);
         state[0] = c;
-        c = ciphertext.get(LAYOUT, cOffset + 4);
-        plaintext.set(LAYOUT, pOffset + 4, c ^ state[1]);
-        state[1] = c;
         c = ciphertext.get(LAYOUT, cOffset + 8);
-        plaintext.set(LAYOUT, pOffset + 8, c ^ state[2]);
-        state[2] = c;
-        c = ciphertext.get(LAYOUT, cOffset + 12);
-        plaintext.set(LAYOUT, pOffset + 12, c ^ state[3]);
-        state[3] = c;
+        plaintext.set(LAYOUT, pOffset + 8, c ^ state[1]);
+        state[1] = c;
         c = ciphertext.get(LAYOUT, cOffset + 16);
-        plaintext.set(LAYOUT, pOffset + 16, c ^ state[4]);
-        state[4] = c;
-        c = ciphertext.get(LAYOUT, cOffset + 20);
-        plaintext.set(LAYOUT, pOffset + 20, c ^ state[5]);
-        state[5] = c;
+        plaintext.set(LAYOUT, pOffset + 16, c ^ state[2]);
+        state[2] = c;
         c = ciphertext.get(LAYOUT, cOffset + 24);
-        plaintext.set(LAYOUT, pOffset + 24, c ^ state[6]);
-        state[6] = c;
-        c = ciphertext.get(LAYOUT, cOffset + 28);
-        plaintext.set(LAYOUT, pOffset + 28, c ^ state[7]);
-        state[7] = c;
+        plaintext.set(LAYOUT, pOffset + 24, c ^ state[3]);
+        state[3] = c;
         c = ciphertext.get(LAYOUT, cOffset + 32);
-        plaintext.set(LAYOUT, pOffset + 32, c ^ state[8]);
-        state[8] = c;
-        c = ciphertext.get(LAYOUT, cOffset + 36);
-        plaintext.set(LAYOUT, pOffset + 36, c ^ state[9]);
-        state[9] = c;
+        plaintext.set(LAYOUT, pOffset + 32, c ^ state[4]);
+        state[4] = c;
         c = ciphertext.get(LAYOUT, cOffset + 40);
-        plaintext.set(LAYOUT, pOffset + 40, c ^ state[10]);
+        plaintext.set(LAYOUT, pOffset + 40, c ^ state[5]);
+        state[5] = c;
+        c = ciphertext.get(LAYOUT, cOffset + 48);
+        plaintext.set(LAYOUT, pOffset + 48, c ^ state[6]);
+        state[6] = c;
+        c = ciphertext.get(LAYOUT, cOffset + 56);
+        plaintext.set(LAYOUT, pOffset + 56, c ^ state[7]);
+        state[7] = c;
+        c = ciphertext.get(LAYOUT, cOffset + 64);
+        plaintext.set(LAYOUT, pOffset + 64, c ^ state[8]);
+        state[8] = c;
+        c = ciphertext.get(LAYOUT, cOffset + 72);
+        plaintext.set(LAYOUT, pOffset + 72, c ^ state[9]);
+        state[9] = c;
+        c = ciphertext.get(LAYOUT, cOffset + 80);
+        plaintext.set(LAYOUT, pOffset + 80, c ^ state[10]);
         state[10] = c;
-        c = ciphertext.get(LAYOUT, cOffset + 44);
-        plaintext.set(LAYOUT, pOffset + 44, c ^ state[11]);
+        c = ciphertext.get(LAYOUT, cOffset + 88);
+        plaintext.set(LAYOUT, pOffset + 88, c ^ state[11]);
         state[11] = c;
     }
 
-    private void decryptLast(int[] state, MemorySegment buffer, int position, MemorySegment plaintext) {
+    private void decryptLast(long[] state, MemorySegment buffer, int position, MemorySegment plaintext) {
         state[15] ^= PAYLOAD;
 
         permute(state, rounds);
 
         buffer.set(LAYOUT, 0, buffer.get(LAYOUT, 0) ^ state[0]);
-        buffer.set(LAYOUT, 4, buffer.get(LAYOUT, 4) ^ state[1]);
-        buffer.set(LAYOUT, 8, buffer.get(LAYOUT, 8) ^ state[2]);
-        buffer.set(LAYOUT, 12, buffer.get(LAYOUT, 12) ^ state[3]);
-        buffer.set(LAYOUT, 16, buffer.get(LAYOUT, 16) ^ state[4]);
-        buffer.set(LAYOUT, 20, buffer.get(LAYOUT, 20) ^ state[5]);
-        buffer.set(LAYOUT, 24, buffer.get(LAYOUT, 24) ^ state[6]);
-        buffer.set(LAYOUT, 28, buffer.get(LAYOUT, 28) ^ state[7]);
-        buffer.set(LAYOUT, 32, buffer.get(LAYOUT, 32) ^ state[8]);
-        buffer.set(LAYOUT, 36, buffer.get(LAYOUT, 36) ^ state[9]);
-        buffer.set(LAYOUT, 40, buffer.get(LAYOUT, 40) ^ state[10]);
-        buffer.set(LAYOUT, 44, buffer.get(LAYOUT, 44) ^ state[11]);
+        buffer.set(LAYOUT, 8, buffer.get(LAYOUT, 8) ^ state[1]);
+        buffer.set(LAYOUT, 16, buffer.get(LAYOUT, 16) ^ state[2]);
+        buffer.set(LAYOUT, 24, buffer.get(LAYOUT, 24) ^ state[3]);
+        buffer.set(LAYOUT, 32, buffer.get(LAYOUT, 32) ^ state[4]);
+        buffer.set(LAYOUT, 40, buffer.get(LAYOUT, 40) ^ state[5]);
+        buffer.set(LAYOUT, 48, buffer.get(LAYOUT, 48) ^ state[6]);
+        buffer.set(LAYOUT, 56, buffer.get(LAYOUT, 56) ^ state[7]);
+        buffer.set(LAYOUT, 64, buffer.get(LAYOUT, 64) ^ state[8]);
+        buffer.set(LAYOUT, 72, buffer.get(LAYOUT, 72) ^ state[9]);
+        buffer.set(LAYOUT, 80, buffer.get(LAYOUT, 80) ^ state[10]);
+        buffer.set(LAYOUT, 88, buffer.get(LAYOUT, 88) ^ state[11]);
 
         pad(buffer, position);
 
         state[0] ^= buffer.get(LAYOUT, 0);
-        state[1] ^= buffer.get(LAYOUT, 4);
-        state[2] ^= buffer.get(LAYOUT, 8);
-        state[3] ^= buffer.get(LAYOUT, 12);
-        state[4] ^= buffer.get(LAYOUT, 16);
-        state[5] ^= buffer.get(LAYOUT, 20);
-        state[6] ^= buffer.get(LAYOUT, 24);
-        state[7] ^= buffer.get(LAYOUT, 28);
-        state[8] ^= buffer.get(LAYOUT, 32);
-        state[9] ^= buffer.get(LAYOUT, 36);
-        state[10] ^= buffer.get(LAYOUT, 40);
-        state[11] ^= buffer.get(LAYOUT, 44);
+        state[1] ^= buffer.get(LAYOUT, 8);
+        state[2] ^= buffer.get(LAYOUT, 16);
+        state[3] ^= buffer.get(LAYOUT, 24);
+        state[4] ^= buffer.get(LAYOUT, 32);
+        state[5] ^= buffer.get(LAYOUT, 40);
+        state[6] ^= buffer.get(LAYOUT, 48);
+        state[7] ^= buffer.get(LAYOUT, 56);
+        state[8] ^= buffer.get(LAYOUT, 64);
+        state[9] ^= buffer.get(LAYOUT, 72);
+        state[10] ^= buffer.get(LAYOUT, 80);
+        state[11] ^= buffer.get(LAYOUT, 88);
 
         MemorySegment.copy(buffer, 0, plaintext, 0, position);
 
     }
 
-    private final class SerialNorx32Encrypter extends AbstractNorx32Encrypter {
+    private final class SerialNorx64Encrypter extends AbstractNorx64Encrypter {
 
-        private SerialNorx32Encrypter(byte[] key, byte[] iv) {
+        private SerialNorx64Encrypter(byte[] key, byte[] iv) {
             super(key, iv, RATE);
         }
 
@@ -507,11 +507,11 @@ public final class Norx32 implements AuthenticatedCipher {
 
     }
 
-    private final class ParallelNorx32Encrypter extends AbstractNorx32Encrypter {
+    private final class ParallelNorx64Encrypter extends AbstractNorx64Encrypter {
 
-        private final int[][] branches = new int[parallelism][16];
+        private final long[][] branches = new long[parallelism][16];
 
-        private ParallelNorx32Encrypter(byte[] key, byte[] iv) {
+        private ParallelNorx64Encrypter(byte[] key, byte[] iv) {
             super(key, iv, parallelism * RATE);
         }
 
@@ -544,13 +544,13 @@ public final class Norx32 implements AuthenticatedCipher {
 
     }
 
-    private final class BushNorx32Encrypter extends AbstractNorx32Encrypter {
+    private final class BushNorx64Encrypter extends AbstractNorx64Encrypter {
 
-        private final int[] copy = new int[16], temp = new int[16], checksum = new int[16];
+        private final long[] copy = new long[16], temp = new long[16], checksum = new long[16];
 
         private int counter = 0;
 
-        private BushNorx32Encrypter(byte[] key, byte[] iv) {
+        private BushNorx64Encrypter(byte[] key, byte[] iv) {
             super(key, iv, RATE);
         }
 
@@ -618,11 +618,11 @@ public final class Norx32 implements AuthenticatedCipher {
 
     }
 
-    private abstract class AbstractNorx32Encrypter implements EncryptEngine {
+    private abstract class AbstractNorx64Encrypter implements EncryptEngine {
 
-        final int[] state;
+        final long[] state;
 
-        private final int[] k;
+        private final long[] k;
 
         private final MemorySegment buffer;
         private int position = 0;
@@ -633,7 +633,7 @@ public final class Norx32 implements AuthenticatedCipher {
 
         private final int rate;
 
-        private AbstractNorx32Encrypter(byte[] key, byte[] iv, int rate) {
+        private AbstractNorx64Encrypter(byte[] key, byte[] iv, int rate) {
             k = load(key);
             state = initialise(k, iv);
             this.rate = rate;
@@ -762,8 +762,8 @@ public final class Norx32 implements AuthenticatedCipher {
         @Override
         public void authenticate(byte[] tag, int offset, int length) {
             Objects.checkFromIndexSize(offset, length, tag.length);
-            if (length > 16) {
-                throw new IllegalArgumentException("Norx32 can produce tags of up to 16 bytes, requested " + length + " bytes");
+            if (length > 32) {
+                throw new IllegalArgumentException("Norx64 can produce tags of up to 32 bytes, requested " + length + " bytes");
             }
 
             switch (stage) {
@@ -783,20 +783,20 @@ public final class Norx32 implements AuthenticatedCipher {
             stage = TAG;
 
             var temp = finalise(state, k);
-            System.arraycopy(temp, 16 - length, tag, offset, length);
+            System.arraycopy(temp, 32 - length, tag, offset, length);
 
         }
 
         @Override
         public AuthenticatedCipher getAlgorithm() {
-            return Norx32.this;
+            return Norx64.this;
         }
 
     }
 
-    private final class SerialNorx32Decrypter extends AbstractNorx32Decrypter {
+    private final class SerialNorx64Decrypter extends AbstractNorx64Decrypter {
 
-        private SerialNorx32Decrypter(byte[] key, byte[] iv) {
+        private SerialNorx64Decrypter(byte[] key, byte[] iv) {
             super(key, iv, RATE);
         }
 
@@ -816,11 +816,11 @@ public final class Norx32 implements AuthenticatedCipher {
 
     }
 
-    private final class ParallelNorx32Decrypter extends AbstractNorx32Decrypter {
+    private final class ParallelNorx64Decrypter extends AbstractNorx64Decrypter {
 
-        private final int[][] branches = new int[parallelism][16];
+        private final long[][] branches = new long[parallelism][16];
 
-        private ParallelNorx32Decrypter(byte[] key, byte[] iv) {
+        private ParallelNorx64Decrypter(byte[] key, byte[] iv) {
             super(key, iv, parallelism * RATE);
         }
 
@@ -852,13 +852,13 @@ public final class Norx32 implements AuthenticatedCipher {
 
     }
 
-    private final class BushNorx32Decrypter extends AbstractNorx32Decrypter {
+    private final class BushNorx64Decrypter extends AbstractNorx64Decrypter {
 
-        private final int[] copy = new int[16], temp = new int[16], checksum = new int[16];
+        private final long[] copy = new long[16], temp = new long[16], checksum = new long[16];
 
-        private int counter = 0;
+        private long counter = 0;
 
-        private BushNorx32Decrypter(byte[] key, byte[] iv) {
+        private BushNorx64Decrypter(byte[] key, byte[] iv) {
             super(key, iv, RATE);
         }
 
@@ -961,11 +961,11 @@ public final class Norx32 implements AuthenticatedCipher {
         }
     }
 
-    private abstract class AbstractNorx32Decrypter implements DecryptEngine {
+    private abstract class AbstractNorx64Decrypter implements DecryptEngine {
 
-        final int[] state;
+        final long[] state;
 
-        private final int[] k;
+        private final long[] k;
 
         private final MemorySegment buffer;
         private int position = 0;
@@ -976,7 +976,7 @@ public final class Norx32 implements AuthenticatedCipher {
 
         private final int rate;
 
-        private AbstractNorx32Decrypter(byte[] key, byte[] iv, int rate) {
+        private AbstractNorx64Decrypter(byte[] key, byte[] iv, int rate) {
             k = load(key);
             state = initialise(k, iv);
             this.rate = rate;
@@ -1105,8 +1105,8 @@ public final class Norx32 implements AuthenticatedCipher {
         @Override
         public boolean verify(byte[] tag, int offset, int length) {
             Objects.checkFromIndexSize(offset, length, tag.length);
-            if (length > 16) {
-                throw new IllegalArgumentException("Norx32 can produce tags of up to 16 bytes, requested " + length + " bytes");
+            if (length > 32) {
+                throw new IllegalArgumentException("Norx64 can produce tags of up to 32 bytes, requested " + length + " bytes");
             }
 
             switch (stage) {
@@ -1126,12 +1126,12 @@ public final class Norx32 implements AuthenticatedCipher {
             stage = TAG;
 
             var temp = finalise(state, k);
-            return Tools.equals(temp, 16 - length, tag, offset, length);
+            return Tools.equals(temp, 32 - length, tag, offset, length);
         }
 
         @Override
         public AuthenticatedCipher getAlgorithm() {
-            return Norx32.this;
+            return Norx64.this;
         }
 
     }
