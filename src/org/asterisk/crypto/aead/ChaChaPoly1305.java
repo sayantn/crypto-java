@@ -18,6 +18,7 @@
 package org.asterisk.crypto.aead;
 
 import java.lang.foreign.MemorySegment;
+import org.asterisk.crypto.Tested;
 import org.asterisk.crypto.helper.Tools;
 import org.asterisk.crypto.interfaces.AuthenticatedCipher;
 import org.asterisk.crypto.mac.Poly1305;
@@ -30,6 +31,7 @@ import org.asterisk.crypto.stream.ChaCha;
 public enum ChaChaPoly1305 implements AuthenticatedCipher {
 
     CHACHA20_POLY1305(ChaCha.CHACHA20),
+    @Tested
     CHACHA20_POLY1305_IETF(ChaCha.CHACHA20_IETF),
     CHACHA12_POLY1305(ChaCha.CHACHA12),
     CHACHA6_POLY1305(ChaCha.CHACHA6);
@@ -158,12 +160,12 @@ public enum ChaChaPoly1305 implements AuthenticatedCipher {
                     ingestingAAD = false;
                 } else {
                     offset = encrypter.finish(plaintext);
-                    msglen+=offset;
+                    msglen += offset;
                     if ((msglen & 15) != 0) {
                         mac.ingest(buffer, 0, 16 - (int) (msglen & 15));
                     }
                 }
-                
+
                 Tools.store64LE(aadlen, buffer, 0);
                 Tools.store64LE(msglen, buffer, 8);
                 mac.ingest(buffer);
@@ -198,14 +200,6 @@ public enum ChaChaPoly1305 implements AuthenticatedCipher {
         return 16;
     }
 
-    @Override
-    public long ciphertextSize(long plaintextSize) {
-        return plaintextSize;
-    }
 
-    @Override
-    public long plaintextSize(long ciphertextSize) {
-        return ciphertextSize;
-    }
 
 }

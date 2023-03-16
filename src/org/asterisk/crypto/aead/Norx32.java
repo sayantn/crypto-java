@@ -229,15 +229,7 @@ public final class Norx32 implements AuthenticatedCipher {
         return 16;
     }
 
-    @Override
-    public long ciphertextSize(long plaintextSize) {
-        return plaintextSize;
-    }
 
-    @Override
-    public long plaintextSize(long ciphertextSize) {
-        return ciphertextSize;
-    }
 
     private int[] initialise(int[] k, byte[] iv) {
         if (iv.length < 16) {
@@ -283,7 +275,7 @@ public final class Norx32 implements AuthenticatedCipher {
         state[11] ^= input.get(LAYOUT, offset + 44);
     }
 
-    byte[] finalise(int[] state, int[] k) {
+    private byte[] finalise(int[] state, int[] k) {
         state[15] ^= TAG;
 
         permute(state, rounds);

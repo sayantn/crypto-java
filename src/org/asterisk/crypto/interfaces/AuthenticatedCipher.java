@@ -24,11 +24,7 @@ public interface AuthenticatedCipher {
     int ivLength();
 
     int tagLength();
-
-    long ciphertextSize(long plaintextSize);
-
-    long plaintextSize(long ciphertextSize);
-
+    
     default int encrypt(byte[] key, byte[] iv, byte[] plaintext, byte[] aad, byte[] ciphertext, byte[] tag) {
         var enc = startEncryption(key, iv);
         enc.ingestAAD(aad);

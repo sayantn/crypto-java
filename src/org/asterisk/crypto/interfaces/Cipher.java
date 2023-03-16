@@ -20,10 +20,6 @@ public interface Cipher {
 
     int ivLength();
 
-    long ciphertextSize(long plaintextSize);
-
-    long plaintextSize(long ciphertextSize);
-
     default int encrypt(byte[] key, byte[] iv, byte[] plaintext, byte[] ciphertext) {
         var enc = startEncryption(key, iv);
         var ret = enc.encrypt(plaintext, ciphertext);

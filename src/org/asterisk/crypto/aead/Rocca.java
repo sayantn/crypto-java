@@ -330,14 +330,6 @@ public enum Rocca implements AuthenticatedCipher {
         return 16;
     }
 
-    @Override
-    public long ciphertextSize(long plaintextSize) {
-        return plaintextSize;
-    }
 
-    @Override
-    public long plaintextSize(long ciphertextSize) {
-        return ciphertextSize;
-    }
 
 }

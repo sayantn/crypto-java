@@ -105,15 +105,7 @@ public enum AesOtr implements AuthenticatedCipher {
         return 16;
     }
 
-    @Override
-    public long ciphertextSize(long plaintextSize) {
-        return plaintextSize;
-    }
 
-    @Override
-    public long plaintextSize(long ciphertextSize) {
-        return ciphertextSize;
-    }
 
     private final class OtrPEncrypter extends AbstractAuthenticaterEngine {
 

@@ -6,6 +6,7 @@ package org.asterisk.crypto.stream;
 
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
+import org.asterisk.crypto.Tested;
 import org.asterisk.crypto.helper.AbstractStreamEncrypter;
 import org.asterisk.crypto.helper.Tools;
 import org.asterisk.crypto.interfaces.Cipher;
@@ -20,7 +21,9 @@ import static org.asterisk.crypto.helper.Tools.load32LE;
  */
 public enum ChaCha implements StreamCipher {
 
-    CHACHA20(10), CHACHA6(3), CHACHA12(6), CHACHA20_IETF(10) {
+    CHACHA20(10), CHACHA6(3), CHACHA12(6), 
+    @Tested
+    CHACHA20_IETF(10) {
 
         @Override
         public ChaChaEngine startEncryption(byte[] key, byte[] iv) {
@@ -291,7 +294,7 @@ public enum ChaCha implements StreamCipher {
         public Poly1305.Poly1305Engine keyPoly1305() {
             state[12] = (int) counter;
             state[13] = (int) (counter >>> 32);
-            
+
             chachaCore(state, buffer, rounds);
 
             buffer[0] += state[0];

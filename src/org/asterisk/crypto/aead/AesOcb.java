@@ -442,14 +442,6 @@ public class AesOcb implements AuthenticatedCipher {
         return tagLength;
     }
 
-    @Override
-    public long ciphertextSize(long plaintextSize) {
-        return plaintextSize;
-    }
 
-    @Override
-    public long plaintextSize(long ciphertextSize) {
-        return ciphertextSize;
-    }
 
 }

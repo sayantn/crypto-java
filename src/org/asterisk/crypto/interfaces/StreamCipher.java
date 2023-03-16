@@ -33,14 +33,6 @@ public interface StreamCipher extends Cipher {
         };
     }
 
-    @Override
-    default long ciphertextSize(long plaintextSize) {
-        return plaintextSize;
-    }
 
-    @Override
-    default long plaintextSize(long ciphertextSize) {
-        return ciphertextSize;
-    }
 
 }

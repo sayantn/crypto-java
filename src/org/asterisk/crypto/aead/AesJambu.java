@@ -277,14 +277,6 @@ public enum AesJambu implements AuthenticatedCipher {
         return 8;
     }
 
-    @Override
-    public long ciphertextSize(long plaintextSize) {
-        return plaintextSize;
-    }
 
-    @Override
-    public long plaintextSize(long ciphertextSize) {
-        return ciphertextSize;
-    }
 
 }

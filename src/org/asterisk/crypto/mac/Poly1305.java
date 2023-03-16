@@ -39,10 +39,6 @@ public enum Poly1305 implements Mac {
     private static final int MASK = 0x3ffffff;
     private static final int HIGH = 0x1000000;
 
-    private static long addFull(int a, int b) {
-        return Integer.toUnsignedLong(a) + Integer.toUnsignedLong(b);
-    }
-
     @Override
     public Poly1305Engine start(byte[] key) {
         return new Poly1305Engine(key);
@@ -59,6 +55,10 @@ public enum Poly1305 implements Mac {
     }
 
     public static class Poly1305Engine implements Engine {
+
+        private static long addFull(int a, int b) {
+            return Integer.toUnsignedLong(a) + Integer.toUnsignedLong(b);
+        }
 
         private final MemorySegment buffer = MemorySegment.allocateNative(16, MemorySession.global());
         private int position = 0;

@@ -4,8 +4,8 @@
  */
 package org.asterisk.crypto.aead;
 
-import org.asterisk.crypto.Tested;
 import java.lang.foreign.MemorySegment;
+import org.asterisk.crypto.Tested;
 import org.asterisk.crypto.helper.AbstractAuthenticaterEngine;
 import org.asterisk.crypto.helper.AbstractVerifierEngine;
 import org.asterisk.crypto.interfaces.AuthenticatedCipher;
@@ -950,14 +950,6 @@ public enum Aegis implements AuthenticatedCipher {
         return 16;
     }
 
-    @Override
-    public long ciphertextSize(long plaintextSize) {
-        return plaintextSize;
-    }
 
-    @Override
-    public long plaintextSize(long ciphertextSize) {
-        return ciphertextSize;
-    }
 
 }

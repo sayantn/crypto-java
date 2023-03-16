@@ -229,7 +229,7 @@ public enum SipHash implements Mac {
         return 16;
     }
 
-    private static abstract class SipHashEngine implements Engine {
+    private abstract static class SipHashEngine implements Engine {
 
         protected final long[] state;
 
