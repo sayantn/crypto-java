@@ -5,7 +5,7 @@
 package org.asterisk.crypto.helper;
 
 import java.lang.foreign.MemorySegment;
-import java.lang.foreign.MemorySession;
+import java.lang.foreign.SegmentScope;
 import java.util.Objects;
 import org.asterisk.crypto.interfaces.Digest;
 
@@ -21,7 +21,7 @@ public abstract class AbstractDigestEngine implements Digest.Engine {
     private final int blockSize;
 
     public AbstractDigestEngine(int blockSize) {
-        buffer = MemorySegment.allocateNative(blockSize, MemorySession.global());
+        buffer = MemorySegment.allocateNative(blockSize, SegmentScope.auto());
         this.blockSize = blockSize;
     }
 

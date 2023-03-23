@@ -6,7 +6,7 @@ package org.asterisk.crypto.interfaces;
 
 import java.io.IOException;
 import java.lang.foreign.MemorySegment;
-import java.lang.foreign.MemorySession;
+import java.lang.foreign.SegmentScope;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileChannel.MapMode;
@@ -74,7 +74,7 @@ public interface Digest {
         default long ingest(Path file, long offset, long length) throws IOException {
             try ( var channel = FileChannel.open(file, StandardOpenOption.READ)) {
                 length = Math.min(length, channel.size() - offset);
-                ingest(channel.map(MapMode.READ_ONLY, offset, length, MemorySession.global()));
+                ingest(channel.map(MapMode.READ_ONLY, offset, length, SegmentScope.auto()));
             }
             return length;
         }

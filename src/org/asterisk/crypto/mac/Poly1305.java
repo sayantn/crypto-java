@@ -18,7 +18,7 @@
 package org.asterisk.crypto.mac;
 
 import java.lang.foreign.MemorySegment;
-import java.lang.foreign.MemorySession;
+import java.lang.foreign.SegmentScope;
 import java.lang.foreign.ValueLayout;
 import java.util.Objects;
 import org.asterisk.crypto.Tested;
@@ -60,7 +60,7 @@ public enum Poly1305 implements Mac {
             return Integer.toUnsignedLong(a) + Integer.toUnsignedLong(b);
         }
 
-        private final MemorySegment buffer = MemorySegment.allocateNative(16, MemorySession.global());
+        private final MemorySegment buffer = MemorySegment.allocateNative(16, SegmentScope.auto());
         private int position = 0;
 
         private final int[] r, s, pad, h = new int[5];

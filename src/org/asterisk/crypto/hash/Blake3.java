@@ -18,10 +18,12 @@
 package org.asterisk.crypto.hash;
 
 import java.lang.foreign.MemorySegment;
-import java.lang.foreign.MemorySession;
+import java.lang.foreign.SegmentScope;
 import java.lang.foreign.ValueLayout;
 import org.asterisk.crypto.helper.Tools;
 import org.asterisk.crypto.interfaces.Xof;
+
+import static org.asterisk.crypto.helper.Tools.store32LE;
 
 /**
  *
@@ -54,7 +56,6 @@ public enum Blake3 implements Xof {
     }
 
     private static void compress(int[] src, MemorySegment input, long offset, long counter, int blockLen, int flags, int[] dest) {
-
         int x0 = src[0];
         int x1 = src[1];
         int x2 = src[2];
@@ -154,395 +155,404 @@ public enum Blake3 implements Xof {
         x9 += x14;
         x4 = Integer.rotateRight(x4 ^ x9, 7);
 
-        x0 += x4 + m0;
+        x0 += x4 + m2;
         x12 = Integer.rotateRight(x12 ^ x0, 16);
         x8 += x12;
         x4 = Integer.rotateRight(x4 ^ x8, 12);
-        x0 += x4 + m1;
+        x0 += x4 + m6;
         x12 = Integer.rotateRight(x12 ^ x0, 8);
         x8 += x12;
         x4 = Integer.rotateRight(x4 ^ x8, 7);
-        x1 += x5 + m2;
+        x1 += x5 + m3;
         x13 = Integer.rotateRight(x13 ^ x1, 16);
         x9 += x13;
         x5 = Integer.rotateRight(x5 ^ x9, 12);
-        x1 += x5 + m3;
+        x1 += x5 + m10;
         x13 = Integer.rotateRight(x13 ^ x1, 8);
         x9 += x13;
         x5 = Integer.rotateRight(x5 ^ x9, 7);
-        x2 += x6 + m4;
+        x2 += x6 + m7;
         x14 = Integer.rotateRight(x14 ^ x2, 16);
         x10 += x14;
         x6 = Integer.rotateRight(x6 ^ x10, 12);
-        x2 += x6 + m5;
+        x2 += x6 + m0;
         x14 = Integer.rotateRight(x14 ^ x2, 8);
         x10 += x14;
         x6 = Integer.rotateRight(x6 ^ x10, 7);
-        x3 += x7 + m6;
+        x3 += x7 + m4;
         x15 = Integer.rotateRight(x15 ^ x3, 16);
         x11 += x15;
         x7 = Integer.rotateRight(x7 ^ x11, 12);
-        x3 += x7 + m7;
+        x3 += x7 + m13;
         x15 = Integer.rotateRight(x15 ^ x3, 8);
         x11 += x15;
         x7 = Integer.rotateRight(x7 ^ x11, 7);
-        x0 += x5 + m8;
+        x0 += x5 + m1;
         x15 = Integer.rotateRight(x15 ^ x0, 16);
         x10 += x15;
         x5 = Integer.rotateRight(x5 ^ x10, 12);
-        x0 += x5 + m9;
+        x0 += x5 + m11;
         x15 = Integer.rotateRight(x15 ^ x0, 8);
         x10 += x15;
         x5 = Integer.rotateRight(x5 ^ x10, 7);
-        x1 += x6 + m10;
+        x1 += x6 + m12;
         x12 = Integer.rotateRight(x12 ^ x1, 16);
         x11 += x12;
         x6 = Integer.rotateRight(x6 ^ x11, 12);
-        x1 += x6 + m11;
+        x1 += x6 + m5;
         x12 = Integer.rotateRight(x12 ^ x1, 8);
         x11 += x12;
         x6 = Integer.rotateRight(x6 ^ x11, 7);
-        x2 += x7 + m12;
+        x2 += x7 + m9;
         x13 = Integer.rotateRight(x13 ^ x2, 16);
         x8 += x13;
         x7 = Integer.rotateRight(x7 ^ x8, 12);
-        x2 += x7 + m13;
+        x2 += x7 + m14;
         x13 = Integer.rotateRight(x13 ^ x2, 8);
         x8 += x13;
         x7 = Integer.rotateRight(x7 ^ x8, 7);
-        x3 += x4 + m14;
+        x3 += x4 + m15;
         x14 = Integer.rotateRight(x14 ^ x3, 16);
         x9 += x14;
         x4 = Integer.rotateRight(x4 ^ x9, 12);
-        x3 += x4 + m15;
+        x3 += x4 + m8;
         x14 = Integer.rotateRight(x14 ^ x3, 8);
         x9 += x14;
         x4 = Integer.rotateRight(x4 ^ x9, 7);
 
-        x0 += x4 + m0;
+        x0 += x4 + m3;
         x12 = Integer.rotateRight(x12 ^ x0, 16);
         x8 += x12;
         x4 = Integer.rotateRight(x4 ^ x8, 12);
-        x0 += x4 + m1;
+        x0 += x4 + m4;
         x12 = Integer.rotateRight(x12 ^ x0, 8);
         x8 += x12;
         x4 = Integer.rotateRight(x4 ^ x8, 7);
-        x1 += x5 + m2;
+        x1 += x5 + m10;
         x13 = Integer.rotateRight(x13 ^ x1, 16);
         x9 += x13;
         x5 = Integer.rotateRight(x5 ^ x9, 12);
-        x1 += x5 + m3;
+        x1 += x5 + m12;
         x13 = Integer.rotateRight(x13 ^ x1, 8);
         x9 += x13;
         x5 = Integer.rotateRight(x5 ^ x9, 7);
-        x2 += x6 + m4;
+        x2 += x6 + m13;
         x14 = Integer.rotateRight(x14 ^ x2, 16);
         x10 += x14;
         x6 = Integer.rotateRight(x6 ^ x10, 12);
-        x2 += x6 + m5;
+        x2 += x6 + m2;
         x14 = Integer.rotateRight(x14 ^ x2, 8);
         x10 += x14;
         x6 = Integer.rotateRight(x6 ^ x10, 7);
-        x3 += x7 + m6;
+        x3 += x7 + m7;
         x15 = Integer.rotateRight(x15 ^ x3, 16);
         x11 += x15;
         x7 = Integer.rotateRight(x7 ^ x11, 12);
-        x3 += x7 + m7;
+        x3 += x7 + m14;
         x15 = Integer.rotateRight(x15 ^ x3, 8);
         x11 += x15;
         x7 = Integer.rotateRight(x7 ^ x11, 7);
-        x0 += x5 + m8;
+        x0 += x5 + m6;
         x15 = Integer.rotateRight(x15 ^ x0, 16);
         x10 += x15;
         x5 = Integer.rotateRight(x5 ^ x10, 12);
-        x0 += x5 + m9;
+        x0 += x5 + m5;
         x15 = Integer.rotateRight(x15 ^ x0, 8);
         x10 += x15;
         x5 = Integer.rotateRight(x5 ^ x10, 7);
-        x1 += x6 + m10;
+        x1 += x6 + m9;
         x12 = Integer.rotateRight(x12 ^ x1, 16);
         x11 += x12;
         x6 = Integer.rotateRight(x6 ^ x11, 12);
-        x1 += x6 + m11;
+        x1 += x6 + m0;
         x12 = Integer.rotateRight(x12 ^ x1, 8);
         x11 += x12;
         x6 = Integer.rotateRight(x6 ^ x11, 7);
-        x2 += x7 + m12;
+        x2 += x7 + m11;
         x13 = Integer.rotateRight(x13 ^ x2, 16);
         x8 += x13;
         x7 = Integer.rotateRight(x7 ^ x8, 12);
-        x2 += x7 + m13;
+        x2 += x7 + m15;
         x13 = Integer.rotateRight(x13 ^ x2, 8);
         x8 += x13;
         x7 = Integer.rotateRight(x7 ^ x8, 7);
-        x3 += x4 + m14;
+        x3 += x4 + m8;
         x14 = Integer.rotateRight(x14 ^ x3, 16);
         x9 += x14;
         x4 = Integer.rotateRight(x4 ^ x9, 12);
-        x3 += x4 + m15;
+        x3 += x4 + m1;
         x14 = Integer.rotateRight(x14 ^ x3, 8);
         x9 += x14;
         x4 = Integer.rotateRight(x4 ^ x9, 7);
 
-        x0 += x4 + m0;
+        x0 += x4 + m10;
         x12 = Integer.rotateRight(x12 ^ x0, 16);
         x8 += x12;
         x4 = Integer.rotateRight(x4 ^ x8, 12);
-        x0 += x4 + m1;
+        x0 += x4 + m7;
         x12 = Integer.rotateRight(x12 ^ x0, 8);
         x8 += x12;
         x4 = Integer.rotateRight(x4 ^ x8, 7);
-        x1 += x5 + m2;
+        x1 += x5 + m12;
         x13 = Integer.rotateRight(x13 ^ x1, 16);
         x9 += x13;
         x5 = Integer.rotateRight(x5 ^ x9, 12);
-        x1 += x5 + m3;
+        x1 += x5 + m9;
         x13 = Integer.rotateRight(x13 ^ x1, 8);
         x9 += x13;
         x5 = Integer.rotateRight(x5 ^ x9, 7);
-        x2 += x6 + m4;
+        x2 += x6 + m14;
         x14 = Integer.rotateRight(x14 ^ x2, 16);
         x10 += x14;
         x6 = Integer.rotateRight(x6 ^ x10, 12);
-        x2 += x6 + m5;
+        x2 += x6 + m3;
         x14 = Integer.rotateRight(x14 ^ x2, 8);
         x10 += x14;
         x6 = Integer.rotateRight(x6 ^ x10, 7);
-        x3 += x7 + m6;
+        x3 += x7 + m13;
         x15 = Integer.rotateRight(x15 ^ x3, 16);
         x11 += x15;
         x7 = Integer.rotateRight(x7 ^ x11, 12);
-        x3 += x7 + m7;
+        x3 += x7 + m15;
         x15 = Integer.rotateRight(x15 ^ x3, 8);
         x11 += x15;
         x7 = Integer.rotateRight(x7 ^ x11, 7);
-        x0 += x5 + m8;
+        x0 += x5 + m4;
         x15 = Integer.rotateRight(x15 ^ x0, 16);
         x10 += x15;
         x5 = Integer.rotateRight(x5 ^ x10, 12);
-        x0 += x5 + m9;
+        x0 += x5 + m0;
         x15 = Integer.rotateRight(x15 ^ x0, 8);
         x10 += x15;
         x5 = Integer.rotateRight(x5 ^ x10, 7);
-        x1 += x6 + m10;
+        x1 += x6 + m11;
         x12 = Integer.rotateRight(x12 ^ x1, 16);
         x11 += x12;
         x6 = Integer.rotateRight(x6 ^ x11, 12);
-        x1 += x6 + m11;
+        x1 += x6 + m2;
         x12 = Integer.rotateRight(x12 ^ x1, 8);
         x11 += x12;
         x6 = Integer.rotateRight(x6 ^ x11, 7);
-        x2 += x7 + m12;
+        x2 += x7 + m5;
         x13 = Integer.rotateRight(x13 ^ x2, 16);
         x8 += x13;
         x7 = Integer.rotateRight(x7 ^ x8, 12);
-        x2 += x7 + m13;
+        x2 += x7 + m8;
         x13 = Integer.rotateRight(x13 ^ x2, 8);
         x8 += x13;
         x7 = Integer.rotateRight(x7 ^ x8, 7);
-        x3 += x4 + m14;
+        x3 += x4 + m1;
         x14 = Integer.rotateRight(x14 ^ x3, 16);
         x9 += x14;
         x4 = Integer.rotateRight(x4 ^ x9, 12);
-        x3 += x4 + m15;
+        x3 += x4 + m6;
         x14 = Integer.rotateRight(x14 ^ x3, 8);
         x9 += x14;
         x4 = Integer.rotateRight(x4 ^ x9, 7);
 
-        x0 += x4 + m0;
+        x0 += x4 + m12;
         x12 = Integer.rotateRight(x12 ^ x0, 16);
         x8 += x12;
         x4 = Integer.rotateRight(x4 ^ x8, 12);
-        x0 += x4 + m1;
+        x0 += x4 + m13;
         x12 = Integer.rotateRight(x12 ^ x0, 8);
         x8 += x12;
         x4 = Integer.rotateRight(x4 ^ x8, 7);
-        x1 += x5 + m2;
+        x1 += x5 + m9;
         x13 = Integer.rotateRight(x13 ^ x1, 16);
         x9 += x13;
         x5 = Integer.rotateRight(x5 ^ x9, 12);
-        x1 += x5 + m3;
+        x1 += x5 + m11;
         x13 = Integer.rotateRight(x13 ^ x1, 8);
         x9 += x13;
         x5 = Integer.rotateRight(x5 ^ x9, 7);
-        x2 += x6 + m4;
+        x2 += x6 + m15;
         x14 = Integer.rotateRight(x14 ^ x2, 16);
         x10 += x14;
         x6 = Integer.rotateRight(x6 ^ x10, 12);
-        x2 += x6 + m5;
+        x2 += x6 + m10;
         x14 = Integer.rotateRight(x14 ^ x2, 8);
         x10 += x14;
         x6 = Integer.rotateRight(x6 ^ x10, 7);
-        x3 += x7 + m6;
+        x3 += x7 + m14;
         x15 = Integer.rotateRight(x15 ^ x3, 16);
         x11 += x15;
         x7 = Integer.rotateRight(x7 ^ x11, 12);
-        x3 += x7 + m7;
+        x3 += x7 + m8;
         x15 = Integer.rotateRight(x15 ^ x3, 8);
         x11 += x15;
         x7 = Integer.rotateRight(x7 ^ x11, 7);
-        x0 += x5 + m8;
+        x0 += x5 + m7;
         x15 = Integer.rotateRight(x15 ^ x0, 16);
         x10 += x15;
         x5 = Integer.rotateRight(x5 ^ x10, 12);
-        x0 += x5 + m9;
+        x0 += x5 + m2;
         x15 = Integer.rotateRight(x15 ^ x0, 8);
         x10 += x15;
         x5 = Integer.rotateRight(x5 ^ x10, 7);
-        x1 += x6 + m10;
+        x1 += x6 + m5;
         x12 = Integer.rotateRight(x12 ^ x1, 16);
         x11 += x12;
         x6 = Integer.rotateRight(x6 ^ x11, 12);
-        x1 += x6 + m11;
+        x1 += x6 + m3;
         x12 = Integer.rotateRight(x12 ^ x1, 8);
         x11 += x12;
         x6 = Integer.rotateRight(x6 ^ x11, 7);
-        x2 += x7 + m12;
+        x2 += x7 + m0;
         x13 = Integer.rotateRight(x13 ^ x2, 16);
         x8 += x13;
         x7 = Integer.rotateRight(x7 ^ x8, 12);
-        x2 += x7 + m13;
+        x2 += x7 + m1;
         x13 = Integer.rotateRight(x13 ^ x2, 8);
         x8 += x13;
         x7 = Integer.rotateRight(x7 ^ x8, 7);
-        x3 += x4 + m14;
+        x3 += x4 + m6;
         x14 = Integer.rotateRight(x14 ^ x3, 16);
         x9 += x14;
         x4 = Integer.rotateRight(x4 ^ x9, 12);
-        x3 += x4 + m15;
+        x3 += x4 + m4;
         x14 = Integer.rotateRight(x14 ^ x3, 8);
         x9 += x14;
         x4 = Integer.rotateRight(x4 ^ x9, 7);
 
-        x0 += x4 + m0;
+        x0 += x4 + m9;
         x12 = Integer.rotateRight(x12 ^ x0, 16);
         x8 += x12;
         x4 = Integer.rotateRight(x4 ^ x8, 12);
-        x0 += x4 + m1;
+        x0 += x4 + m14;
         x12 = Integer.rotateRight(x12 ^ x0, 8);
         x8 += x12;
         x4 = Integer.rotateRight(x4 ^ x8, 7);
-        x1 += x5 + m2;
+        x1 += x5 + m11;
         x13 = Integer.rotateRight(x13 ^ x1, 16);
         x9 += x13;
         x5 = Integer.rotateRight(x5 ^ x9, 12);
-        x1 += x5 + m3;
+        x1 += x5 + m5;
         x13 = Integer.rotateRight(x13 ^ x1, 8);
         x9 += x13;
         x5 = Integer.rotateRight(x5 ^ x9, 7);
-        x2 += x6 + m4;
+        x2 += x6 + m8;
         x14 = Integer.rotateRight(x14 ^ x2, 16);
         x10 += x14;
         x6 = Integer.rotateRight(x6 ^ x10, 12);
-        x2 += x6 + m5;
+        x2 += x6 + m12;
         x14 = Integer.rotateRight(x14 ^ x2, 8);
         x10 += x14;
         x6 = Integer.rotateRight(x6 ^ x10, 7);
-        x3 += x7 + m6;
+        x3 += x7 + m15;
         x15 = Integer.rotateRight(x15 ^ x3, 16);
         x11 += x15;
         x7 = Integer.rotateRight(x7 ^ x11, 12);
-        x3 += x7 + m7;
+        x3 += x7 + m1;
         x15 = Integer.rotateRight(x15 ^ x3, 8);
         x11 += x15;
         x7 = Integer.rotateRight(x7 ^ x11, 7);
-        x0 += x5 + m8;
+        x0 += x5 + m13;
         x15 = Integer.rotateRight(x15 ^ x0, 16);
         x10 += x15;
         x5 = Integer.rotateRight(x5 ^ x10, 12);
-        x0 += x5 + m9;
+        x0 += x5 + m3;
         x15 = Integer.rotateRight(x15 ^ x0, 8);
         x10 += x15;
         x5 = Integer.rotateRight(x5 ^ x10, 7);
-        x1 += x6 + m10;
+        x1 += x6 + m0;
         x12 = Integer.rotateRight(x12 ^ x1, 16);
         x11 += x12;
         x6 = Integer.rotateRight(x6 ^ x11, 12);
-        x1 += x6 + m11;
+        x1 += x6 + m10;
         x12 = Integer.rotateRight(x12 ^ x1, 8);
         x11 += x12;
         x6 = Integer.rotateRight(x6 ^ x11, 7);
-        x2 += x7 + m12;
+        x2 += x7 + m2;
         x13 = Integer.rotateRight(x13 ^ x2, 16);
         x8 += x13;
         x7 = Integer.rotateRight(x7 ^ x8, 12);
-        x2 += x7 + m13;
+        x2 += x7 + m6;
         x13 = Integer.rotateRight(x13 ^ x2, 8);
         x8 += x13;
         x7 = Integer.rotateRight(x7 ^ x8, 7);
-        x3 += x4 + m14;
+        x3 += x4 + m4;
         x14 = Integer.rotateRight(x14 ^ x3, 16);
         x9 += x14;
         x4 = Integer.rotateRight(x4 ^ x9, 12);
-        x3 += x4 + m15;
+        x3 += x4 + m7;
         x14 = Integer.rotateRight(x14 ^ x3, 8);
         x9 += x14;
         x4 = Integer.rotateRight(x4 ^ x9, 7);
 
-        x0 += x4 + m0;
+        x0 += x4 + m11;
         x12 = Integer.rotateRight(x12 ^ x0, 16);
         x8 += x12;
         x4 = Integer.rotateRight(x4 ^ x8, 12);
-        x0 += x4 + m1;
+        x0 += x4 + m15;
         x12 = Integer.rotateRight(x12 ^ x0, 8);
         x8 += x12;
         x4 = Integer.rotateRight(x4 ^ x8, 7);
-        x1 += x5 + m2;
+        x1 += x5 + m5;
         x13 = Integer.rotateRight(x13 ^ x1, 16);
         x9 += x13;
         x5 = Integer.rotateRight(x5 ^ x9, 12);
-        x1 += x5 + m3;
+        x1 += x5 + m0;
         x13 = Integer.rotateRight(x13 ^ x1, 8);
         x9 += x13;
         x5 = Integer.rotateRight(x5 ^ x9, 7);
-        x2 += x6 + m4;
+        x2 += x6 + m1;
         x14 = Integer.rotateRight(x14 ^ x2, 16);
         x10 += x14;
         x6 = Integer.rotateRight(x6 ^ x10, 12);
-        x2 += x6 + m5;
+        x2 += x6 + m9;
         x14 = Integer.rotateRight(x14 ^ x2, 8);
         x10 += x14;
         x6 = Integer.rotateRight(x6 ^ x10, 7);
-        x3 += x7 + m6;
+        x3 += x7 + m8;
         x15 = Integer.rotateRight(x15 ^ x3, 16);
         x11 += x15;
         x7 = Integer.rotateRight(x7 ^ x11, 12);
-        x3 += x7 + m7;
+        x3 += x7 + m6;
         x15 = Integer.rotateRight(x15 ^ x3, 8);
         x11 += x15;
         x7 = Integer.rotateRight(x7 ^ x11, 7);
-        x0 += x5 + m8;
+        x0 += x5 + m14;
         x15 = Integer.rotateRight(x15 ^ x0, 16);
         x10 += x15;
         x5 = Integer.rotateRight(x5 ^ x10, 12);
-        x0 += x5 + m9;
+        x0 += x5 + m10;
         x15 = Integer.rotateRight(x15 ^ x0, 8);
         x10 += x15;
         x5 = Integer.rotateRight(x5 ^ x10, 7);
-        x1 += x6 + m10;
+        x1 += x6 + m2;
         x12 = Integer.rotateRight(x12 ^ x1, 16);
         x11 += x12;
         x6 = Integer.rotateRight(x6 ^ x11, 12);
-        x1 += x6 + m11;
+        x1 += x6 + m12;
         x12 = Integer.rotateRight(x12 ^ x1, 8);
         x11 += x12;
         x6 = Integer.rotateRight(x6 ^ x11, 7);
-        x2 += x7 + m12;
+        x2 += x7 + m3;
         x13 = Integer.rotateRight(x13 ^ x2, 16);
         x8 += x13;
         x7 = Integer.rotateRight(x7 ^ x8, 12);
-        x2 += x7 + m13;
+        x2 += x7 + m4;
         x13 = Integer.rotateRight(x13 ^ x2, 8);
         x8 += x13;
         x7 = Integer.rotateRight(x7 ^ x8, 7);
-        x3 += x4 + m14;
+        x3 += x4 + m7;
         x14 = Integer.rotateRight(x14 ^ x3, 16);
         x9 += x14;
         x4 = Integer.rotateRight(x4 ^ x9, 12);
-        x3 += x4 + m15;
+        x3 += x4 + m13;
         x14 = Integer.rotateRight(x14 ^ x3, 8);
         x9 += x14;
         x4 = Integer.rotateRight(x4 ^ x9, 7);
+
+        dest[8] = x8 ^ src[0];
+        dest[9] = x9 ^ src[1];
+        dest[10] = x10 ^ src[2];
+        dest[11] = x11 ^ src[3];
+        dest[12] = x12 ^ src[4];
+        dest[13] = x13 ^ src[5];
+        dest[14] = x14 ^ src[6];
+        dest[15] = x15 ^ src[7];
 
         dest[0] = x0 ^ x8;
         dest[1] = x1 ^ x9;
@@ -615,11 +625,11 @@ public enum Blake3 implements Xof {
 
     private static class ChunkState {
 
-        private final int[] state = new int[8];
+        private final int[] state = new int[16];
         private long counter = 0;
         private final int flags;
 
-        private final MemorySegment buffer = MemorySegment.allocateNative(BLOCK_LEN, MemorySession.global());
+        private final MemorySegment buffer = MemorySegment.allocateNative(BLOCK_LEN, SegmentScope.auto());
         private int position = 0;
 
         private boolean compressed = false;
@@ -639,52 +649,22 @@ public enum Blake3 implements Xof {
 
             int[] ret = this.state.clone();
 
-            compress(ret, input, offset, counter, BLOCK_LEN, flags | CHUNK_START);
-            offset += BLOCK_LEN;
-
-            compress(ret, input, offset, counter, BLOCK_LEN, flags);
-            offset += BLOCK_LEN;
-
-            compress(ret, input, offset, counter, BLOCK_LEN, flags);
-            offset += BLOCK_LEN;
-
-            compress(ret, input, offset, counter, BLOCK_LEN, flags);
-            offset += BLOCK_LEN;
-
-            compress(ret, input, offset, counter, BLOCK_LEN, flags);
-            offset += BLOCK_LEN;
-
-            compress(ret, input, offset, counter, BLOCK_LEN, flags);
-            offset += BLOCK_LEN;
-
-            compress(ret, input, offset, counter, BLOCK_LEN, flags);
-            offset += BLOCK_LEN;
-
-            compress(ret, input, offset, counter, BLOCK_LEN, flags);
-            offset += BLOCK_LEN;
-
-            compress(ret, input, offset, counter, BLOCK_LEN, flags);
-            offset += BLOCK_LEN;
-
-            compress(ret, input, offset, counter, BLOCK_LEN, flags);
-            offset += BLOCK_LEN;
-
-            compress(ret, input, offset, counter, BLOCK_LEN, flags);
-            offset += BLOCK_LEN;
-
-            compress(ret, input, offset, counter, BLOCK_LEN, flags);
-            offset += BLOCK_LEN;
-
-            compress(ret, input, offset, counter, BLOCK_LEN, flags);
-            offset += BLOCK_LEN;
-
-            compress(ret, input, offset, counter, BLOCK_LEN, flags);
-            offset += BLOCK_LEN;
-
-            compress(ret, input, offset, counter, BLOCK_LEN, flags);
-            offset += BLOCK_LEN;
-
-            compress(ret, input, offset, counter, BLOCK_LEN, flags | CHUNK_END);
+            compress(ret, input, offset + 0, counter, BLOCK_LEN, flags | CHUNK_START);
+            compress(ret, input, offset + 64, counter, BLOCK_LEN, flags);
+            compress(ret, input, offset + 128, counter, BLOCK_LEN, flags);
+            compress(ret, input, offset + 192, counter, BLOCK_LEN, flags);
+            compress(ret, input, offset + 256, counter, BLOCK_LEN, flags);
+            compress(ret, input, offset + 320, counter, BLOCK_LEN, flags);
+            compress(ret, input, offset + 384, counter, BLOCK_LEN, flags);
+            compress(ret, input, offset + 448, counter, BLOCK_LEN, flags);
+            compress(ret, input, offset + 512, counter, BLOCK_LEN, flags);
+            compress(ret, input, offset + 576, counter, BLOCK_LEN, flags);
+            compress(ret, input, offset + 640, counter, BLOCK_LEN, flags);
+            compress(ret, input, offset + 704, counter, BLOCK_LEN, flags);
+            compress(ret, input, offset + 768, counter, BLOCK_LEN, flags);
+            compress(ret, input, offset + 832, counter, BLOCK_LEN, flags);
+            compress(ret, input, offset + 896, counter, BLOCK_LEN, flags);
+            compress(ret, input, offset + 960, counter, BLOCK_LEN, flags | CHUNK_END);
 
             counter++;
 
@@ -723,7 +703,7 @@ public enum Blake3 implements Xof {
 
         public int[] chain() {
             Tools.zeropad(buffer, position);
-            var ret = new int[8];
+            var ret = new int[16];
             compress(state, buffer, 0, counter, position, flags | startFlag() | CHUNK_END, ret);
             return ret;
         }
@@ -733,6 +713,78 @@ public enum Blake3 implements Xof {
             counter++;
             position = 0;
             compressed = false;
+        }
+
+    }
+
+    private static class Node {
+
+        private final int[] inputCV;
+        private final MemorySegment blockWords;
+        private final long counter;
+        private final int blockLen, flags;
+
+        private int outputCounter = 0;
+        private final byte[] outputBuffer = new byte[64];
+        private int outputPosition = 0;
+
+        private Node(int[] inputCV, MemorySegment blockWords, long counter, int blockLen, int flags) {
+            this.inputCV = inputCV;
+            this.blockWords = blockWords;
+            this.counter = counter;
+            this.blockLen = blockLen;
+            this.flags = flags;
+        }
+
+        private int[] chain() {
+            int[] ret = new int[16];
+            compress(inputCV, blockWords, 0, counter, blockLen, flags, ret);
+            return ret;
+        }
+
+        private void outputOneBlock(int[] words, byte[] output, int offset) {
+            compress(inputCV, blockWords, 0, outputCounter++, blockLen, flags | ROOT, words);
+
+            store32LE(words[0], output, offset + 0);
+            store32LE(words[1], output, offset + 4);
+            store32LE(words[2], output, offset + 8);
+            store32LE(words[3], output, offset + 12);
+            store32LE(words[4], output, offset + 16);
+            store32LE(words[5], output, offset + 20);
+            store32LE(words[6], output, offset + 24);
+            store32LE(words[7], output, offset + 28);
+            store32LE(words[8], output, offset + 32);
+            store32LE(words[9], output, offset + 36);
+            store32LE(words[10], output, offset + 40);
+            store32LE(words[11], output, offset + 44);
+            store32LE(words[12], output, offset + 48);
+            store32LE(words[13], output, offset + 52);
+            store32LE(words[14], output, offset + 56);
+            store32LE(words[15], output, offset + 60);
+        }
+
+        private void outputBytes(byte[] output, int offset, int length) {
+            if (outputPosition > 0) {
+                int take = Math.min(length, 64 - outputPosition);
+                System.arraycopy(outputBuffer, outputPosition, output, offset, take);
+                offset += take;
+                length -= take;
+                outputPosition = (outputPosition + take) & 0x3f;
+            }
+            int[] words = length >= 64 ? new int[16] : null;
+
+            while (length >= 64) {
+                outputOneBlock(words, output, offset);
+
+                offset += 64;
+                length -= 64;
+            }
+            if (length > 0) {
+                outputOneBlock(words, outputBuffer, 0);
+
+                System.arraycopy(outputBuffer, 0, output, offset, length);
+                outputPosition = length;
+            }
         }
 
     }

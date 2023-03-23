@@ -5,7 +5,7 @@
 package org.asterisk.crypto.aead;
 
 import java.lang.foreign.MemorySegment;
-import java.lang.foreign.MemorySession;
+import java.lang.foreign.SegmentScope;
 import java.util.function.Function;
 import org.asterisk.crypto.helper.Tools;
 import org.asterisk.crypto.lowlevel.DeoxysTBC;
@@ -89,7 +89,7 @@ public enum DeoxysII {
 
     public final class Encrypter {
 
-        private final MemorySegment buffer = MemorySegment.allocateNative(16, MemorySession.global());
+        private final MemorySegment buffer = MemorySegment.allocateNative(16, SegmentScope.auto());
         private int position = 0;
 
         private final int[] auth = new int[4], tweak = new int[4], data = new int[4], savednonce, savedtag = new int[4];
@@ -262,7 +262,7 @@ public enum DeoxysII {
 
     public final class Decrypter {
 
-        private final MemorySegment buffer = MemorySegment.allocateNative(16, MemorySession.global());
+        private final MemorySegment buffer = MemorySegment.allocateNative(16, SegmentScope.auto());
         private int position = 0;
 
         private final int[] auth = new int[4], tweak = new int[4], crypttweak = new int[4], data = new int[4], savednonce, savedtag = new int[4];

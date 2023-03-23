@@ -5,7 +5,7 @@
 package org.asterisk.crypto.helper;
 
 import java.lang.foreign.MemorySegment;
-import java.lang.foreign.MemorySession;
+import java.lang.foreign.SegmentScope;
 import java.util.Objects;
 import org.asterisk.crypto.interfaces.AuthenticatedCipher;
 
@@ -23,13 +23,13 @@ public abstract class AbstractAuthenticaterEngine implements AuthenticatedCipher
     private boolean ingestingAAD = true;
 
     public AbstractAuthenticaterEngine(int blockSize) {
-        buffer = MemorySegment.allocateNative(blockSize, MemorySession.global());
+        buffer = MemorySegment.allocateNative(blockSize, SegmentScope.auto());
         this.msgBlockSize = blockSize;
         this.aadBlockSize = blockSize;
     }
 
     public AbstractAuthenticaterEngine(int msgBlockSize, int aadBlockSize) {
-        buffer = MemorySegment.allocateNative(Math.max(msgBlockSize, aadBlockSize), MemorySession.global());
+        buffer = MemorySegment.allocateNative(Math.max(msgBlockSize, aadBlockSize), SegmentScope.auto());
         this.msgBlockSize = msgBlockSize;
         this.aadBlockSize = aadBlockSize;
     }

@@ -5,7 +5,7 @@
 package org.asterisk.crypto.hash;
 
 import java.lang.foreign.MemorySegment;
-import java.lang.foreign.MemorySession;
+import java.lang.foreign.SegmentScope;
 import java.lang.foreign.ValueLayout;
 import java.util.Arrays;
 import java.util.Objects;
@@ -166,7 +166,7 @@ public class KangarooTwelve implements Xof {
         private static final ValueLayout.OfLong LAYOUT = Tools.LITTLE_ENDIAN_64_BIT;
 
         private final long[] state = new long[25];
-        private final MemorySegment buffer = MemorySegment.allocateNative(BLOCK_SIZE, MemorySession.global());
+        private final MemorySegment buffer = MemorySegment.allocateNative(BLOCK_SIZE, SegmentScope.auto());
         private int position = 0;
 
         private void round(MemorySegment input, long offset) {

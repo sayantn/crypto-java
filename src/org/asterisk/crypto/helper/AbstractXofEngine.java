@@ -5,7 +5,7 @@
 package org.asterisk.crypto.helper;
 
 import java.lang.foreign.MemorySegment;
-import java.lang.foreign.MemorySession;
+import java.lang.foreign.SegmentScope;
 import java.util.Objects;
 import org.asterisk.crypto.interfaces.Xof;
 
@@ -22,7 +22,7 @@ public abstract class AbstractXofEngine implements Xof.Engine {
     private final int blockSize, digestSize;
 
     public AbstractXofEngine(int blockSize, int digestSize) {
-        buffer = MemorySegment.allocateNative(blockSize, MemorySession.global());
+        buffer = MemorySegment.allocateNative(blockSize, SegmentScope.auto());
         this.blockSize = blockSize;
         this.digestBuffer = new byte[digestSize];
         this.digestSize = digestSize;
@@ -88,10 +88,6 @@ public abstract class AbstractXofEngine implements Xof.Engine {
             System.arraycopy(digestBuffer, 0, dest, offset, length);
             position = length;
         }
-    }
-    
-    protected void setBufferPosition(int position) {
-        this.position = Objects.checkFromIndexSize(position, 0, blockSize);
     }
 
 }

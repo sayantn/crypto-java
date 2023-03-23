@@ -13,7 +13,7 @@ import static org.asterisk.crypto.lowlevel.AesPermutation.shiftSub;
  *
  * @author Sayantan Chakraborty
  */
-public sealed abstract class AesEncApi {
+public abstract sealed class AesEncApi {
 
     private static final int[] RCON = {
         0x01000000, 0x02000000, 0x04000000, 0x08000000, 0x10000000, 0x20000000, 0x40000000, 0x80000000,
@@ -65,7 +65,6 @@ public sealed abstract class AesEncApi {
             aesRound(data, 4, data, 0, rk, 32);
             aesRound(data, 0, data, 4, rk, 36);
             aesRoundLast(data, 4, ciphertext, cOffset, rk, 40);
-
         }
 
         @Override

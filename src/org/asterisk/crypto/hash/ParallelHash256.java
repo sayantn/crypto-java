@@ -5,7 +5,7 @@
 package org.asterisk.crypto.hash;
 
 import java.lang.foreign.MemorySegment;
-import java.lang.foreign.MemorySession;
+import java.lang.foreign.SegmentScope;
 import java.lang.foreign.ValueLayout;
 import java.util.Arrays;
 import org.asterisk.crypto.helper.Tools;
@@ -126,7 +126,7 @@ public class ParallelHash256 implements Digest {
     private static final class Chunk {
 
         private final long[] state = new long[25];
-        private final MemorySegment buffer = MemorySegment.allocateNative(BLOCK_SIZE, MemorySession.global());
+        private final MemorySegment buffer = MemorySegment.allocateNative(BLOCK_SIZE, SegmentScope.auto());
         private int position = 0;
 
         private void ingestOneBlock(MemorySegment input, long offset) {
