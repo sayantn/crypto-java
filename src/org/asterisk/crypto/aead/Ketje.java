@@ -494,7 +494,7 @@ public enum Ketje implements AuthenticatedCipher {
                     Tools.store32LE(state[12], dest, 8);
                     Tools.store32LE(state[18], dest, 12);
                 }
-                
+
                 @Override
                 public boolean verify(byte[] tag, int offset, int length) {
                     var verified = super.verify(tag, offset, length);
@@ -528,7 +528,5 @@ public enum Ketje implements AuthenticatedCipher {
     public int tagLength() {
         return 16;
     }
-
-
 
 }

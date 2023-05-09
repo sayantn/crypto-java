@@ -6,45 +6,40 @@ package org.asterisk.crypto.interfaces;
 
 import java.lang.foreign.MemorySegment;
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 import javax.crypto.AEADBadTagException;
 
 /**
  *
  * @author Sayantan Chakraborty
  */
-public interface AuthenticatedCipher {
+public interface AuthenticatedCipher extends SimpleAead {
+
+    @Override
+    default long encrypt(byte[] key, byte[] iv, MemorySegment aad, MemorySegment plaintext, MemorySegment ciphertext, byte[] tag, int tOffset, int tLength) {
+        var encrypter = startEncryption(key, iv);
+        encrypter.ingestAAD(aad);
+        var offset = encrypter.encrypt(plaintext, ciphertext);
+        offset += encrypter.finish(ciphertext.asSlice(offset));
+        encrypter.authenticate(tag, tOffset, tLength);
+        return offset;
+    }
+    
+    @Override
+    default long decrypt(byte[] key, byte[] iv, MemorySegment aad, MemorySegment ciphertext, MemorySegment plaintext, byte[] tag, int tOffset, int tLength) throws AEADBadTagException {
+        var decrypter = startDecryption(key, iv);
+        decrypter.ingestAAD(aad);
+        var offset = decrypter.decrypt(ciphertext, plaintext);
+        offset += decrypter.finish(plaintext.asSlice(offset));
+        if(!decrypter.verify(tag, tOffset, tLength)){
+            plaintext.asSlice(0, offset).fill((byte)0);
+            throw new AEADBadTagException();
+        }
+        return offset;
+    }
 
     EncryptEngine startEncryption(byte[] key, byte[] iv);
 
     DecryptEngine startDecryption(byte[] key, byte[] iv);
-
-    int keyLength();
-
-    int ivLength();
-
-    int tagLength();
-    
-    default int encrypt(byte[] key, byte[] iv, byte[] plaintext, byte[] aad, byte[] ciphertext, byte[] tag) {
-        var enc = startEncryption(key, iv);
-        enc.ingestAAD(aad);
-        var ret = enc.encrypt(plaintext, ciphertext);
-        ret += enc.finish(ciphertext, ret);
-        enc.authenticate(tag);
-        return ret;
-    }
-
-    default int decrypt(byte[] key, byte[] iv, byte[] ciphertext, byte[] aad, byte[] plaintext, byte[] tag) throws AEADBadTagException {
-        var dec = startDecryption(key, iv);
-        dec.ingestAAD(aad);
-        var ret = dec.decrypt(ciphertext, plaintext);
-        ret += dec.finish(plaintext, ret);
-        if (!dec.verify(tag)) {
-            Arrays.fill(plaintext, 0, ret, (byte) 0);
-            throw new AEADBadTagException();
-        }
-        return ret;
-    }
 
     static interface EncryptEngine {
 

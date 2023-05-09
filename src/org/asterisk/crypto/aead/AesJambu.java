@@ -277,6 +277,4 @@ public enum AesJambu implements AuthenticatedCipher {
         return 8;
     }
 
-
-
 }

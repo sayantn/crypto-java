@@ -7,12 +7,15 @@ package org.asterisk.crypto.aead;
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.SegmentScope;
 import java.util.function.Function;
+import javax.crypto.AEADBadTagException;
 import org.asterisk.crypto.helper.Tools;
 import org.asterisk.crypto.lowlevel.DeoxysTBC;
 
 import static org.asterisk.crypto.helper.Tools.BIG_ENDIAN_32_BIT;
 import static org.asterisk.crypto.helper.Tools.load32BE;
 import static org.asterisk.crypto.helper.Tools.ozpad;
+
+import org.asterisk.crypto.interfaces.SimpleAead;
 
 /**
  * the winner of the CAESAR competition for authenticated ciphers in use case 3
@@ -35,7 +38,7 @@ import static org.asterisk.crypto.helper.Tools.ozpad;
  *
  * @author Sayantan Chakraborty
  */
-public enum DeoxysII {
+public enum DeoxysII implements SimpleAead {
 
     DEOXYS_II_128(DeoxysTBC.DeoxysTBC_256::new) {
         @Override
@@ -57,14 +60,45 @@ public enum DeoxysII {
         this.constructor = constructor;
     }
 
-    public abstract int keyLength();
-
+    @Override
     public int ivLength() {
         return 16;
     }
 
+    @Override
     public int tagLength() {
         return 16;
+    }
+
+    @Override
+    public long encrypt(byte[] key, byte[] iv, MemorySegment aad, MemorySegment plaintext, MemorySegment ciphertext, byte[] tag, int tOffset, int tLength) {
+        if (tLength != 16) {
+            throw new IllegalArgumentException("Deoxys-II always exports a 16 byte tag");
+        }
+        var encrypter = startEncryption(key, iv);
+        encrypter.ingestAAD(aad);
+        encrypter.firstPass(plaintext);
+        encrypter.authenticate(tag, tOffset);
+        var offset = encrypter.secondPass(plaintext, ciphertext);
+        offset += encrypter.finishSecondPass(ciphertext.asSlice(offset));
+        return offset;
+    }
+
+    @Override
+    public long decrypt(byte[] key, byte[] iv, MemorySegment aad, MemorySegment ciphertext, MemorySegment plaintext, byte[] tag, int tOffset, int tLength) throws AEADBadTagException {
+        if (tLength != 16) {
+            throw new IllegalArgumentException("Deoxys-AE2 always exports a 16 byte tag");
+        }
+        var decrypter = startDecryption(key, iv);
+        decrypter.ingestAAD(aad);
+        decrypter.setTag(tag, tOffset);
+        var offset = decrypter.decrypt(ciphertext, plaintext);
+        offset += decrypter.finish(plaintext.asSlice(offset));
+        if (!decrypter.verify()) {
+            plaintext.asSlice(0, offset).fill((byte) 0);
+            throw new AEADBadTagException();
+        }
+        return offset;
     }
 
     public Encrypter startEncryption(byte[] key, byte[] iv) {
@@ -87,6 +121,10 @@ public enum DeoxysII {
         return new Decrypter(key, iv);
     }
 
+    private enum State {
+        INGESTING, FIRST_PASS, SECOND_PASS, CLOSED
+    }
+
     public final class Encrypter {
 
         private final MemorySegment buffer = MemorySegment.allocateNative(16, SegmentScope.auto());
@@ -98,7 +136,7 @@ public enum DeoxysII {
 
         private long counter = 0;
 
-        private boolean closed = false;
+        private State state = State.INGESTING;
 
         private Encrypter(byte[] key, byte[] iv) {
             blockCipher = constructor.apply(key);
@@ -132,9 +170,20 @@ public enum DeoxysII {
 
         }
 
+        private void ingestLastBlock() {
+            if (position > 0) {
+                ozpad(buffer, position);
+                tweak[0] |= LAST;
+                ingestOneBlock(buffer, 0);
+                position = 0;
+            }
+            tweak[0] = 0;
+            counter = 0;
+        }
+
         public void ingestAAD(MemorySegment input) {
-            if (closed) {
-                throw new IllegalStateException("Cannot ingest AAD after encrypting!");
+            if (state != State.INGESTING) {
+                throw new IllegalStateException("Cannot ingest AAD after starting encrypting!");
             }
             long offset = 0, length = input.byteSize();
             if (position > 0) {
@@ -190,21 +239,37 @@ public enum DeoxysII {
 
             blockCipher.setTweak(tweak);
             blockCipher.encryptBlock(auth, 0, savedtag, 0);
+
+            tweak[0] = TAG | savedtag[0];
+            tweak[1] = savedtag[1];
+
+            counter = 0;
         }
 
-        public long encrypt(MemorySegment plaintext, MemorySegment ciphertext) {
-            if (closed) {
-                throw new IllegalStateException("Can encrypt only one time!");
+        public void firstPass(MemorySegment plaintext) {
+            switch (state) {
+                case INGESTING -> {
+                    ingestLastBlock();
+                    state = State.FIRST_PASS;
+                }
+                case SECOND_PASS ->
+                    throw new IllegalStateException("First pass can be done only once");
+                case CLOSED ->
+                    throw new IllegalStateException("Cannot encrypt more than once");
             }
-            if (position > 0) {
-                tweak[0] |= LAST;
-                ozpad(buffer, position);
-                ingestOneBlock(buffer, 0);
-                position = 0;
-            }
-            tweak[0] = 0;
-            counter = 0;
             long offset = 0, length = plaintext.byteSize();
+            if (position > 0) {
+                int take = (int) Math.min(length, 16 - position);
+                MemorySegment.copy(plaintext, offset, buffer, position, take);
+                offset += take;
+                length -= take;
+                position += take;
+                if (position == 16) {
+                    ingestOneBlock(buffer, 0);
+                    position = 0;
+                }
+            }
+
             while (length >= 16) {
                 ingestOneBlock(plaintext, offset);
 
@@ -213,49 +278,80 @@ public enum DeoxysII {
             }
             if (length > 0) {
                 MemorySegment.copy(plaintext, offset, buffer, 0, length);
-                ozpad(buffer, length);
-                tweak[0] |= LAST;
-                ingestOneBlock(buffer, 0);
+                position = (int) length;
             }
-
-            generateTag();
-
-            tweak[0] = TAG | savedtag[0];
-            tweak[1] = savedtag[1];
-
-            counter = 0;
-
-            length = plaintext.byteSize();
-            offset = 0;
-            while (length >= 16) {
-                encryptOneBlock(plaintext, offset, ciphertext, offset);
-                offset += 16;
-                length -= 16;
-            }
-            if (length > 0) {
-                MemorySegment.copy(plaintext, offset, buffer, 0, length);
-                encryptOneBlock(buffer, 0, buffer, 0);
-                MemorySegment.copy(buffer, 0, ciphertext, offset, length);
-                offset += length;
-            }
-
-            closed = true;
-
-            return offset;
         }
 
         public void authenticate(byte[] tag, int offset) {
             if (tag.length - offset < 16) {
                 throw new IllegalArgumentException("Deoxys-II always exports a 16 byte tag, but buffer provided has size " + (tag.length - offset));
             }
-            if (!closed) {
+            if (state == State.INGESTING || state == State.FIRST_PASS) {
+                ingestLastBlock();
+                state = State.SECOND_PASS;
                 generateTag();
-                closed = true;
             }
             Tools.store32BE(savedtag[0], tag, offset + 0);
             Tools.store32BE(savedtag[1], tag, offset + 4);
             Tools.store32BE(savedtag[2], tag, offset + 8);
             Tools.store32BE(savedtag[3], tag, offset + 12);
+        }
+
+        public long secondPass(MemorySegment plaintext, MemorySegment ciphertext) {
+            switch (state) {
+                case INGESTING, FIRST_PASS -> {
+                    ingestLastBlock();
+                    state = State.SECOND_PASS;
+                    generateTag();
+                }
+                case CLOSED ->
+                    throw new IllegalStateException("Cannot encrypt more than once");
+            }
+            long pOffset = 0, cOffset = 0, length = plaintext.byteSize();
+            if (position > 0) {
+                int take = (int) Math.min(length, 16 - position);
+                MemorySegment.copy(plaintext, pOffset, buffer, position, take);
+                pOffset += take;
+                length -= take;
+                position += take;
+                if (position == 16) {
+                    encryptOneBlock(buffer, 0, ciphertext, cOffset);
+                    cOffset += 16;
+                    position = 0;
+                }
+            }
+
+            while (length >= 16) {
+                encryptOneBlock(plaintext, pOffset, ciphertext, cOffset);
+
+                pOffset += 16;
+                cOffset += 16;
+                length -= 16;
+            }
+            if (length > 0) {
+                MemorySegment.copy(plaintext, pOffset, buffer, 0, length);
+                position = (int) length;
+            }
+            return pOffset;
+        }
+
+        public int finishSecondPass(MemorySegment ciphertext) {
+            return switch (state) {
+                case INGESTING, FIRST_PASS -> {
+                    ingestLastBlock();
+                    state = State.CLOSED;
+                    generateTag();
+                    yield 0;
+                }
+                case SECOND_PASS -> {
+                    encryptOneBlock(buffer, 0, buffer, 0);
+                    MemorySegment.copy(buffer, 0, ciphertext, 0, position);
+                    state = State.CLOSED;
+                    yield position;
+                }
+                case CLOSED ->
+                    throw new IllegalStateException("Already closed!");
+            };
         }
 
     }

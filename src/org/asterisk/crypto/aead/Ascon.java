@@ -4,9 +4,9 @@
  */
 package org.asterisk.crypto.aead;
 
-import org.asterisk.crypto.Tested;
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
+import org.asterisk.crypto.Tested;
 import org.asterisk.crypto.helper.AbstractAuthenticaterEngine;
 import org.asterisk.crypto.helper.AbstractVerifierEngine;
 import org.asterisk.crypto.helper.Tools;
@@ -648,7 +648,5 @@ public enum Ascon implements AuthenticatedCipher {
     public int tagLength() {
         return 16;
     }
-
-
 
 }

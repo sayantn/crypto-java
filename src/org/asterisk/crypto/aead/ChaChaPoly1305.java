@@ -200,6 +200,4 @@ public enum ChaChaPoly1305 implements AuthenticatedCipher {
         return 16;
     }
 
-
-
 }

@@ -348,6 +348,4 @@ public enum DeoxysAE1 implements AuthenticatedCipher {
         return 16;
     }
 
-
-
 }

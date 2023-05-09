@@ -351,6 +351,4 @@ public enum DeoxysI implements AuthenticatedCipher {
         return 16;
     }
 
-
-
 }

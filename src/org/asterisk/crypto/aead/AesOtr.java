@@ -105,8 +105,6 @@ public enum AesOtr implements AuthenticatedCipher {
         return 16;
     }
 
-
-
     private final class OtrPEncrypter extends AbstractAuthenticaterEngine {
 
         private final AesEncApi aes;

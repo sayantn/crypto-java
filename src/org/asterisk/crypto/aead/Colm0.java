@@ -12,11 +12,13 @@ import org.asterisk.crypto.lowlevel.AesEncApi;
 import static java.lang.foreign.ValueLayout.JAVA_BYTE;
 import static org.asterisk.crypto.helper.GfHelper.*;
 
+import org.asterisk.crypto.interfaces.SimpleAead;
+
 /**
  *
  * @author Sayantan Chakraborty
  */
-public enum Colm0 {
+public enum Colm0 implements SimpleAead {
 
     COLM_0;
 
@@ -54,14 +56,17 @@ public enum Colm0 {
 
     }
 
+    @Override
     public int keyLength() {
         return 16;
     }
 
+    @Override
     public int ivLength() {
         return 8;
     }
 
+    @Override
     public int tagLength() {
         return 16;
     }
@@ -88,6 +93,35 @@ public enum Colm0 {
             throw new IllegalArgumentException("Colm0 takes a 8 byte iv, " + iv.length + " bytes provided");
         }
         return new Colm0DecryptEngine(key, iv);
+    }
+
+    @Override
+    public long encrypt(byte[] key, byte[] iv, MemorySegment aad, MemorySegment plaintext, MemorySegment ciphertext, byte[] tag, int tOffset, int tLength) {
+        if (tLength != tagLength()) {
+            throw new IllegalArgumentException("Colm must use a 16-byte tag");
+        }
+        var encrypter = startEncryption(key, iv);
+        encrypter.ingestAAD(aad);
+        long offset = encrypter.encrypt(plaintext, ciphertext);
+        offset += encrypter.finish(ciphertext, tag, tOffset);
+        return offset;
+    }
+
+    @Override
+    public long decrypt(byte[] key, byte[] iv, MemorySegment aad, MemorySegment ciphertext, MemorySegment plaintext, byte[] tag, int tOffset, int tLength) throws AEADBadTagException {
+        if (tLength != tagLength()) {
+            throw new IllegalArgumentException("Colm must use a 16-byte tag");
+        }
+        var decrypter = startDecryption(key, iv);
+        decrypter.ingestAAD(aad);
+        long offset = decrypter.decrypt(ciphertext, plaintext);
+        try {
+            offset += decrypter.finish(ciphertext, tag, tOffset);
+        } catch (AEADBadTagException ex) {
+            plaintext.asSlice(0, ciphertext.byteSize()).fill((byte) 0);
+            throw ex;
+        }
+        return offset;
     }
 
     public static class Colm0EncryptEngine {

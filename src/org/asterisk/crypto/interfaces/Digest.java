@@ -12,6 +12,7 @@ import java.nio.channels.FileChannel;
 import java.nio.channels.FileChannel.MapMode;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.Objects;
 
 /**
  *
@@ -20,7 +21,7 @@ import java.nio.file.StandardOpenOption;
 public interface Digest {
 
     Engine start();
-
+    
     int digestSize();
     
     int blockSize();
@@ -66,14 +67,15 @@ public interface Digest {
          *
          * @throws IOException               if any read operation throws
          * @throws IndexOutOfBoundsException if {@code offset<0} or
-         *                                   {@code length>0} or
+         *                                   {@code length<0} or
          *                                   {@code offset>size} where
          *                                   size is the size of the file in
          *                                   bytes
          */
         default long ingest(Path file, long offset, long length) throws IOException {
-            try ( var channel = FileChannel.open(file, StandardOpenOption.READ)) {
+            try (var channel = FileChannel.open(file, StandardOpenOption.READ)) {
                 length = Math.min(length, channel.size() - offset);
+                Objects.checkFromIndexSize(offset, length, channel.size());
                 ingest(channel.map(MapMode.READ_ONLY, offset, length, SegmentScope.auto()));
             }
             return length;

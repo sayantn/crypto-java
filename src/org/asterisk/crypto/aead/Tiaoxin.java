@@ -22,7 +22,7 @@ import static org.asterisk.crypto.helper.Tools.store32BE;
 public enum Tiaoxin implements AuthenticatedCipher {
 
     TIAOXIN_346;
-    
+
     private static final ValueLayout.OfInt LAYOUT = Tools.BIG_ENDIAN_32_BIT;
 
     private static final int[] Z = {
@@ -90,8 +90,6 @@ public enum Tiaoxin implements AuthenticatedCipher {
     public int tagLength() {
         return 16;
     }
-
-
 
     @Override
     public AuthenticatedCipher.EncryptEngine startEncryption(byte[] key, byte[] iv) {

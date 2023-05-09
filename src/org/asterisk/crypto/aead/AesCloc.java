@@ -146,7 +146,7 @@ public enum AesCloc implements AuthenticatedCipher {
                 ciphertext.set(LAYOUT, cOffset + 12, state[3]);
 
                 state[0] |= 0x80000000;
-                
+
                 aes.encryptBlock(state, 0, state, 0);
 
             }
@@ -355,7 +355,5 @@ public enum AesCloc implements AuthenticatedCipher {
     public int tagLength() {
         return 8;
     }
-
-
 
 }
