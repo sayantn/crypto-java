@@ -170,9 +170,28 @@ public class KangarooTwelve implements Xof {
         private int position = 0;
 
         private void round(MemorySegment input, long offset) {
-            for (int i = 0; i < 21; i++) {
-                state[i] ^= input.get(LAYOUT, offset + 8 * i);
-            }
+            state[0] ^= input.get(LAYOUT, offset + 0);
+            state[1] ^= input.get(LAYOUT, offset + 8);
+            state[2] ^= input.get(LAYOUT, offset + 16);
+            state[3] ^= input.get(LAYOUT, offset + 24);
+            state[4] ^= input.get(LAYOUT, offset + 32);
+            state[5] ^= input.get(LAYOUT, offset + 40);
+            state[6] ^= input.get(LAYOUT, offset + 48);
+            state[7] ^= input.get(LAYOUT, offset + 56);
+            state[8] ^= input.get(LAYOUT, offset + 64);
+            state[9] ^= input.get(LAYOUT, offset + 72);
+            state[10] ^= input.get(LAYOUT, offset + 80);
+            state[11] ^= input.get(LAYOUT, offset + 88);
+            state[12] ^= input.get(LAYOUT, offset + 96);
+            state[13] ^= input.get(LAYOUT, offset + 104);
+            state[14] ^= input.get(LAYOUT, offset + 112);
+            state[15] ^= input.get(LAYOUT, offset + 120);
+            state[16] ^= input.get(LAYOUT, offset + 128);
+            state[17] ^= input.get(LAYOUT, offset + 136);
+            state[18] ^= input.get(LAYOUT, offset + 144);
+            state[19] ^= input.get(LAYOUT, offset + 152);
+            state[20] ^= input.get(LAYOUT, offset + 160);
+
             keccak_p1600(state, 12);
         }
 

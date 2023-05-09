@@ -17,6 +17,7 @@ import org.asterisk.crypto.interfaces.Mac;
  *
  * @author Sayantan Chakraborty
  */
+//For some unknown reason, this apparently slow and rolled process is faster than any unrolled version
 public class Blake2b implements Digest, Mac {
 
     private static final ValueLayout.OfLong LAYOUT = Tools.LITTLE_ENDIAN_64_BIT;

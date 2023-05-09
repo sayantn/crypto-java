@@ -54,7 +54,7 @@ public enum Poly1305 implements Mac {
         return 32;
     }
 
-    public static class Poly1305Engine implements Engine {
+    public static final class Poly1305Engine implements Engine {
 
         private static long addFull(int a, int b) {
             return Integer.toUnsignedLong(a) + Integer.toUnsignedLong(b);
@@ -101,7 +101,7 @@ public enum Poly1305 implements Mac {
         }
 
         @Override
-        public final void ingest(MemorySegment input) {
+        public void ingest(MemorySegment input) {
             long offset = 0, length = input.byteSize();
             if (position > 0) {
                 int take = (int) Math.min(length, 16 - position);

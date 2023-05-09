@@ -29,7 +29,7 @@ import static org.asterisk.crypto.helper.Tools.store32LE;
  *
  * @author Sayantan Chakraborty
  */
-public enum Blake3 implements Xof {
+enum Blake3 implements Xof {
 
     BLAKE3;
 

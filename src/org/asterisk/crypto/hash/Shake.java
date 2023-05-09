@@ -57,7 +57,7 @@ public enum Shake implements Xof {
                     KeccakP.keccak_f1600(state);
 
                     for (int i = 0; i < 21; i++) {
-                        Tools.store64LE(state[0], dest, offset + 8 * i);
+                        Tools.store64LE(state[i], dest, offset + 8 * i);
                     }
                 }
 
@@ -119,7 +119,7 @@ public enum Shake implements Xof {
                     KeccakP.keccak_f1600(state);
 
                     for (int i = 0; i < 17; i++) {
-                        Tools.store64LE(state[0], dest, offset + 8 * i);
+                        Tools.store64LE(state[i], dest, offset + 8 * i);
                     }
                 }
 

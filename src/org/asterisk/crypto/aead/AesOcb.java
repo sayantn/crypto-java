@@ -4,13 +4,13 @@
  */
 package org.asterisk.crypto.aead;
 
-import org.asterisk.crypto.helper.GfHelper;
 import java.lang.foreign.MemorySegment;
 import java.util.function.Function;
 import java.util.stream.Stream;
 import org.asterisk.crypto.Tested;
 import org.asterisk.crypto.helper.AbstractAuthenticaterEngine;
 import org.asterisk.crypto.helper.AbstractVerifierEngine;
+import org.asterisk.crypto.helper.GfHelper;
 import org.asterisk.crypto.helper.Tools;
 import org.asterisk.crypto.interfaces.AuthenticatedCipher;
 import org.asterisk.crypto.lowlevel.AesDecApi;
@@ -441,7 +441,5 @@ public class AesOcb implements AuthenticatedCipher {
     public int tagLength() {
         return tagLength;
     }
-
-
 
 }
