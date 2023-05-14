@@ -6,13 +6,12 @@ import java.lang.foreign.ValueLayout;
 import java.util.Objects;
 import javax.crypto.AEADBadTagException;
 import org.asterisk.crypto.helper.Tools;
+import org.asterisk.crypto.interfaces.SimpleAead;
 import org.asterisk.crypto.lowlevel.AesDecApi;
 import org.asterisk.crypto.lowlevel.AesEncApi;
 
 import static java.lang.foreign.ValueLayout.JAVA_BYTE;
 import static org.asterisk.crypto.helper.GfHelper.*;
-
-import org.asterisk.crypto.interfaces.SimpleAead;
 
 /**
  *
@@ -124,6 +123,12 @@ public enum Colm0 implements SimpleAead {
         return offset;
     }
 
+    /**
+     * The normal control flow is (ingestAAD)* (encrypt)* finish
+     * <p>
+     * The main difference to EncryptEngine is that it must release the tag in
+     * finish(), and the tag cannot be truncated
+     */
     public static class Colm0EncryptEngine {
 
         private final int[] deltaA = new int[4], deltaM = new int[4], deltaC = new int[4];

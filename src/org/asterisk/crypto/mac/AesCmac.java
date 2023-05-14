@@ -19,8 +19,8 @@ package org.asterisk.crypto.mac;
 
 import java.lang.foreign.MemorySegment;
 import java.util.function.Function;
-import org.asterisk.crypto.helper.GfHelper;
 import org.asterisk.crypto.helper.AbstractMacEngine;
+import org.asterisk.crypto.helper.GfHelper;
 import org.asterisk.crypto.helper.Tools;
 import org.asterisk.crypto.interfaces.Mac;
 import org.asterisk.crypto.lowlevel.AesEncApi;
@@ -99,11 +99,11 @@ public enum AesCmac implements Mac {
             }
 
             @Override
-            protected void getTag(byte[] buffer) {
-                Tools.store32BE(checksum[0], buffer, 0);
-                Tools.store32BE(checksum[1], buffer, 4);
-                Tools.store32BE(checksum[2], buffer, 8);
-                Tools.store32BE(checksum[3], buffer, 12);
+            protected void getTag(byte[] buffer, int offset) {
+                Tools.store32BE(checksum[0], buffer, offset + 0);
+                Tools.store32BE(checksum[1], buffer, offset + 4);
+                Tools.store32BE(checksum[2], buffer, offset + 8);
+                Tools.store32BE(checksum[3], buffer, offset + 12);
 
             }
 

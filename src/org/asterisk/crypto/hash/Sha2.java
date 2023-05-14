@@ -162,7 +162,7 @@ public enum Sha2 implements Digest {
                 }
 
                 @Override
-                protected void digestOneBlock(byte[] dest, int offset) {
+                protected void getDigest(byte[] dest, int offset) {
                     Tools.store32BE(state[0], dest, offset + 0);
                     Tools.store32BE(state[1], dest, offset + 4);
                     Tools.store32BE(state[2], dest, offset + 8);
@@ -336,7 +336,7 @@ public enum Sha2 implements Digest {
                 }
 
                 @Override
-                protected void digestOneBlock(byte[] dest, int offset) {
+                protected void getDigest(byte[] dest, int offset) {
                     Tools.store32BE(state[0], dest, offset + 0);
                     Tools.store32BE(state[1], dest, offset + 4);
                     Tools.store32BE(state[2], dest, offset + 8);
@@ -510,7 +510,7 @@ public enum Sha2 implements Digest {
                 }
 
                 @Override
-                protected void digestOneBlock(byte[] dest, int offset) {
+                protected void getDigest(byte[] dest, int offset) {
                     Tools.store64BE(state[0], dest, offset + 0);
                     Tools.store64BE(state[1], dest, offset + 8);
                     Tools.store64BE(state[2], dest, offset + 16);
@@ -683,7 +683,7 @@ public enum Sha2 implements Digest {
                 }
 
                 @Override
-                protected void digestOneBlock(byte[] dest, int offset) {
+                protected void getDigest(byte[] dest, int offset) {
                     Tools.store64BE(state[0], dest, offset + 0);
                     Tools.store64BE(state[1], dest, offset + 8);
                     Tools.store64BE(state[2], dest, offset + 16);

@@ -12,10 +12,10 @@ import java.lang.annotation.Target;
 
 /**
  * The presence of this annotation on any public field (including enum
- * constants) containing a cryptographic algorithm implies that that
+ * constants) containing a cryptographic algorithm implies that the
  * implementation has been exhaustively tested
  * <p>
- * The presence of this annotation on a constructor also implies that
+ * The presence of this annotation on a constructor or method also implies that
  * all the public methods accessible of that object are also tested exhaustively
  *
  * @author Sayantan Chakraborty

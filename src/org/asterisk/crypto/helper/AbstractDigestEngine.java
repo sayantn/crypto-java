@@ -29,7 +29,7 @@ public abstract class AbstractDigestEngine implements Digest.Engine {
 
     protected abstract void ingestLastBlock(MemorySegment input, int length);
 
-    protected abstract void digestOneBlock(byte[] dest, int offset);
+    protected abstract void getDigest(byte[] dest, int offset);
 
     @Override
     public final void ingest(MemorySegment input) {
@@ -60,7 +60,7 @@ public abstract class AbstractDigestEngine implements Digest.Engine {
     public final void digestTo(byte[] dest, int offset) {
         Objects.checkFromIndexSize(offset, getAlgorithm().digestSize(), dest.length);
         ingestLastBlock(buffer, position);
-        digestOneBlock(dest, offset);
+        getDigest(dest, offset);
     }
     
     protected void setBufferPosition(int position) {

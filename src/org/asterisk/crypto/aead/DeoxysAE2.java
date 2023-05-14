@@ -21,13 +21,12 @@ import java.lang.foreign.MemorySegment;
 import java.lang.foreign.SegmentScope;
 import javax.crypto.AEADBadTagException;
 import org.asterisk.crypto.helper.Tools;
+import org.asterisk.crypto.interfaces.SimpleAead;
 import org.asterisk.crypto.lowlevel.DeoxysTBC;
 
 import static org.asterisk.crypto.helper.Tools.BIG_ENDIAN_32_BIT;
 import static org.asterisk.crypto.helper.Tools.load32BE;
 import static org.asterisk.crypto.helper.Tools.ozpad;
-
-import org.asterisk.crypto.interfaces.SimpleAead;
 
 /**
  *
@@ -109,7 +108,7 @@ public enum DeoxysAE2 implements SimpleAead {
         INGESTING, FIRST_PASS, SECOND_PASS, CLOSED
     }
 
-    public final class Encrypter {
+    public static class Encrypter {
 
         private final MemorySegment buffer = MemorySegment.allocateNative(32, SegmentScope.auto());
         private int position = 0;
@@ -346,7 +345,7 @@ public enum DeoxysAE2 implements SimpleAead {
 
     }
 
-    public final class Decrypter {
+    public static class Decrypter {
 
         private final MemorySegment buffer = MemorySegment.allocateNative(32, SegmentScope.auto());
         private int position = 0;

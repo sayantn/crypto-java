@@ -9,13 +9,12 @@ import java.lang.foreign.SegmentScope;
 import java.util.function.Function;
 import javax.crypto.AEADBadTagException;
 import org.asterisk.crypto.helper.Tools;
+import org.asterisk.crypto.interfaces.SimpleAead;
 import org.asterisk.crypto.lowlevel.DeoxysTBC;
 
 import static org.asterisk.crypto.helper.Tools.BIG_ENDIAN_32_BIT;
 import static org.asterisk.crypto.helper.Tools.load32BE;
 import static org.asterisk.crypto.helper.Tools.ozpad;
-
-import org.asterisk.crypto.interfaces.SimpleAead;
 
 /**
  * the winner of the CAESAR competition for authenticated ciphers in use case 3
@@ -108,7 +107,7 @@ public enum DeoxysII implements SimpleAead {
         if (iv.length < 15) {
             throw new IllegalArgumentException(this + " requires an iv of 15 bytes, passed only " + iv.length + " bytes");
         }
-        return new Encrypter(key, iv);
+        return new Encrypter(constructor.apply(key), iv);
     }
 
     public Decrypter startDecryption(byte[] key, byte[] iv) {
@@ -118,14 +117,14 @@ public enum DeoxysII implements SimpleAead {
         if (iv.length < 15) {
             throw new IllegalArgumentException(this + " requires an iv of 15 bytes, passed only " + iv.length + " bytes");
         }
-        return new Decrypter(key, iv);
+        return new Decrypter(constructor.apply(key), iv);
     }
 
     private enum State {
         INGESTING, FIRST_PASS, SECOND_PASS, CLOSED
     }
 
-    public final class Encrypter {
+    public static class Encrypter {
 
         private final MemorySegment buffer = MemorySegment.allocateNative(16, SegmentScope.auto());
         private int position = 0;
@@ -138,8 +137,8 @@ public enum DeoxysII implements SimpleAead {
 
         private State state = State.INGESTING;
 
-        private Encrypter(byte[] key, byte[] iv) {
-            blockCipher = constructor.apply(key);
+        private Encrypter(DeoxysTBC blockCipher, byte[] iv) {
+            this.blockCipher = blockCipher;
             savednonce = new int[]{
                 load32BE(iv, 0) >>> 8,
                 load32BE(iv, 3),
@@ -356,7 +355,7 @@ public enum DeoxysII implements SimpleAead {
 
     }
 
-    public final class Decrypter {
+    public static class Decrypter {
 
         private final MemorySegment buffer = MemorySegment.allocateNative(16, SegmentScope.auto());
         private int position = 0;
@@ -369,8 +368,8 @@ public enum DeoxysII implements SimpleAead {
 
         private boolean ingestingAAD = true, tagSet = false;
 
-        private Decrypter(byte[] key, byte[] iv) {
-            blockCipher = constructor.apply(key);
+        private Decrypter(DeoxysTBC blockCipher, byte[] iv) {
+            this.blockCipher = blockCipher;
             savednonce = new int[]{
                 load32BE(iv, 0) >>> 8,
                 load32BE(iv, 3),

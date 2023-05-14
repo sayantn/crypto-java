@@ -29,7 +29,7 @@ public abstract class AbstractMacEngine implements Mac.Engine {
 
     protected abstract void ingestLastBlock(MemorySegment input, int length);
 
-    protected abstract void getTag(byte[] buffer);
+    protected abstract void getTag(byte[] buffer, int offset);
 
     @Override
     public final void ingest(MemorySegment input) {
@@ -58,11 +58,19 @@ public abstract class AbstractMacEngine implements Mac.Engine {
 
     @Override
     public void authenticateTo(byte[] tag, int offset, int length) {
-        Objects.checkFromIndexSize(offset, getAlgorithm().tagLength(), tag.length);
+        int tagLength = getAlgorithm().tagLength();
+        if (tagLength < length) {
+            throw new IllegalArgumentException(getAlgorithm() + " can produce tags of up to " + tagLength + " bytes, " + length + " bytes requested");
+        }
+        Objects.checkFromIndexSize(offset, length, tag.length);
         ingestLastBlock(buffer, position);
-        byte[] dest = new byte[getAlgorithm().tagLength()];
-        getTag(dest);
-        System.arraycopy(dest, 0, tag, offset, length);
+        if (tagLength > length) {
+            byte[] dest = new byte[tagLength];
+            getTag(dest, 0);
+            System.arraycopy(dest, 0, tag, offset, length);
+        } else {
+            getTag(tag, offset);
+        }
     }
 
     protected void setBufferPosition(int position) {

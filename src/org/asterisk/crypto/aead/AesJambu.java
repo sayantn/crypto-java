@@ -92,20 +92,10 @@ public enum AesJambu implements AuthenticatedCipher {
                     encryptOneBlock(buffer, 0, ciphertext, 0);
                     length = 0;
                 }
-                if (length == 0) {
-                    aes.encryptBlock(state, 0, state, 0);
+                Tools.ozpad(buffer, length);
+                encryptOneBlock(buffer, 0, buffer, 0);
+                MemorySegment.copy(buffer, 0, ciphertext, 0, length);
 
-                    state[0] ^= 0x80000000;
-                    state[2] ^= r0;
-                    state[3] ^= r1;
-
-                    r0 ^= state[0];
-                    r1 ^= state[1];
-                } else {
-                    Tools.ozpad(buffer, length);
-                    encryptOneBlock(buffer, 0, buffer, 0);
-                    MemorySegment.copy(buffer, 0, ciphertext, 0, length);
-                }
                 return length;
             }
 

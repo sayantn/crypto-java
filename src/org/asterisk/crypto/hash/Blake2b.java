@@ -148,9 +148,9 @@ public class Blake2b implements Digest, Mac {
             }
 
             @Override
-            protected void getTag(byte[] dest) {
-                Tools.store64LE(state[0], dest, 0);
-                Tools.store64LE(state[1], dest, 8);
+            protected void getTag(byte[] dest, int offset) {
+                Tools.store64LE(state[0], dest, offset + 0);
+                Tools.store64LE(state[1], dest, offset + 8);
             }
 
             @Override
@@ -206,7 +206,7 @@ public class Blake2b implements Digest, Mac {
             }
 
             @Override
-            protected void digestOneBlock(byte[] dest, int offset) {
+            protected void getDigest(byte[] dest, int offset) {
                 for (int i = 0; i < 8; i++) {
                     Tools.store64LE(state[i], dest, offset + 8 * i);
                 }

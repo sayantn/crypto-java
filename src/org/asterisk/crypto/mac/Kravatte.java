@@ -12,6 +12,7 @@ import org.asterisk.crypto.interfaces.Mac;
 import org.asterisk.crypto.lowlevel.KeccakP;
 
 /**
+ * 5.3 cpb
  *
  * @author Sayantan Chakraborty
  */
@@ -83,22 +84,29 @@ public enum Kravatte implements Mac {
                     length = 0;
                 }
                 input.set(ValueLayout.JAVA_BYTE, length, (byte) 0x01);
-                input.asSlice(length + 1).fill((byte) 0);
-                ingestOneBlock(input, 0);
+                Tools.zeropad(input, length + 1);
+                for (int i = 0; i < 25; i++) {
+                    buffer[i] = input.get(LAYOUT, 8 * i) ^ rolledKey[i];
+                }
+                permute(buffer);
+                for (int i = 0; i < 25; i++) {
+                    accumulator[i] ^= buffer[i];
+                }
+                rollc(rolledKey);
 
                 rollc(rolledKey);
             }
 
             @Override
-            protected void getTag(byte[] dest) {
+            protected void getTag(byte[] dest, int offset) {
                 System.arraycopy(accumulator, 0, buffer, 0, 25);
 
                 permute(buffer);
                 rolle(buffer);
                 permute(buffer);
 
-                Tools.store64LE(buffer[0] ^ rolledKey[0], dest, 0);
-                Tools.store64LE(buffer[1] ^ rolledKey[1], dest, 8);
+                Tools.store64LE(buffer[0] ^ rolledKey[0], dest, offset + 0);
+                Tools.store64LE(buffer[1] ^ rolledKey[1], dest, offset + 8);
             }
 
             @Override

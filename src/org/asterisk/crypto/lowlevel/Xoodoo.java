@@ -33,6 +33,7 @@ public class Xoodoo {
             throw new IllegalArgumentException("rounds: " + rounds);
         }
         int temp0, temp1, temp2, temp3, temp4, temp5, temp6, temp7;
+        
         int state0 = state[0];
         int state1 = state[1];
         int state2 = state[2];

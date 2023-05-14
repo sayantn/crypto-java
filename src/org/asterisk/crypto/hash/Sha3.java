@@ -54,7 +54,7 @@ public enum Sha3 implements Digest {
                 }
 
                 @Override
-                protected void digestOneBlock(byte[] dest, int offset) {
+                protected void getDigest(byte[] dest, int offset) {
                     Tools.store64LE(state[0], dest, offset + 0);
                     Tools.store64LE(state[1], dest, offset + 8);
                     Tools.store64LE(state[2], dest, offset + 16);
@@ -115,7 +115,7 @@ public enum Sha3 implements Digest {
                 }
 
                 @Override
-                protected void digestOneBlock(byte[] dest, int offset) {
+                protected void getDigest(byte[] dest, int offset) {
                     Tools.store64LE(state[0], dest, offset + 0);
                     Tools.store64LE(state[1], dest, offset + 8);
                     Tools.store64LE(state[2], dest, offset + 16);
@@ -176,7 +176,7 @@ public enum Sha3 implements Digest {
                 }
 
                 @Override
-                protected void digestOneBlock(byte[] dest, int offset) {
+                protected void getDigest(byte[] dest, int offset) {
                     Tools.store64LE(state[0], dest, offset + 0);
                     Tools.store64LE(state[1], dest, offset + 8);
                     Tools.store64LE(state[2], dest, offset + 16);
@@ -241,7 +241,7 @@ public enum Sha3 implements Digest {
                 }
 
                 @Override
-                protected void digestOneBlock(byte[] dest, int offset) {
+                protected void getDigest(byte[] dest, int offset) {
                     Tools.store64LE(state[0], dest, offset + 0);
                     Tools.store64LE(state[1], dest, offset + 8);
                     Tools.store64LE(state[2], dest, offset + 16);

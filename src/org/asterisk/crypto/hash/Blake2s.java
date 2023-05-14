@@ -17,7 +17,7 @@ import org.asterisk.crypto.interfaces.Mac;
  *
  * @author Sayantan Chakraborty
  */
-public class Blake2s implements Digest,Mac {
+public class Blake2s implements Digest, Mac {
 
     private static final ValueLayout.OfInt LAYOUT = Tools.LITTLE_ENDIAN_32_BIT;
 
@@ -107,7 +107,7 @@ public class Blake2s implements Digest,Mac {
         pers = Arrays.copyOf(personalization.getBytes(), 8);
         persString = new String(pers);
     }
-    
+
     @Override
     public Mac.Engine start(byte[] key) {
         return startSalted(key, DEFAULT_SALT);
@@ -145,11 +145,11 @@ public class Blake2s implements Digest,Mac {
             }
 
             @Override
-            protected void getTag(byte[] dest) {
-                Tools.store32LE(state[0], dest, 0);
-                Tools.store32LE(state[1], dest, 4);
-                Tools.store32LE(state[2], dest, 8);
-                Tools.store32LE(state[3], dest, 12);
+            protected void getTag(byte[] dest, int offset) {
+                Tools.store32LE(state[0], dest, offset + 0);
+                Tools.store32LE(state[1], dest, offset + 4);
+                Tools.store32LE(state[2], dest, offset + 8);
+                Tools.store32LE(state[3], dest, offset + 12);
             }
 
             @Override
@@ -205,7 +205,7 @@ public class Blake2s implements Digest,Mac {
             }
 
             @Override
-            protected void digestOneBlock(byte[] dest, int offset) {
+            protected void getDigest(byte[] dest, int offset) {
                 for (int i = 0; i < 8; i++) {
                     Tools.store32LE(state[i], dest, offset + 4 * i);
                 }

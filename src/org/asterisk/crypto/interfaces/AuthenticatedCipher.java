@@ -23,15 +23,15 @@ public interface AuthenticatedCipher extends SimpleAead {
         encrypter.authenticate(tag, tOffset, tLength);
         return offset;
     }
-    
+
     @Override
     default long decrypt(byte[] key, byte[] iv, MemorySegment aad, MemorySegment ciphertext, MemorySegment plaintext, byte[] tag, int tOffset, int tLength) throws AEADBadTagException {
         var decrypter = startDecryption(key, iv);
         decrypter.ingestAAD(aad);
         var offset = decrypter.decrypt(ciphertext, plaintext);
         offset += decrypter.finish(plaintext.asSlice(offset));
-        if(!decrypter.verify(tag, tOffset, tLength)){
-            plaintext.asSlice(0, offset).fill((byte)0);
+        if (!decrypter.verify(tag, tOffset, tLength)) {
+            plaintext.asSlice(0, offset).fill((byte) 0);
             throw new AEADBadTagException();
         }
         return offset;
@@ -41,6 +41,12 @@ public interface AuthenticatedCipher extends SimpleAead {
 
     DecryptEngine startDecryption(byte[] key, byte[] iv);
 
+    /**
+     * The normal control flow is (ingestAAD)* (encrypt)* finish authenticate
+     * <p>
+     * Some implementations might permit a more relaxed control flow, but they
+     * must not use a more restricted version
+     */
     static interface EncryptEngine {
 
         void ingestAAD(MemorySegment aad);
@@ -95,6 +101,16 @@ public interface AuthenticatedCipher extends SimpleAead {
 
     }
 
+    /**
+     * /**
+     * The normal control flow is (ingestAAD)* (decrypt)* finish verify
+     * <p>
+     * if verify fails, the user MUST NOT release the plaintext and preferably
+     * zeroize the memory to avoid leaks
+     * <p>
+     * Some implementations might permit a more relaxed control flow, but they
+     * must not use a more restricted version
+     */
     static interface DecryptEngine {
 
         void ingestAAD(MemorySegment aad);
