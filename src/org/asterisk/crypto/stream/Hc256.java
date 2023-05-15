@@ -120,11 +120,11 @@ public enum Hc256 implements StreamCipher {
             }
 
             private int h1(int x) {
-                return Q[(x) & 0xff] + Q[256 + ((x >>> 8) & 0xff)] + Q[512 + ((x >>> 16) & 0xff)] + Q[768 + ((x >>> 24) & 0xff)];
+                return Q[x & 0xff] + Q[256 + ((x >>> 8) & 0xff)] + Q[512 + ((x >>> 16) & 0xff)] + Q[768 + (x >>> 24)];
             }
 
             private int h2(int x) {
-                return P[(x) & 0xff] + P[256 + ((x >>> 8) & 0xff)] + P[512 + ((x >>> 16) & 0xff)] + P[768 + ((x >>> 24) & 0xff)];
+                return P[x & 0xff] + P[256 + ((x >>> 8) & 0xff)] + P[512 + ((x >>> 16) & 0xff)] + P[768 + (x >>> 24) ];
             }
 
             @Override

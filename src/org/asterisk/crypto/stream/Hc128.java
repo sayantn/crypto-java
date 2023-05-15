@@ -4,13 +4,13 @@
  */
 package org.asterisk.crypto.stream;
 
-import org.asterisk.crypto.interfaces.StreamCipher;
-import org.asterisk.crypto.helper.AbstractStreamEncrypter;
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
 import org.asterisk.crypto.Tested;
+import org.asterisk.crypto.helper.AbstractStreamEncrypter;
 import org.asterisk.crypto.helper.Tools;
 import org.asterisk.crypto.interfaces.Cipher;
+import org.asterisk.crypto.interfaces.StreamCipher;
 
 import static org.asterisk.crypto.helper.Tools.load32BE;
 

@@ -152,11 +152,6 @@ public enum Zuc implements StreamCipher {
         0x000000b0, 0x00000025, 0x000000ac, 0x000000af, 0x00000012, 0x00000003, 0x000000e2, 0x000000f2
     };
 
-    private static final int[] CONST = {
-        0x44d700, 0x26bc00, 0x626b00, 0x135e00, 0x578900, 0x35e200, 0x713500, 0x09af00,
-        0x4d7800, 0x2f1300, 0x6bc400, 0x1af100, 0x5e2600, 0x3c4d00, 0x789a00, 0x47ac00
-    };
-
     private static int addM(int a, int b) {
         int w = a + b;
         return (w & 0x7fffffff) + (w >>> 31);
@@ -203,676 +198,712 @@ public enum Zuc implements StreamCipher {
     }
 
     private static int[] init(int[] register, byte[] key, byte[] iv) {
-        int[] state = new int[32];
-
-        for (int i = 0; i < 16; i++) {
-            state[i] = ((key[i] & 0xff) << 23) | CONST[i] | (iv[i] & 0xff);
-        }
+        int state0 = ((key[0] & 0xff) << 23) | 0x44d700 | (iv[0] & 0xff);
+        int state1 = ((key[1] & 0xff) << 23) | 0x26bc00 | (iv[1] & 0xff);
+        int state2 = ((key[2] & 0xff) << 23) | 0x626b00 | (iv[2] & 0xff);
+        int state3 = ((key[3] & 0xff) << 23) | 0x135e00 | (iv[3] & 0xff);
+        int state4 = ((key[4] & 0xff) << 23) | 0x578900 | (iv[4] & 0xff);
+        int state5 = ((key[5] & 0xff) << 23) | 0x35e200 | (iv[5] & 0xff);
+        int state6 = ((key[6] & 0xff) << 23) | 0x713500 | (iv[6] & 0xff);
+        int state7 = ((key[7] & 0xff) << 23) | 0x09af00 | (iv[7] & 0xff);
+        int state8 = ((key[8] & 0xff) << 23) | 0x4d7800 | (iv[8] & 0xff);
+        int state9 = ((key[9] & 0xff) << 23) | 0x2f1300 | (iv[9] & 0xff);
+        int state10 = ((key[10] & 0xff) << 23) | 0x6bc400 | (iv[10] & 0xff);
+        int state11 = ((key[11] & 0xff) << 23) | 0x1af100 | (iv[11] & 0xff);
+        int state12 = ((key[12] & 0xff) << 23) | 0x5e2600 | (iv[12] & 0xff);
+        int state13 = ((key[13] & 0xff) << 23) | 0x3c4d00 | (iv[13] & 0xff);
+        int state14 = ((key[14] & 0xff) << 23) | 0x789a00 | (iv[14] & 0xff);
+        int state15 = ((key[15] & 0xff) << 23) | 0x47ac00 | (iv[15] & 0xff);
 
         int w1, w2, u, r1 = 0, r2 = 0;
 
-        u = (((state[15] & 0xffff0000) << 1) ^ (state[14] & 0xffff) ^ r1) + r2;
+        u = (((state15 & 0xffff0000) << 1) ^ (state14 & 0xffff) ^ r1) + r2;
 
-        w1 = r1 + ((state[11] << 16) | (state[9] >>> 15));
-        w2 = r2 ^ (state[7] << 16) ^ (state[5] >>> 15);
-
-        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
-        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
-
-        state[16] = feedback(state[0], state[4], state[10], state[13], state[15], u >>> 1);
-
-        u = (((state[16] & 0xffff0000) << 1) ^ (state[15] & 0xffff) ^ r1) + r2;
-
-        w1 = r1 + ((state[12] << 16) | (state[10] >>> 15));
-        w2 = r2 ^ (state[8] << 16) ^ (state[6] >>> 15);
+        w1 = r1 + ((state11 << 16) | (state9 >>> 15));
+        w2 = r2 ^ (state7 << 16) ^ (state5 >>> 15);
 
         r1 = s(l1((w1 << 16) | (w2 >>> 16)));
         r2 = s(l2((w2 << 16) | (w1 >>> 16)));
 
-        state[17] = feedback(state[1], state[5], state[11], state[14], state[16], u >>> 1);
+        int state16 = feedback(state0, state4, state10, state13, state15, u >>> 1);
 
-        u = (((state[17] & 0xffff0000) << 1) ^ (state[16] & 0xffff) ^ r1) + r2;
+        u = (((state16 & 0xffff0000) << 1) ^ (state15 & 0xffff) ^ r1) + r2;
 
-        w1 = r1 + ((state[13] << 16) | (state[11] >>> 15));
-        w2 = r2 ^ (state[9] << 16) ^ (state[7] >>> 15);
-
-        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
-        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
-
-        state[18] = feedback(state[2], state[6], state[12], state[15], state[17], u >>> 1);
-
-        u = (((state[18] & 0xffff0000) << 1) ^ (state[17] & 0xffff) ^ r1) + r2;
-
-        w1 = r1 + ((state[14] << 16) | (state[12] >>> 15));
-        w2 = r2 ^ (state[10] << 16) ^ (state[8] >>> 15);
+        w1 = r1 + ((state12 << 16) | (state10 >>> 15));
+        w2 = r2 ^ (state8 << 16) ^ (state6 >>> 15);
 
         r1 = s(l1((w1 << 16) | (w2 >>> 16)));
         r2 = s(l2((w2 << 16) | (w1 >>> 16)));
 
-        state[19] = feedback(state[3], state[7], state[13], state[16], state[18], u >>> 1);
+        int state17 = feedback(state1, state5, state11, state14, state16, u >>> 1);
 
-        u = (((state[19] & 0xffff0000) << 1) ^ (state[18] & 0xffff) ^ r1) + r2;
+        u = (((state17 & 0xffff0000) << 1) ^ (state16 & 0xffff) ^ r1) + r2;
 
-        w1 = r1 + ((state[15] << 16) | (state[13] >>> 15));
-        w2 = r2 ^ (state[11] << 16) ^ (state[9] >>> 15);
-
-        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
-        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
-
-        state[20] = feedback(state[4], state[8], state[14], state[17], state[19], u >>> 1);
-
-        u = (((state[20] & 0xffff0000) << 1) ^ (state[19] & 0xffff) ^ r1) + r2;
-
-        w1 = r1 + ((state[16] << 16) | (state[14] >>> 15));
-        w2 = r2 ^ (state[12] << 16) ^ (state[10] >>> 15);
+        w1 = r1 + ((state13 << 16) | (state11 >>> 15));
+        w2 = r2 ^ (state9 << 16) ^ (state7 >>> 15);
 
         r1 = s(l1((w1 << 16) | (w2 >>> 16)));
         r2 = s(l2((w2 << 16) | (w1 >>> 16)));
 
-        state[21] = feedback(state[5], state[9], state[15], state[18], state[20], u >>> 1);
+        int state18 = feedback(state2, state6, state12, state15, state17, u >>> 1);
 
-        u = (((state[21] & 0xffff0000) << 1) ^ (state[20] & 0xffff) ^ r1) + r2;
+        u = (((state18 & 0xffff0000) << 1) ^ (state17 & 0xffff) ^ r1) + r2;
 
-        w1 = r1 + ((state[17] << 16) | (state[15] >>> 15));
-        w2 = r2 ^ (state[13] << 16) ^ (state[11] >>> 15);
-
-        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
-        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
-
-        state[22] = feedback(state[6], state[10], state[16], state[19], state[21], u >>> 1);
-
-        u = (((state[22] & 0xffff0000) << 1) ^ (state[21] & 0xffff) ^ r1) + r2;
-
-        w1 = r1 + ((state[18] << 16) | (state[16] >>> 15));
-        w2 = r2 ^ (state[14] << 16) ^ (state[12] >>> 15);
+        w1 = r1 + ((state14 << 16) | (state12 >>> 15));
+        w2 = r2 ^ (state10 << 16) ^ (state8 >>> 15);
 
         r1 = s(l1((w1 << 16) | (w2 >>> 16)));
         r2 = s(l2((w2 << 16) | (w1 >>> 16)));
 
-        state[23] = feedback(state[7], state[11], state[17], state[20], state[22], u >>> 1);
+        int state19 = feedback(state3, state7, state13, state16, state18, u >>> 1);
 
-        u = (((state[23] & 0xffff0000) << 1) ^ (state[22] & 0xffff) ^ r1) + r2;
+        u = (((state19 & 0xffff0000) << 1) ^ (state18 & 0xffff) ^ r1) + r2;
 
-        w1 = r1 + ((state[19] << 16) | (state[17] >>> 15));
-        w2 = r2 ^ (state[15] << 16) ^ (state[13] >>> 15);
-
-        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
-        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
-
-        state[24] = feedback(state[8], state[12], state[18], state[21], state[23], u >>> 1);
-
-        u = (((state[24] & 0xffff0000) << 1) ^ (state[23] & 0xffff) ^ r1) + r2;
-
-        w1 = r1 + ((state[20] << 16) | (state[18] >>> 15));
-        w2 = r2 ^ (state[16] << 16) ^ (state[14] >>> 15);
+        w1 = r1 + ((state15 << 16) | (state13 >>> 15));
+        w2 = r2 ^ (state11 << 16) ^ (state9 >>> 15);
 
         r1 = s(l1((w1 << 16) | (w2 >>> 16)));
         r2 = s(l2((w2 << 16) | (w1 >>> 16)));
 
-        state[25] = feedback(state[9], state[13], state[19], state[22], state[24], u >>> 1);
+        int state20 = feedback(state4, state8, state14, state17, state19, u >>> 1);
 
-        u = (((state[25] & 0xffff0000) << 1) ^ (state[24] & 0xffff) ^ r1) + r2;
+        u = (((state20 & 0xffff0000) << 1) ^ (state19 & 0xffff) ^ r1) + r2;
 
-        w1 = r1 + ((state[21] << 16) | (state[19] >>> 15));
-        w2 = r2 ^ (state[17] << 16) ^ (state[15] >>> 15);
-
-        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
-        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
-
-        state[26] = feedback(state[10], state[14], state[20], state[23], state[25], u >>> 1);
-
-        u = (((state[26] & 0xffff0000) << 1) ^ (state[25] & 0xffff) ^ r1) + r2;
-
-        w1 = r1 + ((state[22] << 16) | (state[20] >>> 15));
-        w2 = r2 ^ (state[18] << 16) ^ (state[16] >>> 15);
+        w1 = r1 + ((state16 << 16) | (state14 >>> 15));
+        w2 = r2 ^ (state12 << 16) ^ (state10 >>> 15);
 
         r1 = s(l1((w1 << 16) | (w2 >>> 16)));
         r2 = s(l2((w2 << 16) | (w1 >>> 16)));
 
-        state[27] = feedback(state[11], state[15], state[21], state[24], state[26], u >>> 1);
+        int state21 = feedback(state5, state9, state15, state18, state20, u >>> 1);
 
-        u = (((state[27] & 0xffff0000) << 1) ^ (state[26] & 0xffff) ^ r1) + r2;
+        u = (((state21 & 0xffff0000) << 1) ^ (state20 & 0xffff) ^ r1) + r2;
 
-        w1 = r1 + ((state[23] << 16) | (state[21] >>> 15));
-        w2 = r2 ^ (state[19] << 16) ^ (state[17] >>> 15);
-
-        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
-        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
-
-        state[28] = feedback(state[12], state[16], state[22], state[25], state[27], u >>> 1);
-
-        u = (((state[28] & 0xffff0000) << 1) ^ (state[27] & 0xffff) ^ r1) + r2;
-
-        w1 = r1 + ((state[24] << 16) | (state[22] >>> 15));
-        w2 = r2 ^ (state[20] << 16) ^ (state[18] >>> 15);
+        w1 = r1 + ((state17 << 16) | (state15 >>> 15));
+        w2 = r2 ^ (state13 << 16) ^ (state11 >>> 15);
 
         r1 = s(l1((w1 << 16) | (w2 >>> 16)));
         r2 = s(l2((w2 << 16) | (w1 >>> 16)));
 
-        state[29] = feedback(state[13], state[17], state[23], state[26], state[28], u >>> 1);
+        int state22 = feedback(state6, state10, state16, state19, state21, u >>> 1);
 
-        u = (((state[29] & 0xffff0000) << 1) ^ (state[28] & 0xffff) ^ r1) + r2;
+        u = (((state22 & 0xffff0000) << 1) ^ (state21 & 0xffff) ^ r1) + r2;
 
-        w1 = r1 + ((state[25] << 16) | (state[23] >>> 15));
-        w2 = r2 ^ (state[21] << 16) ^ (state[19] >>> 15);
-
-        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
-        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
-
-        state[30] = feedback(state[14], state[18], state[24], state[27], state[29], u >>> 1);
-
-        u = (((state[30] & 0xffff0000) << 1) ^ (state[29] & 0xffff) ^ r1) + r2;
-
-        w1 = r1 + ((state[26] << 16) | (state[24] >>> 15));
-        w2 = r2 ^ (state[22] << 16) ^ (state[20] >>> 15);
+        w1 = r1 + ((state18 << 16) | (state16 >>> 15));
+        w2 = r2 ^ (state14 << 16) ^ (state12 >>> 15);
 
         r1 = s(l1((w1 << 16) | (w2 >>> 16)));
         r2 = s(l2((w2 << 16) | (w1 >>> 16)));
 
-        state[31] = feedback(state[15], state[19], state[25], state[28], state[30], u >>> 1);
+        int state23 = feedback(state7, state11, state17, state20, state22, u >>> 1);
 
-        u = (((state[31] & 0xffff0000) << 1) ^ (state[30] & 0xffff) ^ r1) + r2;
+        u = (((state23 & 0xffff0000) << 1) ^ (state22 & 0xffff) ^ r1) + r2;
 
-        w1 = r1 + ((state[27] << 16) | (state[25] >>> 15));
-        w2 = r2 ^ (state[23] << 16) ^ (state[21] >>> 15);
-
-        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
-        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
-
-        state[0] = feedback(state[16], state[20], state[26], state[29], state[31], u >>> 1);
-
-        u = (((state[0] & 0xffff0000) << 1) ^ (state[31] & 0xffff) ^ r1) + r2;
-
-        w1 = r1 + ((state[28] << 16) | (state[26] >>> 15));
-        w2 = r2 ^ (state[24] << 16) ^ (state[22] >>> 15);
+        w1 = r1 + ((state19 << 16) | (state17 >>> 15));
+        w2 = r2 ^ (state15 << 16) ^ (state13 >>> 15);
 
         r1 = s(l1((w1 << 16) | (w2 >>> 16)));
         r2 = s(l2((w2 << 16) | (w1 >>> 16)));
 
-        state[1] = feedback(state[17], state[21], state[27], state[30], state[0], u >>> 1);
+        int state24 = feedback(state8, state12, state18, state21, state23, u >>> 1);
 
-        u = (((state[1] & 0xffff0000) << 1) ^ (state[0] & 0xffff) ^ r1) + r2;
+        u = (((state24 & 0xffff0000) << 1) ^ (state23 & 0xffff) ^ r1) + r2;
 
-        w1 = r1 + ((state[29] << 16) | (state[27] >>> 15));
-        w2 = r2 ^ (state[25] << 16) ^ (state[23] >>> 15);
-
-        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
-        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
-
-        state[2] = feedback(state[18], state[22], state[28], state[31], state[1], u >>> 1);
-
-        u = (((state[2] & 0xffff0000) << 1) ^ (state[1] & 0xffff) ^ r1) + r2;
-
-        w1 = r1 + ((state[30] << 16) | (state[28] >>> 15));
-        w2 = r2 ^ (state[26] << 16) ^ (state[24] >>> 15);
+        w1 = r1 + ((state20 << 16) | (state18 >>> 15));
+        w2 = r2 ^ (state16 << 16) ^ (state14 >>> 15);
 
         r1 = s(l1((w1 << 16) | (w2 >>> 16)));
         r2 = s(l2((w2 << 16) | (w1 >>> 16)));
 
-        state[3] = feedback(state[19], state[23], state[29], state[0], state[2], u >>> 1);
+        int state25 = feedback(state9, state13, state19, state22, state24, u >>> 1);
 
-        u = (((state[3] & 0xffff0000) << 1) ^ (state[2] & 0xffff) ^ r1) + r2;
+        u = (((state25 & 0xffff0000) << 1) ^ (state24 & 0xffff) ^ r1) + r2;
 
-        w1 = r1 + ((state[31] << 16) | (state[29] >>> 15));
-        w2 = r2 ^ (state[27] << 16) ^ (state[25] >>> 15);
-
-        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
-        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
-
-        state[4] = feedback(state[20], state[24], state[30], state[1], state[3], u >>> 1);
-
-        u = (((state[4] & 0xffff0000) << 1) ^ (state[3] & 0xffff) ^ r1) + r2;
-
-        w1 = r1 + ((state[0] << 16) | (state[30] >>> 15));
-        w2 = r2 ^ (state[28] << 16) ^ (state[26] >>> 15);
+        w1 = r1 + ((state21 << 16) | (state19 >>> 15));
+        w2 = r2 ^ (state17 << 16) ^ (state15 >>> 15);
 
         r1 = s(l1((w1 << 16) | (w2 >>> 16)));
         r2 = s(l2((w2 << 16) | (w1 >>> 16)));
 
-        state[5] = feedback(state[21], state[25], state[31], state[2], state[4], u >>> 1);
+        int state26 = feedback(state10, state14, state20, state23, state25, u >>> 1);
 
-        u = (((state[5] & 0xffff0000) << 1) ^ (state[4] & 0xffff) ^ r1) + r2;
+        u = (((state26 & 0xffff0000) << 1) ^ (state25 & 0xffff) ^ r1) + r2;
 
-        w1 = r1 + ((state[1] << 16) | (state[31] >>> 15));
-        w2 = r2 ^ (state[29] << 16) ^ (state[27] >>> 15);
-
-        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
-        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
-
-        state[6] = feedback(state[22], state[26], state[0], state[3], state[5], u >>> 1);
-
-        u = (((state[6] & 0xffff0000) << 1) ^ (state[5] & 0xffff) ^ r1) + r2;
-
-        w1 = r1 + ((state[2] << 16) | (state[0] >>> 15));
-        w2 = r2 ^ (state[30] << 16) ^ (state[28] >>> 15);
+        w1 = r1 + ((state22 << 16) | (state20 >>> 15));
+        w2 = r2 ^ (state18 << 16) ^ (state16 >>> 15);
 
         r1 = s(l1((w1 << 16) | (w2 >>> 16)));
         r2 = s(l2((w2 << 16) | (w1 >>> 16)));
 
-        state[7] = feedback(state[23], state[27], state[1], state[4], state[6], u >>> 1);
+        int state27 = feedback(state11, state15, state21, state24, state26, u >>> 1);
 
-        u = (((state[7] & 0xffff0000) << 1) ^ (state[6] & 0xffff) ^ r1) + r2;
+        u = (((state27 & 0xffff0000) << 1) ^ (state26 & 0xffff) ^ r1) + r2;
 
-        w1 = r1 + ((state[3] << 16) | (state[1] >>> 15));
-        w2 = r2 ^ (state[31] << 16) ^ (state[29] >>> 15);
-
-        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
-        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
-
-        state[8] = feedback(state[24], state[28], state[2], state[5], state[7], u >>> 1);
-
-        u = (((state[8] & 0xffff0000) << 1) ^ (state[7] & 0xffff) ^ r1) + r2;
-
-        w1 = r1 + ((state[4] << 16) | (state[2] >>> 15));
-        w2 = r2 ^ (state[0] << 16) ^ (state[30] >>> 15);
+        w1 = r1 + ((state23 << 16) | (state21 >>> 15));
+        w2 = r2 ^ (state19 << 16) ^ (state17 >>> 15);
 
         r1 = s(l1((w1 << 16) | (w2 >>> 16)));
         r2 = s(l2((w2 << 16) | (w1 >>> 16)));
 
-        state[9] = feedback(state[25], state[29], state[3], state[6], state[8], u >>> 1);
+        int state28 = feedback(state12, state16, state22, state25, state27, u >>> 1);
 
-        u = (((state[9] & 0xffff0000) << 1) ^ (state[8] & 0xffff) ^ r1) + r2;
+        u = (((state28 & 0xffff0000) << 1) ^ (state27 & 0xffff) ^ r1) + r2;
 
-        w1 = r1 + ((state[5] << 16) | (state[3] >>> 15));
-        w2 = r2 ^ (state[1] << 16) ^ (state[31] >>> 15);
-
-        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
-        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
-
-        state[10] = feedback(state[26], state[30], state[4], state[7], state[9], u >>> 1);
-
-        u = (((state[10] & 0xffff0000) << 1) ^ (state[9] & 0xffff) ^ r1) + r2;
-
-        w1 = r1 + ((state[6] << 16) | (state[4] >>> 15));
-        w2 = r2 ^ (state[2] << 16) ^ (state[0] >>> 15);
+        w1 = r1 + ((state24 << 16) | (state22 >>> 15));
+        w2 = r2 ^ (state20 << 16) ^ (state18 >>> 15);
 
         r1 = s(l1((w1 << 16) | (w2 >>> 16)));
         r2 = s(l2((w2 << 16) | (w1 >>> 16)));
 
-        state[11] = feedback(state[27], state[31], state[5], state[8], state[10], u >>> 1);
+        int state29 = feedback(state13, state17, state23, state26, state28, u >>> 1);
 
-        u = (((state[11] & 0xffff0000) << 1) ^ (state[10] & 0xffff) ^ r1) + r2;
+        u = (((state29 & 0xffff0000) << 1) ^ (state28 & 0xffff) ^ r1) + r2;
 
-        w1 = r1 + ((state[7] << 16) | (state[5] >>> 15));
-        w2 = r2 ^ (state[3] << 16) ^ (state[1] >>> 15);
-
-        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
-        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
-
-        state[12] = feedback(state[28], state[0], state[6], state[9], state[11], u >>> 1);
-
-        u = (((state[12] & 0xffff0000) << 1) ^ (state[11] & 0xffff) ^ r1) + r2;
-
-        w1 = r1 + ((state[8] << 16) | (state[6] >>> 15));
-        w2 = r2 ^ (state[4] << 16) ^ (state[2] >>> 15);
+        w1 = r1 + ((state25 << 16) | (state23 >>> 15));
+        w2 = r2 ^ (state21 << 16) ^ (state19 >>> 15);
 
         r1 = s(l1((w1 << 16) | (w2 >>> 16)));
         r2 = s(l2((w2 << 16) | (w1 >>> 16)));
 
-        state[13] = feedback(state[29], state[1], state[7], state[10], state[12], u >>> 1);
+        int state30 = feedback(state14, state18, state24, state27, state29, u >>> 1);
 
-        u = (((state[13] & 0xffff0000) << 1) ^ (state[12] & 0xffff) ^ r1) + r2;
+        u = (((state30 & 0xffff0000) << 1) ^ (state29 & 0xffff) ^ r1) + r2;
 
-        w1 = r1 + ((state[9] << 16) | (state[7] >>> 15));
-        w2 = r2 ^ (state[5] << 16) ^ (state[3] >>> 15);
-
-        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
-        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
-
-        state[14] = feedback(state[30], state[2], state[8], state[11], state[13], u >>> 1);
-
-        u = (((state[14] & 0xffff0000) << 1) ^ (state[13] & 0xffff) ^ r1) + r2;
-
-        w1 = r1 + ((state[10] << 16) | (state[8] >>> 15));
-        w2 = r2 ^ (state[6] << 16) ^ (state[4] >>> 15);
+        w1 = r1 + ((state26 << 16) | (state24 >>> 15));
+        w2 = r2 ^ (state22 << 16) ^ (state20 >>> 15);
 
         r1 = s(l1((w1 << 16) | (w2 >>> 16)));
         r2 = s(l2((w2 << 16) | (w1 >>> 16)));
 
-        state[15] = feedback(state[31], state[3], state[9], state[12], state[14], u >>> 1);
+        int state31 = feedback(state15, state19, state25, state28, state30, u >>> 1);
+
+        u = (((state31 & 0xffff0000) << 1) ^ (state30 & 0xffff) ^ r1) + r2;
+
+        w1 = r1 + ((state27 << 16) | (state25 >>> 15));
+        w2 = r2 ^ (state23 << 16) ^ (state21 >>> 15);
+
+        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
+        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
+
+        state0 = feedback(state16, state20, state26, state29, state31, u >>> 1);
+
+        u = (((state0 & 0xffff0000) << 1) ^ (state31 & 0xffff) ^ r1) + r2;
+
+        w1 = r1 + ((state28 << 16) | (state26 >>> 15));
+        w2 = r2 ^ (state24 << 16) ^ (state22 >>> 15);
+
+        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
+        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
+
+        state1 = feedback(state17, state21, state27, state30, state0, u >>> 1);
+
+        u = (((state1 & 0xffff0000) << 1) ^ (state0 & 0xffff) ^ r1) + r2;
+
+        w1 = r1 + ((state29 << 16) | (state27 >>> 15));
+        w2 = r2 ^ (state25 << 16) ^ (state23 >>> 15);
+
+        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
+        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
+
+        state2 = feedback(state18, state22, state28, state31, state1, u >>> 1);
+
+        u = (((state2 & 0xffff0000) << 1) ^ (state1 & 0xffff) ^ r1) + r2;
+
+        w1 = r1 + ((state30 << 16) | (state28 >>> 15));
+        w2 = r2 ^ (state26 << 16) ^ (state24 >>> 15);
+
+        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
+        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
+
+        state3 = feedback(state19, state23, state29, state0, state2, u >>> 1);
+
+        u = (((state3 & 0xffff0000) << 1) ^ (state2 & 0xffff) ^ r1) + r2;
+
+        w1 = r1 + ((state31 << 16) | (state29 >>> 15));
+        w2 = r2 ^ (state27 << 16) ^ (state25 >>> 15);
+
+        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
+        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
+
+        state4 = feedback(state20, state24, state30, state1, state3, u >>> 1);
+
+        u = (((state4 & 0xffff0000) << 1) ^ (state3 & 0xffff) ^ r1) + r2;
+
+        w1 = r1 + ((state0 << 16) | (state30 >>> 15));
+        w2 = r2 ^ (state28 << 16) ^ (state26 >>> 15);
+
+        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
+        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
+
+        state5 = feedback(state21, state25, state31, state2, state4, u >>> 1);
+
+        u = (((state5 & 0xffff0000) << 1) ^ (state4 & 0xffff) ^ r1) + r2;
+
+        w1 = r1 + ((state1 << 16) | (state31 >>> 15));
+        w2 = r2 ^ (state29 << 16) ^ (state27 >>> 15);
+
+        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
+        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
+
+        state6 = feedback(state22, state26, state0, state3, state5, u >>> 1);
+
+        u = (((state6 & 0xffff0000) << 1) ^ (state5 & 0xffff) ^ r1) + r2;
+
+        w1 = r1 + ((state2 << 16) | (state0 >>> 15));
+        w2 = r2 ^ (state30 << 16) ^ (state28 >>> 15);
+
+        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
+        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
+
+        state7 = feedback(state23, state27, state1, state4, state6, u >>> 1);
+
+        u = (((state7 & 0xffff0000) << 1) ^ (state6 & 0xffff) ^ r1) + r2;
+
+        w1 = r1 + ((state3 << 16) | (state1 >>> 15));
+        w2 = r2 ^ (state31 << 16) ^ (state29 >>> 15);
+
+        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
+        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
+
+        state8 = feedback(state24, state28, state2, state5, state7, u >>> 1);
+
+        u = (((state8 & 0xffff0000) << 1) ^ (state7 & 0xffff) ^ r1) + r2;
+
+        w1 = r1 + ((state4 << 16) | (state2 >>> 15));
+        w2 = r2 ^ (state0 << 16) ^ (state30 >>> 15);
+
+        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
+        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
+
+        state9 = feedback(state25, state29, state3, state6, state8, u >>> 1);
+
+        u = (((state9 & 0xffff0000) << 1) ^ (state8 & 0xffff) ^ r1) + r2;
+
+        w1 = r1 + ((state5 << 16) | (state3 >>> 15));
+        w2 = r2 ^ (state1 << 16) ^ (state31 >>> 15);
+
+        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
+        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
+
+        state10 = feedback(state26, state30, state4, state7, state9, u >>> 1);
+
+        u = (((state10 & 0xffff0000) << 1) ^ (state9 & 0xffff) ^ r1) + r2;
+
+        w1 = r1 + ((state6 << 16) | (state4 >>> 15));
+        w2 = r2 ^ (state2 << 16) ^ (state0 >>> 15);
+
+        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
+        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
+
+        state11 = feedback(state27, state31, state5, state8, state10, u >>> 1);
+
+        u = (((state11 & 0xffff0000) << 1) ^ (state10 & 0xffff) ^ r1) + r2;
+
+        w1 = r1 + ((state7 << 16) | (state5 >>> 15));
+        w2 = r2 ^ (state3 << 16) ^ (state1 >>> 15);
+
+        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
+        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
+
+        state12 = feedback(state28, state0, state6, state9, state11, u >>> 1);
+
+        u = (((state12 & 0xffff0000) << 1) ^ (state11 & 0xffff) ^ r1) + r2;
+
+        w1 = r1 + ((state8 << 16) | (state6 >>> 15));
+        w2 = r2 ^ (state4 << 16) ^ (state2 >>> 15);
+
+        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
+        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
+
+        state13 = feedback(state29, state1, state7, state10, state12, u >>> 1);
+
+        u = (((state13 & 0xffff0000) << 1) ^ (state12 & 0xffff) ^ r1) + r2;
+
+        w1 = r1 + ((state9 << 16) | (state7 >>> 15));
+        w2 = r2 ^ (state5 << 16) ^ (state3 >>> 15);
+
+        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
+        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
+
+        state14 = feedback(state30, state2, state8, state11, state13, u >>> 1);
+
+        u = (((state14 & 0xffff0000) << 1) ^ (state13 & 0xffff) ^ r1) + r2;
+
+        w1 = r1 + ((state10 << 16) | (state8 >>> 15));
+        w2 = r2 ^ (state6 << 16) ^ (state4 >>> 15);
+
+        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
+        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
+
+        state15 = feedback(state31, state3, state9, state12, state14, u >>> 1);
 
         //discarding
-        w1 = r1 + ((state[11] << 16) | (state[9] >>> 15));
-        w2 = r2 ^ (state[7] << 16) ^ (state[5] >>> 15);
+        w1 = r1 + ((state11 << 16) | (state9 >>> 15));
+        w2 = r2 ^ (state7 << 16) ^ (state5 >>> 15);
 
         r1 = s(l1((w1 << 16) | (w2 >>> 16)));
         r2 = s(l2((w2 << 16) | (w1 >>> 16)));
 
-        state[16] = feedback(state[0], state[4], state[10], state[13], state[15]);
-
-        System.arraycopy(state, 1, state, 0, 16);
+        state16 = feedback(state0, state4, state10, state13, state15);
 
         register[0] = r1;
         register[1] = r2;
 
-        return state;
+        return new int[]{
+            state1, state2, state3, state4,
+            state5, state6, state7, state8,
+            state9, state10, state11, state12,
+            state13, state14, state15, state16
+        };
     }
 
     private static void keystream(int[] state, int[] register, int[] keystream) {
-        int w1, w2, r1 = register[0], r2 = register[1];
+        int state0 = state[0], state1 = state[1], state2 = state[2], state3 = state[3];
+        int state4 = state[4], state5 = state[5], state6 = state[6], state7 = state[7];
+        int state8 = state[8], state9 = state[9], state10 = state[10], state11 = state[11];
+        int state12 = state[12], state13 = state[13], state14 = state[14], state15 = state[15];
 
-        keystream[0] = ((((state[15] & 0xffff0000) << 1) ^ (state[14] & 0xffff) ^ r1) + r2) ^ (state[2] << 16) ^ (state[0] >>> 15);
+        int w1, w2, r1 = 0, r2 = 0;
 
-        w1 = r1 + ((state[11] << 16) | (state[9] >>> 15));
-        w2 = r2 ^ (state[7] << 16) ^ (state[5] >>> 15);
+        keystream[0] = ((((state15 & 0xffff0000) << 1) ^ (state14 & 0xffff) ^ r1) + r2) ^ (state2 << 16) ^ (state0 >>> 15);
 
-        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
-        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
-
-        state[16] = feedback(state[0], state[4], state[10], state[13], state[15]);
-
-        keystream[1] = ((((state[16] & 0xffff0000) << 1) ^ (state[15] & 0xffff) ^ r1) + r2) ^ (state[3] << 16) ^ (state[1] >>> 15);
-
-        w1 = r1 + ((state[12] << 16) | (state[10] >>> 15));
-        w2 = r2 ^ (state[8] << 16) ^ (state[6] >>> 15);
+        w1 = r1 + ((state11 << 16) | (state9 >>> 15));
+        w2 = r2 ^ (state7 << 16) ^ (state5 >>> 15);
 
         r1 = s(l1((w1 << 16) | (w2 >>> 16)));
         r2 = s(l2((w2 << 16) | (w1 >>> 16)));
 
-        state[17] = feedback(state[1], state[5], state[11], state[14], state[16]);
+        int state16 = feedback(state0, state4, state10, state13, state15);
 
-        keystream[2] = ((((state[17] & 0xffff0000) << 1) ^ (state[16] & 0xffff) ^ r1) + r2) ^ (state[4] << 16) ^ (state[2] >>> 15);
+        keystream[1] = ((((state16 & 0xffff0000) << 1) ^ (state15 & 0xffff) ^ r1) + r2) ^ (state3 << 16) ^ (state1 >>> 15);
 
-        w1 = r1 + ((state[13] << 16) | (state[11] >>> 15));
-        w2 = r2 ^ (state[9] << 16) ^ (state[7] >>> 15);
-
-        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
-        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
-
-        state[18] = feedback(state[2], state[6], state[12], state[15], state[17]);
-
-        keystream[3] = ((((state[18] & 0xffff0000) << 1) ^ (state[17] & 0xffff) ^ r1) + r2) ^ (state[5] << 16) ^ (state[3] >>> 15);
-
-        w1 = r1 + ((state[14] << 16) | (state[12] >>> 15));
-        w2 = r2 ^ (state[10] << 16) ^ (state[8] >>> 15);
+        w1 = r1 + ((state12 << 16) | (state10 >>> 15));
+        w2 = r2 ^ (state8 << 16) ^ (state6 >>> 15);
 
         r1 = s(l1((w1 << 16) | (w2 >>> 16)));
         r2 = s(l2((w2 << 16) | (w1 >>> 16)));
 
-        state[19] = feedback(state[3], state[7], state[13], state[16], state[18]);
+        int state17 = feedback(state1, state5, state11, state14, state16);
 
-        keystream[4] = ((((state[19] & 0xffff0000) << 1) ^ (state[18] & 0xffff) ^ r1) + r2) ^ (state[6] << 16) ^ (state[4] >>> 15);
+        keystream[2] = ((((state17 & 0xffff0000) << 1) ^ (state16 & 0xffff) ^ r1) + r2) ^ (state4 << 16) ^ (state2 >>> 15);
 
-        w1 = r1 + ((state[15] << 16) | (state[13] >>> 15));
-        w2 = r2 ^ (state[11] << 16) ^ (state[9] >>> 15);
-
-        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
-        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
-
-        state[20] = feedback(state[4], state[8], state[14], state[17], state[19]);
-
-        keystream[5] = ((((state[20] & 0xffff0000) << 1) ^ (state[19] & 0xffff) ^ r1) + r2) ^ (state[7] << 16) ^ (state[5] >>> 15);
-
-        w1 = r1 + ((state[16] << 16) | (state[14] >>> 15));
-        w2 = r2 ^ (state[12] << 16) ^ (state[10] >>> 15);
+        w1 = r1 + ((state13 << 16) | (state11 >>> 15));
+        w2 = r2 ^ (state9 << 16) ^ (state7 >>> 15);
 
         r1 = s(l1((w1 << 16) | (w2 >>> 16)));
         r2 = s(l2((w2 << 16) | (w1 >>> 16)));
 
-        state[21] = feedback(state[5], state[9], state[15], state[18], state[20]);
+        int state18 = feedback(state2, state6, state12, state15, state17);
 
-        keystream[6] = ((((state[21] & 0xffff0000) << 1) ^ (state[20] & 0xffff) ^ r1) + r2) ^ (state[8] << 16) ^ (state[6] >>> 15);
+        keystream[3] = ((((state18 & 0xffff0000) << 1) ^ (state17 & 0xffff) ^ r1) + r2) ^ (state5 << 16) ^ (state3 >>> 15);
 
-        w1 = r1 + ((state[17] << 16) | (state[15] >>> 15));
-        w2 = r2 ^ (state[13] << 16) ^ (state[11] >>> 15);
-
-        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
-        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
-
-        state[22] = feedback(state[6], state[10], state[16], state[19], state[21]);
-
-        keystream[7] = ((((state[22] & 0xffff0000) << 1) ^ (state[21] & 0xffff) ^ r1) + r2) ^ (state[9] << 16) ^ (state[7] >>> 15);
-
-        w1 = r1 + ((state[18] << 16) | (state[16] >>> 15));
-        w2 = r2 ^ (state[14] << 16) ^ (state[12] >>> 15);
+        w1 = r1 + ((state14 << 16) | (state12 >>> 15));
+        w2 = r2 ^ (state10 << 16) ^ (state8 >>> 15);
 
         r1 = s(l1((w1 << 16) | (w2 >>> 16)));
         r2 = s(l2((w2 << 16) | (w1 >>> 16)));
 
-        state[23] = feedback(state[7], state[11], state[17], state[20], state[22]);
+        int state19 = feedback(state3, state7, state13, state16, state18);
 
-        keystream[8] = ((((state[23] & 0xffff0000) << 1) ^ (state[22] & 0xffff) ^ r1) + r2) ^ (state[10] << 16) ^ (state[8] >>> 15);
+        keystream[4] = ((((state19 & 0xffff0000) << 1) ^ (state18 & 0xffff) ^ r1) + r2) ^ (state6 << 16) ^ (state4 >>> 15);
 
-        w1 = r1 + ((state[19] << 16) | (state[17] >>> 15));
-        w2 = r2 ^ (state[15] << 16) ^ (state[13] >>> 15);
-
-        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
-        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
-
-        state[24] = feedback(state[8], state[12], state[18], state[21], state[23]);
-
-        keystream[9] = ((((state[24] & 0xffff0000) << 1) ^ (state[23] & 0xffff) ^ r1) + r2) ^ (state[11] << 16) ^ (state[9] >>> 15);
-
-        w1 = r1 + ((state[20] << 16) | (state[18] >>> 15));
-        w2 = r2 ^ (state[16] << 16) ^ (state[14] >>> 15);
+        w1 = r1 + ((state15 << 16) | (state13 >>> 15));
+        w2 = r2 ^ (state11 << 16) ^ (state9 >>> 15);
 
         r1 = s(l1((w1 << 16) | (w2 >>> 16)));
         r2 = s(l2((w2 << 16) | (w1 >>> 16)));
 
-        state[25] = feedback(state[9], state[13], state[19], state[22], state[24]);
+        int state20 = feedback(state4, state8, state14, state17, state19);
 
-        keystream[10] = ((((state[25] & 0xffff0000) << 1) ^ (state[24] & 0xffff) ^ r1) + r2) ^ (state[12] << 16) ^ (state[10] >>> 15);
+        keystream[5] = ((((state20 & 0xffff0000) << 1) ^ (state19 & 0xffff) ^ r1) + r2) ^ (state7 << 16) ^ (state5 >>> 15);
 
-        w1 = r1 + ((state[21] << 16) | (state[19] >>> 15));
-        w2 = r2 ^ (state[17] << 16) ^ (state[15] >>> 15);
-
-        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
-        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
-
-        state[26] = feedback(state[10], state[14], state[20], state[23], state[25]);
-
-        keystream[11] = ((((state[26] & 0xffff0000) << 1) ^ (state[25] & 0xffff) ^ r1) + r2) ^ (state[13] << 16) ^ (state[11] >>> 15);
-
-        w1 = r1 + ((state[22] << 16) | (state[20] >>> 15));
-        w2 = r2 ^ (state[18] << 16) ^ (state[16] >>> 15);
+        w1 = r1 + ((state16 << 16) | (state14 >>> 15));
+        w2 = r2 ^ (state12 << 16) ^ (state10 >>> 15);
 
         r1 = s(l1((w1 << 16) | (w2 >>> 16)));
         r2 = s(l2((w2 << 16) | (w1 >>> 16)));
 
-        state[27] = feedback(state[11], state[15], state[21], state[24], state[26]);
+        int state21 = feedback(state5, state9, state15, state18, state20);
 
-        keystream[12] = ((((state[27] & 0xffff0000) << 1) ^ (state[26] & 0xffff) ^ r1) + r2) ^ (state[14] << 16) ^ (state[12] >>> 15);
+        keystream[6] = ((((state21 & 0xffff0000) << 1) ^ (state20 & 0xffff) ^ r1) + r2) ^ (state8 << 16) ^ (state6 >>> 15);
 
-        w1 = r1 + ((state[23] << 16) | (state[21] >>> 15));
-        w2 = r2 ^ (state[19] << 16) ^ (state[17] >>> 15);
-
-        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
-        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
-
-        state[28] = feedback(state[12], state[16], state[22], state[25], state[27]);
-
-        keystream[13] = ((((state[28] & 0xffff0000) << 1) ^ (state[27] & 0xffff) ^ r1) + r2) ^ (state[15] << 16) ^ (state[13] >>> 15);
-
-        w1 = r1 + ((state[24] << 16) | (state[22] >>> 15));
-        w2 = r2 ^ (state[20] << 16) ^ (state[18] >>> 15);
+        w1 = r1 + ((state17 << 16) | (state15 >>> 15));
+        w2 = r2 ^ (state13 << 16) ^ (state11 >>> 15);
 
         r1 = s(l1((w1 << 16) | (w2 >>> 16)));
         r2 = s(l2((w2 << 16) | (w1 >>> 16)));
 
-        state[29] = feedback(state[13], state[17], state[23], state[26], state[28]);
+        int state22 = feedback(state6, state10, state16, state19, state21);
 
-        keystream[14] = ((((state[29] & 0xffff0000) << 1) ^ (state[28] & 0xffff) ^ r1) + r2) ^ (state[16] << 16) ^ (state[14] >>> 15);
+        keystream[7] = ((((state22 & 0xffff0000) << 1) ^ (state21 & 0xffff) ^ r1) + r2) ^ (state9 << 16) ^ (state7 >>> 15);
 
-        w1 = r1 + ((state[25] << 16) | (state[23] >>> 15));
-        w2 = r2 ^ (state[21] << 16) ^ (state[19] >>> 15);
-
-        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
-        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
-
-        state[30] = feedback(state[14], state[18], state[24], state[27], state[29]);
-
-        keystream[15] = ((((state[30] & 0xffff0000) << 1) ^ (state[29] & 0xffff) ^ r1) + r2) ^ (state[17] << 16) ^ (state[15] >>> 15);
-
-        w1 = r1 + ((state[26] << 16) | (state[24] >>> 15));
-        w2 = r2 ^ (state[22] << 16) ^ (state[20] >>> 15);
+        w1 = r1 + ((state18 << 16) | (state16 >>> 15));
+        w2 = r2 ^ (state14 << 16) ^ (state12 >>> 15);
 
         r1 = s(l1((w1 << 16) | (w2 >>> 16)));
         r2 = s(l2((w2 << 16) | (w1 >>> 16)));
 
-        state[31] = feedback(state[15], state[19], state[25], state[28], state[30]);
+        int state23 = feedback(state7, state11, state17, state20, state22);
 
-        keystream[16] = ((((state[31] & 0xffff0000) << 1) ^ (state[30] & 0xffff) ^ r1) + r2) ^ (state[18] << 16) ^ (state[16] >>> 15);
+        keystream[8] = ((((state23 & 0xffff0000) << 1) ^ (state22 & 0xffff) ^ r1) + r2) ^ (state10 << 16) ^ (state8 >>> 15);
 
-        w1 = r1 + ((state[27] << 16) | (state[25] >>> 15));
-        w2 = r2 ^ (state[23] << 16) ^ (state[21] >>> 15);
-
-        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
-        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
-
-        state[0] = feedback(state[16], state[20], state[26], state[29], state[31]);
-
-        keystream[17] = ((((state[0] & 0xffff0000) << 1) ^ (state[31] & 0xffff) ^ r1) + r2) ^ (state[19] << 16) ^ (state[17] >>> 15);
-
-        w1 = r1 + ((state[28] << 16) | (state[26] >>> 15));
-        w2 = r2 ^ (state[24] << 16) ^ (state[22] >>> 15);
+        w1 = r1 + ((state19 << 16) | (state17 >>> 15));
+        w2 = r2 ^ (state15 << 16) ^ (state13 >>> 15);
 
         r1 = s(l1((w1 << 16) | (w2 >>> 16)));
         r2 = s(l2((w2 << 16) | (w1 >>> 16)));
 
-        state[1] = feedback(state[17], state[21], state[27], state[30], state[0]);
+        int state24 = feedback(state8, state12, state18, state21, state23);
 
-        keystream[18] = ((((state[1] & 0xffff0000) << 1) ^ (state[0] & 0xffff) ^ r1) + r2) ^ (state[20] << 16) ^ (state[18] >>> 15);
+        keystream[9] = ((((state24 & 0xffff0000) << 1) ^ (state23 & 0xffff) ^ r1) + r2) ^ (state11 << 16) ^ (state9 >>> 15);
 
-        w1 = r1 + ((state[29] << 16) | (state[27] >>> 15));
-        w2 = r2 ^ (state[25] << 16) ^ (state[23] >>> 15);
-
-        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
-        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
-
-        state[2] = feedback(state[18], state[22], state[28], state[31], state[1]);
-
-        keystream[19] = ((((state[2] & 0xffff0000) << 1) ^ (state[1] & 0xffff) ^ r1) + r2) ^ (state[21] << 16) ^ (state[19] >>> 15);
-
-        w1 = r1 + ((state[30] << 16) | (state[28] >>> 15));
-        w2 = r2 ^ (state[26] << 16) ^ (state[24] >>> 15);
+        w1 = r1 + ((state20 << 16) | (state18 >>> 15));
+        w2 = r2 ^ (state16 << 16) ^ (state14 >>> 15);
 
         r1 = s(l1((w1 << 16) | (w2 >>> 16)));
         r2 = s(l2((w2 << 16) | (w1 >>> 16)));
 
-        state[3] = feedback(state[19], state[23], state[29], state[0], state[2]);
+        int state25 = feedback(state9, state13, state19, state22, state24);
 
-        keystream[20] = ((((state[3] & 0xffff0000) << 1) ^ (state[2] & 0xffff) ^ r1) + r2) ^ (state[22] << 16) ^ (state[20] >>> 15);
+        keystream[10] = ((((state25 & 0xffff0000) << 1) ^ (state24 & 0xffff) ^ r1) + r2) ^ (state12 << 16) ^ (state10 >>> 15);
 
-        w1 = r1 + ((state[31] << 16) | (state[29] >>> 15));
-        w2 = r2 ^ (state[27] << 16) ^ (state[25] >>> 15);
-
-        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
-        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
-
-        state[4] = feedback(state[20], state[24], state[30], state[1], state[3]);
-
-        keystream[21] = ((((state[4] & 0xffff0000) << 1) ^ (state[3] & 0xffff) ^ r1) + r2) ^ (state[23] << 16) ^ (state[21] >>> 15);
-
-        w1 = r1 + ((state[0] << 16) | (state[30] >>> 15));
-        w2 = r2 ^ (state[28] << 16) ^ (state[26] >>> 15);
+        w1 = r1 + ((state21 << 16) | (state19 >>> 15));
+        w2 = r2 ^ (state17 << 16) ^ (state15 >>> 15);
 
         r1 = s(l1((w1 << 16) | (w2 >>> 16)));
         r2 = s(l2((w2 << 16) | (w1 >>> 16)));
 
-        state[5] = feedback(state[21], state[25], state[31], state[2], state[4]);
+        int state26 = feedback(state10, state14, state20, state23, state25);
 
-        keystream[22] = ((((state[5] & 0xffff0000) << 1) ^ (state[4] & 0xffff) ^ r1) + r2) ^ (state[24] << 16) ^ (state[22] >>> 15);
+        keystream[11] = ((((state26 & 0xffff0000) << 1) ^ (state25 & 0xffff) ^ r1) + r2) ^ (state13 << 16) ^ (state11 >>> 15);
 
-        w1 = r1 + ((state[1] << 16) | (state[31] >>> 15));
-        w2 = r2 ^ (state[29] << 16) ^ (state[27] >>> 15);
-
-        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
-        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
-
-        state[6] = feedback(state[22], state[26], state[0], state[3], state[5]);
-
-        keystream[23] = ((((state[6] & 0xffff0000) << 1) ^ (state[5] & 0xffff) ^ r1) + r2) ^ (state[25] << 16) ^ (state[23] >>> 15);
-
-        w1 = r1 + ((state[2] << 16) | (state[0] >>> 15));
-        w2 = r2 ^ (state[30] << 16) ^ (state[28] >>> 15);
+        w1 = r1 + ((state22 << 16) | (state20 >>> 15));
+        w2 = r2 ^ (state18 << 16) ^ (state16 >>> 15);
 
         r1 = s(l1((w1 << 16) | (w2 >>> 16)));
         r2 = s(l2((w2 << 16) | (w1 >>> 16)));
 
-        state[7] = feedback(state[23], state[27], state[1], state[4], state[6]);
+        int state27 = feedback(state11, state15, state21, state24, state26);
 
-        keystream[24] = ((((state[7] & 0xffff0000) << 1) ^ (state[6] & 0xffff) ^ r1) + r2) ^ (state[26] << 16) ^ (state[24] >>> 15);
+        keystream[12] = ((((state27 & 0xffff0000) << 1) ^ (state26 & 0xffff) ^ r1) + r2) ^ (state14 << 16) ^ (state12 >>> 15);
 
-        w1 = r1 + ((state[3] << 16) | (state[1] >>> 15));
-        w2 = r2 ^ (state[31] << 16) ^ (state[29] >>> 15);
-
-        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
-        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
-
-        state[8] = feedback(state[24], state[28], state[2], state[5], state[7]);
-
-        keystream[25] = ((((state[8] & 0xffff0000) << 1) ^ (state[7] & 0xffff) ^ r1) + r2) ^ (state[27] << 16) ^ (state[25] >>> 15);
-
-        w1 = r1 + ((state[4] << 16) | (state[2] >>> 15));
-        w2 = r2 ^ (state[0] << 16) ^ (state[30] >>> 15);
+        w1 = r1 + ((state23 << 16) | (state21 >>> 15));
+        w2 = r2 ^ (state19 << 16) ^ (state17 >>> 15);
 
         r1 = s(l1((w1 << 16) | (w2 >>> 16)));
         r2 = s(l2((w2 << 16) | (w1 >>> 16)));
 
-        state[9] = feedback(state[25], state[29], state[3], state[6], state[8]);
+        int state28 = feedback(state12, state16, state22, state25, state27);
 
-        keystream[26] = ((((state[9] & 0xffff0000) << 1) ^ (state[8] & 0xffff) ^ r1) + r2) ^ (state[28] << 16) ^ (state[26] >>> 15);
+        keystream[13] = ((((state28 & 0xffff0000) << 1) ^ (state27 & 0xffff) ^ r1) + r2) ^ (state15 << 16) ^ (state13 >>> 15);
 
-        w1 = r1 + ((state[5] << 16) | (state[3] >>> 15));
-        w2 = r2 ^ (state[1] << 16) ^ (state[31] >>> 15);
-
-        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
-        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
-
-        state[10] = feedback(state[26], state[30], state[4], state[7], state[9]);
-
-        keystream[27] = ((((state[10] & 0xffff0000) << 1) ^ (state[9] & 0xffff) ^ r1) + r2) ^ (state[29] << 16) ^ (state[27] >>> 15);
-
-        w1 = r1 + ((state[6] << 16) | (state[4] >>> 15));
-        w2 = r2 ^ (state[2] << 16) ^ (state[0] >>> 15);
+        w1 = r1 + ((state24 << 16) | (state22 >>> 15));
+        w2 = r2 ^ (state20 << 16) ^ (state18 >>> 15);
 
         r1 = s(l1((w1 << 16) | (w2 >>> 16)));
         r2 = s(l2((w2 << 16) | (w1 >>> 16)));
 
-        state[11] = feedback(state[27], state[31], state[5], state[8], state[10]);
+        int state29 = feedback(state13, state17, state23, state26, state28);
 
-        keystream[28] = ((((state[11] & 0xffff0000) << 1) ^ (state[10] & 0xffff) ^ r1) + r2) ^ (state[30] << 16) ^ (state[28] >>> 15);
+        keystream[14] = ((((state29 & 0xffff0000) << 1) ^ (state28 & 0xffff) ^ r1) + r2) ^ (state16 << 16) ^ (state14 >>> 15);
 
-        w1 = r1 + ((state[7] << 16) | (state[5] >>> 15));
-        w2 = r2 ^ (state[3] << 16) ^ (state[1] >>> 15);
-
-        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
-        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
-
-        state[12] = feedback(state[28], state[0], state[6], state[9], state[11]);
-
-        keystream[29] = ((((state[12] & 0xffff0000) << 1) ^ (state[11] & 0xffff) ^ r1) + r2) ^ (state[31] << 16) ^ (state[29] >>> 15);
-
-        w1 = r1 + ((state[8] << 16) | (state[6] >>> 15));
-        w2 = r2 ^ (state[4] << 16) ^ (state[2] >>> 15);
+        w1 = r1 + ((state25 << 16) | (state23 >>> 15));
+        w2 = r2 ^ (state21 << 16) ^ (state19 >>> 15);
 
         r1 = s(l1((w1 << 16) | (w2 >>> 16)));
         r2 = s(l2((w2 << 16) | (w1 >>> 16)));
 
-        state[13] = feedback(state[29], state[1], state[7], state[10], state[12]);
+        int state30 = feedback(state14, state18, state24, state27, state29);
 
-        keystream[30] = ((((state[13] & 0xffff0000) << 1) ^ (state[12] & 0xffff) ^ r1) + r2) ^ (state[0] << 16) ^ (state[30] >>> 15);
+        keystream[15] = ((((state30 & 0xffff0000) << 1) ^ (state29 & 0xffff) ^ r1) + r2) ^ (state17 << 16) ^ (state15 >>> 15);
 
-        w1 = r1 + ((state[9] << 16) | (state[7] >>> 15));
-        w2 = r2 ^ (state[5] << 16) ^ (state[3] >>> 15);
-
-        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
-        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
-
-        state[14] = feedback(state[30], state[2], state[8], state[11], state[13]);
-
-        keystream[31] = ((((state[14] & 0xffff0000) << 1) ^ (state[13] & 0xffff) ^ r1) + r2) ^ (state[1] << 16) ^ (state[31] >>> 15);
-
-        w1 = r1 + ((state[10] << 16) | (state[8] >>> 15));
-        w2 = r2 ^ (state[6] << 16) ^ (state[4] >>> 15);
+        w1 = r1 + ((state26 << 16) | (state24 >>> 15));
+        w2 = r2 ^ (state22 << 16) ^ (state20 >>> 15);
 
         r1 = s(l1((w1 << 16) | (w2 >>> 16)));
         r2 = s(l2((w2 << 16) | (w1 >>> 16)));
 
-        state[15] = feedback(state[31], state[3], state[9], state[12], state[14]);
+        int state31 = feedback(state15, state19, state25, state28, state30);
+
+        keystream[16] = ((((state31 & 0xffff0000) << 1) ^ (state30 & 0xffff) ^ r1) + r2) ^ (state18 << 16) ^ (state16 >>> 15);
+
+        w1 = r1 + ((state27 << 16) | (state25 >>> 15));
+        w2 = r2 ^ (state23 << 16) ^ (state21 >>> 15);
+
+        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
+        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
+
+        state0 = feedback(state16, state20, state26, state29, state31);
+
+        keystream[17] = ((((state0 & 0xffff0000) << 1) ^ (state31 & 0xffff) ^ r1) + r2) ^ (state19 << 16) ^ (state17 >>> 15);
+
+        w1 = r1 + ((state28 << 16) | (state26 >>> 15));
+        w2 = r2 ^ (state24 << 16) ^ (state22 >>> 15);
+
+        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
+        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
+
+        state1 = feedback(state17, state21, state27, state30, state0);
+
+        keystream[18] = ((((state1 & 0xffff0000) << 1) ^ (state0 & 0xffff) ^ r1) + r2) ^ (state20 << 16) ^ (state18 >>> 15);
+
+        w1 = r1 + ((state29 << 16) | (state27 >>> 15));
+        w2 = r2 ^ (state25 << 16) ^ (state23 >>> 15);
+
+        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
+        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
+
+        state2 = feedback(state18, state22, state28, state31, state1);
+
+        keystream[19] = ((((state2 & 0xffff0000) << 1) ^ (state1 & 0xffff) ^ r1) + r2) ^ (state21 << 16) ^ (state19 >>> 15);
+
+        w1 = r1 + ((state30 << 16) | (state28 >>> 15));
+        w2 = r2 ^ (state26 << 16) ^ (state24 >>> 15);
+
+        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
+        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
+
+        state3 = feedback(state19, state23, state29, state0, state2);
+
+        keystream[20] = ((((state3 & 0xffff0000) << 1) ^ (state2 & 0xffff) ^ r1) + r2) ^ (state22 << 16) ^ (state20 >>> 15);
+
+        w1 = r1 + ((state31 << 16) | (state29 >>> 15));
+        w2 = r2 ^ (state27 << 16) ^ (state25 >>> 15);
+
+        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
+        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
+
+        state4 = feedback(state20, state24, state30, state1, state3);
+
+        keystream[21] = ((((state4 & 0xffff0000) << 1) ^ (state3 & 0xffff) ^ r1) + r2) ^ (state23 << 16) ^ (state21 >>> 15);
+
+        w1 = r1 + ((state0 << 16) | (state30 >>> 15));
+        w2 = r2 ^ (state28 << 16) ^ (state26 >>> 15);
+
+        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
+        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
+
+        state5 = feedback(state21, state25, state31, state2, state4);
+
+        keystream[22] = ((((state5 & 0xffff0000) << 1) ^ (state4 & 0xffff) ^ r1) + r2) ^ (state24 << 16) ^ (state22 >>> 15);
+
+        w1 = r1 + ((state1 << 16) | (state31 >>> 15));
+        w2 = r2 ^ (state29 << 16) ^ (state27 >>> 15);
+
+        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
+        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
+
+        state6 = feedback(state22, state26, state0, state3, state5);
+
+        keystream[23] = ((((state6 & 0xffff0000) << 1) ^ (state5 & 0xffff) ^ r1) + r2) ^ (state25 << 16) ^ (state23 >>> 15);
+
+        w1 = r1 + ((state2 << 16) | (state0 >>> 15));
+        w2 = r2 ^ (state30 << 16) ^ (state28 >>> 15);
+
+        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
+        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
+
+        state7 = feedback(state23, state27, state1, state4, state6);
+
+        keystream[24] = ((((state7 & 0xffff0000) << 1) ^ (state6 & 0xffff) ^ r1) + r2) ^ (state26 << 16) ^ (state24 >>> 15);
+
+        w1 = r1 + ((state3 << 16) | (state1 >>> 15));
+        w2 = r2 ^ (state31 << 16) ^ (state29 >>> 15);
+
+        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
+        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
+
+        state8 = feedback(state24, state28, state2, state5, state7);
+
+        keystream[25] = ((((state8 & 0xffff0000) << 1) ^ (state7 & 0xffff) ^ r1) + r2) ^ (state27 << 16) ^ (state25 >>> 15);
+
+        w1 = r1 + ((state4 << 16) | (state2 >>> 15));
+        w2 = r2 ^ (state0 << 16) ^ (state30 >>> 15);
+
+        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
+        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
+
+        state9 = feedback(state25, state29, state3, state6, state8);
+
+        keystream[26] = ((((state9 & 0xffff0000) << 1) ^ (state8 & 0xffff) ^ r1) + r2) ^ (state28 << 16) ^ (state26 >>> 15);
+
+        w1 = r1 + ((state5 << 16) | (state3 >>> 15));
+        w2 = r2 ^ (state1 << 16) ^ (state31 >>> 15);
+
+        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
+        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
+
+        state10 = feedback(state26, state30, state4, state7, state9);
+
+        keystream[27] = ((((state10 & 0xffff0000) << 1) ^ (state9 & 0xffff) ^ r1) + r2) ^ (state29 << 16) ^ (state27 >>> 15);
+
+        w1 = r1 + ((state6 << 16) | (state4 >>> 15));
+        w2 = r2 ^ (state2 << 16) ^ (state0 >>> 15);
+
+        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
+        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
+
+        state11 = feedback(state27, state31, state5, state8, state10);
+
+        keystream[28] = ((((state11 & 0xffff0000) << 1) ^ (state10 & 0xffff) ^ r1) + r2) ^ (state30 << 16) ^ (state28 >>> 15);
+
+        w1 = r1 + ((state7 << 16) | (state5 >>> 15));
+        w2 = r2 ^ (state3 << 16) ^ (state1 >>> 15);
+
+        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
+        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
+
+        state12 = feedback(state28, state0, state6, state9, state11);
+
+        keystream[29] = ((((state12 & 0xffff0000) << 1) ^ (state11 & 0xffff) ^ r1) + r2) ^ (state31 << 16) ^ (state29 >>> 15);
+
+        w1 = r1 + ((state8 << 16) | (state6 >>> 15));
+        w2 = r2 ^ (state4 << 16) ^ (state2 >>> 15);
+
+        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
+        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
+
+        state13 = feedback(state29, state1, state7, state10, state12);
+
+        keystream[30] = ((((state13 & 0xffff0000) << 1) ^ (state12 & 0xffff) ^ r1) + r2) ^ (state0 << 16) ^ (state30 >>> 15);
+
+        w1 = r1 + ((state9 << 16) | (state7 >>> 15));
+        w2 = r2 ^ (state5 << 16) ^ (state3 >>> 15);
+
+        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
+        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
+
+        state14 = feedback(state30, state2, state8, state11, state13);
+
+        keystream[31] = ((((state14 & 0xffff0000) << 1) ^ (state13 & 0xffff) ^ r1) + r2) ^ (state1 << 16) ^ (state31 >>> 15);
+
+        w1 = r1 + ((state10 << 16) | (state8 >>> 15));
+        w2 = r2 ^ (state6 << 16) ^ (state4 >>> 15);
+
+        r1 = s(l1((w1 << 16) | (w2 >>> 16)));
+        r2 = s(l2((w2 << 16) | (w1 >>> 16)));
+
+        state15 = feedback(state31, state3, state9, state12, state14);
 
         register[0] = r1;
         register[1] = r2;
+
+        state[0] = state0;
+        state[1] = state1;
+        state[2] = state2;
+        state[3] = state3;
+        state[4] = state4;
+        state[5] = state5;
+        state[6] = state6;
+        state[7] = state7;
+        state[8] = state8;
+        state[9] = state9;
+        state[10] = state10;
+        state[11] = state11;
+        state[12] = state12;
+        state[13] = state13;
+        state[14] = state14;
+        state[15] = state15;
 
     }
 

@@ -4,12 +4,12 @@
  */
 package org.asterisk.crypto.stream;
 
-import org.asterisk.crypto.interfaces.StreamCipher;
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
 import org.asterisk.crypto.helper.AbstractStreamEncrypter;
 import org.asterisk.crypto.helper.Tools;
 import org.asterisk.crypto.interfaces.Cipher;
+import org.asterisk.crypto.interfaces.StreamCipher;
 
 /**
  *
@@ -380,264 +380,288 @@ public enum Snow3g implements StreamCipher {
     }
 
     private static void keystream(int[] state, int[] register, int[] buffer) {
-        int temp0, temp1, r2;
+        int state0 = state[0], state1 = state[1], state2 = state[2], state3 = state[3];
+        int state4 = state[4], state5 = state[5], state6 = state[6], state7 = state[7];
+        int state8 = state[8], state9 = state[9], state10 = state[10], state11 = state[11];
+        int state12 = state[12], state13 = state[13], state14 = state[14], state15 = state[15];
 
-        buffer[0] = (state[15] + register[0]) ^ register[1] ^ state[0];
+        int r0 = register[0], r1 = register[1], r2 = register[2];
 
-        temp0 = register[1] + (register[2] ^ state[5]);
-        r2 = s2(register[1]);
-        register[1] = s1(register[0]);
+        int temp0, temp1;
 
-        int state16 = (state[0] << 8) ^ MUL_ALPHA[state[0] >>> 24] ^ state[2] ^ (state[11] >>> 8) ^ DIV_ALPHA[state[11] & 0xff];
+        buffer[0] = (state15 + r0) ^ r1 ^ state0;
 
-        buffer[1] = (state16 + temp0) ^ register[1] ^ state[1];
+        temp0 = r1 + (r2 ^ state5);
+        r2 = s2(r1);
+        r1 = s1(r0);
 
-        temp1 = register[1] + (r2 ^ state[6]);
-        r2 = s2(register[1]);
-        register[1] = s1(temp0);
+        int state16 = (state0 << 8) ^ MUL_ALPHA[state0 >>> 24] ^ state2 ^ (state11 >>> 8) ^ DIV_ALPHA[state11 & 0xff];
 
-        int state17 = (state[1] << 8) ^ MUL_ALPHA[state[1] >>> 24] ^ state[3] ^ (state[12] >>> 8) ^ DIV_ALPHA[state[12] & 0xff];
+        buffer[1] = (state16 + temp0) ^ r1 ^ state1;
 
-        buffer[2] = (state17 + temp1) ^ register[1] ^ state[2];
+        temp1 = r1 + (r2 ^ state6);
+        r2 = s2(r1);
+        r1 = s1(temp0);
 
-        temp0 = register[1] + (r2 ^ state[7]);
-        r2 = s2(register[1]);
-        register[1] = s1(temp1);
+        int state17 = (state1 << 8) ^ MUL_ALPHA[state1 >>> 24] ^ state3 ^ (state12 >>> 8) ^ DIV_ALPHA[state12 & 0xff];
 
-        int state18 = (state[2] << 8) ^ MUL_ALPHA[state[2] >>> 24] ^ state[4] ^ (state[13] >>> 8) ^ DIV_ALPHA[state[13] & 0xff];
+        buffer[2] = (state17 + temp1) ^ r1 ^ state2;
 
-        buffer[3] = (state18 + temp0) ^ register[1] ^ state[3];
+        temp0 = r1 + (r2 ^ state7);
+        r2 = s2(r1);
+        r1 = s1(temp1);
 
-        temp1 = register[1] + (r2 ^ state[8]);
-        r2 = s2(register[1]);
-        register[1] = s1(temp0);
+        int state18 = (state2 << 8) ^ MUL_ALPHA[state2 >>> 24] ^ state4 ^ (state13 >>> 8) ^ DIV_ALPHA[state13 & 0xff];
 
-        int state19 = (state[3] << 8) ^ MUL_ALPHA[state[3] >>> 24] ^ state[5] ^ (state[14] >>> 8) ^ DIV_ALPHA[state[14] & 0xff];
+        buffer[3] = (state18 + temp0) ^ r1 ^ state3;
 
-        buffer[4] = (state19 + temp1) ^ register[1] ^ state[4];
+        temp1 = r1 + (r2 ^ state8);
+        r2 = s2(r1);
+        r1 = s1(temp0);
 
-        temp0 = register[1] + (r2 ^ state[9]);
-        r2 = s2(register[1]);
-        register[1] = s1(temp1);
+        int state19 = (state3 << 8) ^ MUL_ALPHA[state3 >>> 24] ^ state5 ^ (state14 >>> 8) ^ DIV_ALPHA[state14 & 0xff];
 
-        int state20 = (state[4] << 8) ^ MUL_ALPHA[state[4] >>> 24] ^ state[6] ^ (state[15] >>> 8) ^ DIV_ALPHA[state[15] & 0xff];
+        buffer[4] = (state19 + temp1) ^ r1 ^ state4;
 
-        buffer[5] = (state20 + temp0) ^ register[1] ^ state[5];
+        temp0 = r1 + (r2 ^ state9);
+        r2 = s2(r1);
+        r1 = s1(temp1);
 
-        temp1 = register[1] + (r2 ^ state[10]);
-        r2 = s2(register[1]);
-        register[1] = s1(temp0);
+        int state20 = (state4 << 8) ^ MUL_ALPHA[state4 >>> 24] ^ state6 ^ (state15 >>> 8) ^ DIV_ALPHA[state15 & 0xff];
 
-        int state21 = (state[5] << 8) ^ MUL_ALPHA[state[5] >>> 24] ^ state[7] ^ (state16 >>> 8) ^ DIV_ALPHA[state16 & 0xff];
+        buffer[5] = (state20 + temp0) ^ r1 ^ state5;
 
-        buffer[6] = (state21 + temp1) ^ register[1] ^ state[6];
+        temp1 = r1 + (r2 ^ state10);
+        r2 = s2(r1);
+        r1 = s1(temp0);
 
-        temp0 = register[1] + (r2 ^ state[11]);
-        r2 = s2(register[1]);
-        register[1] = s1(temp1);
+        int state21 = (state5 << 8) ^ MUL_ALPHA[state5 >>> 24] ^ state7 ^ (state16 >>> 8) ^ DIV_ALPHA[state16 & 0xff];
 
-        int state22 = (state[6] << 8) ^ MUL_ALPHA[state[6] >>> 24] ^ state[8] ^ (state17 >>> 8) ^ DIV_ALPHA[state17 & 0xff];
+        buffer[6] = (state21 + temp1) ^ r1 ^ state6;
 
-        buffer[7] = (state22 + temp0) ^ register[1] ^ state[7];
+        temp0 = r1 + (r2 ^ state11);
+        r2 = s2(r1);
+        r1 = s1(temp1);
 
-        temp1 = register[1] + (r2 ^ state[12]);
-        r2 = s2(register[1]);
-        register[1] = s1(temp0);
+        int state22 = (state6 << 8) ^ MUL_ALPHA[state6 >>> 24] ^ state8 ^ (state17 >>> 8) ^ DIV_ALPHA[state17 & 0xff];
 
-        int state23 = (state[7] << 8) ^ MUL_ALPHA[state[7] >>> 24] ^ state[9] ^ (state18 >>> 8) ^ DIV_ALPHA[state18 & 0xff];
+        buffer[7] = (state22 + temp0) ^ r1 ^ state7;
 
-        buffer[8] = (state23 + temp1) ^ register[1] ^ state[8];
+        temp1 = r1 + (r2 ^ state12);
+        r2 = s2(r1);
+        r1 = s1(temp0);
 
-        temp0 = register[1] + (r2 ^ state[13]);
-        r2 = s2(register[1]);
-        register[1] = s1(temp1);
+        int state23 = (state7 << 8) ^ MUL_ALPHA[state7 >>> 24] ^ state9 ^ (state18 >>> 8) ^ DIV_ALPHA[state18 & 0xff];
 
-        int state24 = (state[8] << 8) ^ MUL_ALPHA[state[8] >>> 24] ^ state[10] ^ (state19 >>> 8) ^ DIV_ALPHA[state19 & 0xff];
+        buffer[8] = (state23 + temp1) ^ r1 ^ state8;
 
-        buffer[9] = (state24 + temp0) ^ register[1] ^ state[9];
+        temp0 = r1 + (r2 ^ state13);
+        r2 = s2(r1);
+        r1 = s1(temp1);
 
-        temp1 = register[1] + (r2 ^ state[14]);
-        r2 = s2(register[1]);
-        register[1] = s1(temp0);
+        int state24 = (state8 << 8) ^ MUL_ALPHA[state8 >>> 24] ^ state10 ^ (state19 >>> 8) ^ DIV_ALPHA[state19 & 0xff];
 
-        int state25 = (state[9] << 8) ^ MUL_ALPHA[state[9] >>> 24] ^ state[11] ^ (state20 >>> 8) ^ DIV_ALPHA[state20 & 0xff];
+        buffer[9] = (state24 + temp0) ^ r1 ^ state9;
 
-        buffer[10] = (state25 + temp1) ^ register[1] ^ state[10];
+        temp1 = r1 + (r2 ^ state14);
+        r2 = s2(r1);
+        r1 = s1(temp0);
 
-        temp0 = register[1] + (r2 ^ state[15]);
-        r2 = s2(register[1]);
-        register[1] = s1(temp1);
+        int state25 = (state9 << 8) ^ MUL_ALPHA[state9 >>> 24] ^ state11 ^ (state20 >>> 8) ^ DIV_ALPHA[state20 & 0xff];
 
-        int state26 = (state[10] << 8) ^ MUL_ALPHA[state[10] >>> 24] ^ state[12] ^ (state21 >>> 8) ^ DIV_ALPHA[state21 & 0xff];
+        buffer[10] = (state25 + temp1) ^ r1 ^ state10;
 
-        buffer[11] = (state26 + temp0) ^ register[1] ^ state[11];
+        temp0 = r1 + (r2 ^ state15);
+        r2 = s2(r1);
+        r1 = s1(temp1);
 
-        temp1 = register[1] + (r2 ^ state16);
-        r2 = s2(register[1]);
-        register[1] = s1(temp0);
+        int state26 = (state10 << 8) ^ MUL_ALPHA[state10 >>> 24] ^ state12 ^ (state21 >>> 8) ^ DIV_ALPHA[state21 & 0xff];
 
-        int state27 = (state[11] << 8) ^ MUL_ALPHA[state[11] >>> 24] ^ state[13] ^ (state22 >>> 8) ^ DIV_ALPHA[state22 & 0xff];
+        buffer[11] = (state26 + temp0) ^ r1 ^ state11;
 
-        buffer[12] = (state27 + temp1) ^ register[1] ^ state[12];
+        temp1 = r1 + (r2 ^ state16);
+        r2 = s2(r1);
+        r1 = s1(temp0);
 
-        temp0 = register[1] + (r2 ^ state17);
-        r2 = s2(register[1]);
-        register[1] = s1(temp1);
+        int state27 = (state11 << 8) ^ MUL_ALPHA[state11 >>> 24] ^ state13 ^ (state22 >>> 8) ^ DIV_ALPHA[state22 & 0xff];
 
-        int state28 = (state[12] << 8) ^ MUL_ALPHA[state[12] >>> 24] ^ state[14] ^ (state23 >>> 8) ^ DIV_ALPHA[state23 & 0xff];
+        buffer[12] = (state27 + temp1) ^ r1 ^ state12;
 
-        buffer[13] = (state28 + temp0) ^ register[1] ^ state[13];
+        temp0 = r1 + (r2 ^ state17);
+        r2 = s2(r1);
+        r1 = s1(temp1);
 
-        temp1 = register[1] + (r2 ^ state18);
-        r2 = s2(register[1]);
-        register[1] = s1(temp0);
+        int state28 = (state12 << 8) ^ MUL_ALPHA[state12 >>> 24] ^ state14 ^ (state23 >>> 8) ^ DIV_ALPHA[state23 & 0xff];
 
-        int state29 = (state[13] << 8) ^ MUL_ALPHA[state[13] >>> 24] ^ state[15] ^ (state24 >>> 8) ^ DIV_ALPHA[state24 & 0xff];
+        buffer[13] = (state28 + temp0) ^ r1 ^ state13;
 
-        buffer[14] = (state29 + temp1) ^ register[1] ^ state[14];
+        temp1 = r1 + (r2 ^ state18);
+        r2 = s2(r1);
+        r1 = s1(temp0);
 
-        temp0 = register[1] + (r2 ^ state19);
-        r2 = s2(register[1]);
-        register[1] = s1(temp1);
+        int state29 = (state13 << 8) ^ MUL_ALPHA[state13 >>> 24] ^ state15 ^ (state24 >>> 8) ^ DIV_ALPHA[state24 & 0xff];
 
-        int state30 = (state[14] << 8) ^ MUL_ALPHA[state[14] >>> 24] ^ state16 ^ (state25 >>> 8) ^ DIV_ALPHA[state25 & 0xff];
+        buffer[14] = (state29 + temp1) ^ r1 ^ state14;
 
-        buffer[15] = (state30 + temp0) ^ register[1] ^ state[15];
+        temp0 = r1 + (r2 ^ state19);
+        r2 = s2(r1);
+        r1 = s1(temp1);
 
-        temp1 = register[1] + (r2 ^ state20);
-        r2 = s2(register[1]);
-        register[1] = s1(temp0);
+        int state30 = (state14 << 8) ^ MUL_ALPHA[state14 >>> 24] ^ state16 ^ (state25 >>> 8) ^ DIV_ALPHA[state25 & 0xff];
 
-        int state31 = (state[15] << 8) ^ MUL_ALPHA[state[15] >>> 24] ^ state17 ^ (state26 >>> 8) ^ DIV_ALPHA[state26 & 0xff];
+        buffer[15] = (state30 + temp0) ^ r1 ^ state15;
 
-        buffer[16] = (state31 + temp1) ^ register[1] ^ state16;
+        temp1 = r1 + (r2 ^ state20);
+        r2 = s2(r1);
+        r1 = s1(temp0);
 
-        temp0 = register[1] + (r2 ^ state21);
-        r2 = s2(register[1]);
-        register[1] = s1(temp1);
+        int state31 = (state15 << 8) ^ MUL_ALPHA[state15 >>> 24] ^ state17 ^ (state26 >>> 8) ^ DIV_ALPHA[state26 & 0xff];
 
-        state[0] = (state16 << 8) ^ MUL_ALPHA[state16 >>> 24] ^ state18 ^ (state27 >>> 8) ^ DIV_ALPHA[state27 & 0xff];
+        buffer[16] = (state31 + temp1) ^ r1 ^ state16;
 
-        buffer[17] = (state[0] + temp0) ^ register[1] ^ state17;
+        temp0 = r1 + (r2 ^ state21);
+        r2 = s2(r1);
+        r1 = s1(temp1);
 
-        temp1 = register[1] + (r2 ^ state22);
-        r2 = s2(register[1]);
-        register[1] = s1(temp0);
+        state0 = (state16 << 8) ^ MUL_ALPHA[state16 >>> 24] ^ state18 ^ (state27 >>> 8) ^ DIV_ALPHA[state27 & 0xff];
 
-        state[1] = (state17 << 8) ^ MUL_ALPHA[state17 >>> 24] ^ state19 ^ (state28 >>> 8) ^ DIV_ALPHA[state28 & 0xff];
+        buffer[17] = (state0 + temp0) ^ r1 ^ state17;
 
-        buffer[18] = (state[1] + temp1) ^ register[1] ^ state18;
+        temp1 = r1 + (r2 ^ state22);
+        r2 = s2(r1);
+        r1 = s1(temp0);
 
-        temp0 = register[1] + (r2 ^ state23);
-        r2 = s2(register[1]);
-        register[1] = s1(temp1);
+        state1 = (state17 << 8) ^ MUL_ALPHA[state17 >>> 24] ^ state19 ^ (state28 >>> 8) ^ DIV_ALPHA[state28 & 0xff];
 
-        state[2] = (state18 << 8) ^ MUL_ALPHA[state18 >>> 24] ^ state20 ^ (state29 >>> 8) ^ DIV_ALPHA[state29 & 0xff];
+        buffer[18] = (state1 + temp1) ^ r1 ^ state18;
 
-        buffer[19] = (state[2] + temp0) ^ register[1] ^ state19;
+        temp0 = r1 + (r2 ^ state23);
+        r2 = s2(r1);
+        r1 = s1(temp1);
 
-        temp1 = register[1] + (r2 ^ state24);
-        r2 = s2(register[1]);
-        register[1] = s1(temp0);
+        state2 = (state18 << 8) ^ MUL_ALPHA[state18 >>> 24] ^ state20 ^ (state29 >>> 8) ^ DIV_ALPHA[state29 & 0xff];
 
-        state[3] = (state19 << 8) ^ MUL_ALPHA[state19 >>> 24] ^ state21 ^ (state30 >>> 8) ^ DIV_ALPHA[state30 & 0xff];
+        buffer[19] = (state2 + temp0) ^ r1 ^ state19;
 
-        buffer[20] = (state[3] + temp1) ^ register[1] ^ state20;
+        temp1 = r1 + (r2 ^ state24);
+        r2 = s2(r1);
+        r1 = s1(temp0);
 
-        temp0 = register[1] + (r2 ^ state25);
-        r2 = s2(register[1]);
-        register[1] = s1(temp1);
+        state3 = (state19 << 8) ^ MUL_ALPHA[state19 >>> 24] ^ state21 ^ (state30 >>> 8) ^ DIV_ALPHA[state30 & 0xff];
 
-        state[4] = (state20 << 8) ^ MUL_ALPHA[state20 >>> 24] ^ state22 ^ (state31 >>> 8) ^ DIV_ALPHA[state31 & 0xff];
+        buffer[20] = (state3 + temp1) ^ r1 ^ state20;
 
-        buffer[21] = (state[4] + temp0) ^ register[1] ^ state21;
+        temp0 = r1 + (r2 ^ state25);
+        r2 = s2(r1);
+        r1 = s1(temp1);
 
-        temp1 = register[1] + (r2 ^ state26);
-        r2 = s2(register[1]);
-        register[1] = s1(temp0);
+        state4 = (state20 << 8) ^ MUL_ALPHA[state20 >>> 24] ^ state22 ^ (state31 >>> 8) ^ DIV_ALPHA[state31 & 0xff];
 
-        state[5] = (state21 << 8) ^ MUL_ALPHA[state21 >>> 24] ^ state23 ^ (state[0] >>> 8) ^ DIV_ALPHA[state[0] & 0xff];
+        buffer[21] = (state4 + temp0) ^ r1 ^ state21;
 
-        buffer[22] = (state[5] + temp1) ^ register[1] ^ state22;
+        temp1 = r1 + (r2 ^ state26);
+        r2 = s2(r1);
+        r1 = s1(temp0);
 
-        temp0 = register[1] + (r2 ^ state27);
-        r2 = s2(register[1]);
-        register[1] = s1(temp1);
+        state5 = (state21 << 8) ^ MUL_ALPHA[state21 >>> 24] ^ state23 ^ (state0 >>> 8) ^ DIV_ALPHA[state0 & 0xff];
 
-        state[6] = (state22 << 8) ^ MUL_ALPHA[state22 >>> 24] ^ state24 ^ (state[1] >>> 8) ^ DIV_ALPHA[state[1] & 0xff];
+        buffer[22] = (state5 + temp1) ^ r1 ^ state22;
 
-        buffer[23] = (state[6] + temp0) ^ register[1] ^ state23;
+        temp0 = r1 + (r2 ^ state27);
+        r2 = s2(r1);
+        r1 = s1(temp1);
 
-        temp1 = register[1] + (r2 ^ state28);
-        r2 = s2(register[1]);
-        register[1] = s1(temp0);
+        state6 = (state22 << 8) ^ MUL_ALPHA[state22 >>> 24] ^ state24 ^ (state1 >>> 8) ^ DIV_ALPHA[state1 & 0xff];
 
-        state[7] = (state23 << 8) ^ MUL_ALPHA[state23 >>> 24] ^ state25 ^ (state[2] >>> 8) ^ DIV_ALPHA[state[2] & 0xff];
+        buffer[23] = (state6 + temp0) ^ r1 ^ state23;
 
-        buffer[24] = (state[7] + temp1) ^ register[1] ^ state24;
+        temp1 = r1 + (r2 ^ state28);
+        r2 = s2(r1);
+        r1 = s1(temp0);
 
-        temp0 = register[1] + (r2 ^ state29);
-        r2 = s2(register[1]);
-        register[1] = s1(temp1);
+        state7 = (state23 << 8) ^ MUL_ALPHA[state23 >>> 24] ^ state25 ^ (state2 >>> 8) ^ DIV_ALPHA[state2 & 0xff];
 
-        state[8] = (state24 << 8) ^ MUL_ALPHA[state24 >>> 24] ^ state26 ^ (state[3] >>> 8) ^ DIV_ALPHA[state[3] & 0xff];
+        buffer[24] = (state7 + temp1) ^ r1 ^ state24;
 
-        buffer[25] = (state[8] + temp0) ^ register[1] ^ state25;
+        temp0 = r1 + (r2 ^ state29);
+        r2 = s2(r1);
+        r1 = s1(temp1);
 
-        temp1 = register[1] + (r2 ^ state30);
-        r2 = s2(register[1]);
-        register[1] = s1(temp0);
+        state8 = (state24 << 8) ^ MUL_ALPHA[state24 >>> 24] ^ state26 ^ (state3 >>> 8) ^ DIV_ALPHA[state3 & 0xff];
 
-        state[9] = (state25 << 8) ^ MUL_ALPHA[state25 >>> 24] ^ state27 ^ (state[4] >>> 8) ^ DIV_ALPHA[state[4] & 0xff];
+        buffer[25] = (state8 + temp0) ^ r1 ^ state25;
 
-        buffer[26] = (state[9] + temp1) ^ register[1] ^ state26;
+        temp1 = r1 + (r2 ^ state30);
+        r2 = s2(r1);
+        r1 = s1(temp0);
 
-        temp0 = register[1] + (r2 ^ state31);
-        r2 = s2(register[1]);
-        register[1] = s1(temp1);
+        state9 = (state25 << 8) ^ MUL_ALPHA[state25 >>> 24] ^ state27 ^ (state4 >>> 8) ^ DIV_ALPHA[state4 & 0xff];
 
-        state[10] = (state26 << 8) ^ MUL_ALPHA[state26 >>> 24] ^ state28 ^ (state[5] >>> 8) ^ DIV_ALPHA[state[5] & 0xff];
+        buffer[26] = (state9 + temp1) ^ r1 ^ state26;
 
-        buffer[27] = (state[10] + temp0) ^ register[1] ^ state27;
+        temp0 = r1 + (r2 ^ state31);
+        r2 = s2(r1);
+        r1 = s1(temp1);
 
-        temp1 = register[1] + (r2 ^ state[0]);
-        r2 = s2(register[1]);
-        register[1] = s1(temp0);
+        state10 = (state26 << 8) ^ MUL_ALPHA[state26 >>> 24] ^ state28 ^ (state5 >>> 8) ^ DIV_ALPHA[state5 & 0xff];
 
-        state[11] = (state27 << 8) ^ MUL_ALPHA[state27 >>> 24] ^ state29 ^ (state[6] >>> 8) ^ DIV_ALPHA[state[6] & 0xff];
+        buffer[27] = (state10 + temp0) ^ r1 ^ state27;
 
-        buffer[28] = (state[11] + temp1) ^ register[1] ^ state28;
+        temp1 = r1 + (r2 ^ state0);
+        r2 = s2(r1);
+        r1 = s1(temp0);
 
-        temp0 = register[1] + (r2 ^ state[1]);
-        r2 = s2(register[1]);
-        register[1] = s1(temp1);
+        state11 = (state27 << 8) ^ MUL_ALPHA[state27 >>> 24] ^ state29 ^ (state6 >>> 8) ^ DIV_ALPHA[state6 & 0xff];
 
-        state[12] = (state28 << 8) ^ MUL_ALPHA[state28 >>> 24] ^ state30 ^ (state[7] >>> 8) ^ DIV_ALPHA[state[7] & 0xff];
+        buffer[28] = (state11 + temp1) ^ r1 ^ state28;
 
-        buffer[29] = (state[12] + temp0) ^ register[1] ^ state29;
+        temp0 = r1 + (r2 ^ state1);
+        r2 = s2(r1);
+        r1 = s1(temp1);
 
-        temp1 = register[1] + (r2 ^ state[2]);
-        r2 = s2(register[1]);
-        register[1] = s1(temp0);
+        state12 = (state28 << 8) ^ MUL_ALPHA[state28 >>> 24] ^ state30 ^ (state7 >>> 8) ^ DIV_ALPHA[state7 & 0xff];
 
-        state[13] = (state29 << 8) ^ MUL_ALPHA[state29 >>> 24] ^ state31 ^ (state[8] >>> 8) ^ DIV_ALPHA[state[8] & 0xff];
+        buffer[29] = (state12 + temp0) ^ r1 ^ state29;
 
-        buffer[30] = (state[13] + temp1) ^ register[1] ^ state30;
+        temp1 = r1 + (r2 ^ state2);
+        r2 = s2(r1);
+        r1 = s1(temp0);
 
-        temp0 = register[1] + (r2 ^ state[3]);
-        r2 = s2(register[1]);
-        register[1] = s1(temp1);
+        state13 = (state29 << 8) ^ MUL_ALPHA[state29 >>> 24] ^ state31 ^ (state8 >>> 8) ^ DIV_ALPHA[state8 & 0xff];
 
-        state[14] = (state30 << 8) ^ MUL_ALPHA[state30 >>> 24] ^ state[0] ^ (state[9] >>> 8) ^ DIV_ALPHA[state[9] & 0xff];
+        buffer[30] = (state13 + temp1) ^ r1 ^ state30;
 
-        buffer[31] = (state[14] + temp0) ^ register[1] ^ state31;
+        temp0 = r1 + (r2 ^ state3);
+        r2 = s2(r1);
+        r1 = s1(temp1);
 
-        temp1 = register[1] + (r2 ^ state[4]);
-        register[2] = s2(register[1]);
-        register[1] = s1(temp0);
-        register[0] = temp1;
+        state14 = (state30 << 8) ^ MUL_ALPHA[state30 >>> 24] ^ state0 ^ (state9 >>> 8) ^ DIV_ALPHA[state9 & 0xff];
 
-        state[15] = (state31 << 8) ^ MUL_ALPHA[state31 >>> 24] ^ state[1] ^ (state[10] >>> 8) ^ DIV_ALPHA[state[10] & 0xff];
+        buffer[31] = (state14 + temp0) ^ r1 ^ state31;
+
+        temp1 = r1 + (r2 ^ state4);
+        r2 = s2(r1);
+        r1 = s1(temp0);
+        r0 = temp1;
+
+        state15 = (state31 << 8) ^ MUL_ALPHA[state31 >>> 24] ^ state1 ^ (state10 >>> 8) ^ DIV_ALPHA[state10 & 0xff];
+
+        state[0] = state0;
+        state[1] = state1;
+        state[2] = state2;
+        state[3] = state3;
+        state[4] = state4;
+        state[5] = state5;
+        state[6] = state6;
+        state[7] = state7;
+        state[8] = state8;
+        state[9] = state9;
+        state[10] = state10;
+        state[11] = state11;
+        state[12] = state12;
+        state[13] = state13;
+        state[14] = state14;
+        state[15] = state15;
 
     }
 
@@ -647,217 +671,219 @@ public enum Snow3g implements StreamCipher {
         int k2 = Tools.load32BE(key, 8);
         int k3 = Tools.load32BE(key, 12);
 
-        int[] state = {
-            ~k0, ~k1, ~k2, ~k3,
-            k0, k1, k2, k3,
-            ~k0, ~k1 ^ Tools.load32BE(iv, 12), ~k2 ^ Tools.load32BE(iv, 8), ~k3,
-            k0 ^ Tools.load32BE(iv, 4), k1, k2, k3 ^ Tools.load32BE(iv, 0)
+        int state0 = ~k0, state1 = ~k1, state2 = ~k2, state3 = ~k3;
+        int state4 = k0, state5 = k1, state6 = k2, state7 = k3;
+        int state8 = state0, state9 = state1 ^ Tools.load32BE(iv, 12), state10 = state2 ^ Tools.load32BE(iv, 8), state11 = state3;
+        int state12 = state4 ^ Tools.load32BE(iv, 4), state13 = state5, state14 = state6, state15 = state7 ^ Tools.load32BE(iv, 0);
+
+        int r0=register[0], r1=register[1], r2=register[2];
+        
+        int temp0, temp1;
+
+        int state16 = (state0 << 8) ^ MUL_ALPHA[state0 >>> 24] ^ state2 ^ (state11 >>> 8) ^ DIV_ALPHA[state11 & 0xff] ^ (state15 + r0) ^ r1;
+
+        temp0 = r1 + (r2 ^ state5);
+        r2 = s2(r1);
+        r1 = s1(r0);
+
+        int state17 = (state1 << 8) ^ MUL_ALPHA[state1 >>> 24] ^ state3 ^ (state12 >>> 8) ^ DIV_ALPHA[state12 & 0xff] ^ (state16 + temp0) ^ r1;
+
+        temp1 = r1 + (r2 ^ state6);
+        r2 = s2(r1);
+        r1 = s1(temp0);
+
+        int state18 = (state2 << 8) ^ MUL_ALPHA[state2 >>> 24] ^ state4 ^ (state13 >>> 8) ^ DIV_ALPHA[state13 & 0xff] ^ (state17 + temp1) ^ r1;
+
+        temp0 = r1 + (r2 ^ state7);
+        r2 = s2(r1);
+        r1 = s1(temp1);
+
+        int state19 = (state3 << 8) ^ MUL_ALPHA[state3 >>> 24] ^ state5 ^ (state14 >>> 8) ^ DIV_ALPHA[state14 & 0xff] ^ (state18 + temp0) ^ r1;
+
+        temp1 = r1 + (r2 ^ state8);
+        r2 = s2(r1);
+        r1 = s1(temp0);
+
+        int state20 = (state4 << 8) ^ MUL_ALPHA[state4 >>> 24] ^ state6 ^ (state15 >>> 8) ^ DIV_ALPHA[state15 & 0xff] ^ (state19 + temp1) ^ r1;
+
+        temp0 = r1 + (r2 ^ state9);
+        r2 = s2(r1);
+        r1 = s1(temp1);
+
+        int state21 = (state5 << 8) ^ MUL_ALPHA[state5 >>> 24] ^ state7 ^ (state16 >>> 8) ^ DIV_ALPHA[state16 & 0xff] ^ (state20 + temp0) ^ r1;
+
+        temp1 = r1 + (r2 ^ state10);
+        r2 = s2(r1);
+        r1 = s1(temp0);
+
+        int state22 = (state6 << 8) ^ MUL_ALPHA[state6 >>> 24] ^ state8 ^ (state17 >>> 8) ^ DIV_ALPHA[state17 & 0xff] ^ (state21 + temp1) ^ r1;
+
+        temp0 = r1 + (r2 ^ state11);
+        r2 = s2(r1);
+        r1 = s1(temp1);
+
+        int state23 = (state7 << 8) ^ MUL_ALPHA[state7 >>> 24] ^ state9 ^ (state18 >>> 8) ^ DIV_ALPHA[state18 & 0xff] ^ (state22 + temp0) ^ r1;
+
+        temp1 = r1 + (r2 ^ state12);
+        r2 = s2(r1);
+        r1 = s1(temp0);
+
+        int state24 = (state8 << 8) ^ MUL_ALPHA[state8 >>> 24] ^ state10 ^ (state19 >>> 8) ^ DIV_ALPHA[state19 & 0xff] ^ (state23 + temp1) ^ r1;
+
+        temp0 = r1 + (r2 ^ state13);
+        r2 = s2(r1);
+        r1 = s1(temp1);
+
+        int state25 = (state9 << 8) ^ MUL_ALPHA[state9 >>> 24] ^ state11 ^ (state20 >>> 8) ^ DIV_ALPHA[state20 & 0xff] ^ (state24 + temp0) ^ r1;
+
+        temp1 = r1 + (r2 ^ state14);
+        r2 = s2(r1);
+        r1 = s1(temp0);
+
+        int state26 = (state10 << 8) ^ MUL_ALPHA[state10 >>> 24] ^ state12 ^ (state21 >>> 8) ^ DIV_ALPHA[state21 & 0xff] ^ (state25 + temp1) ^ r1;
+
+        temp0 = r1 + (r2 ^ state15);
+        r2 = s2(r1);
+        r1 = s1(temp1);
+
+        int state27 = (state11 << 8) ^ MUL_ALPHA[state11 >>> 24] ^ state13 ^ (state22 >>> 8) ^ DIV_ALPHA[state22 & 0xff] ^ (state26 + temp0) ^ r1;
+
+        temp1 = r1 + (r2 ^ state16);
+        r2 = s2(r1);
+        r1 = s1(temp0);
+
+        int state28 = (state12 << 8) ^ MUL_ALPHA[state12 >>> 24] ^ state14 ^ (state23 >>> 8) ^ DIV_ALPHA[state23 & 0xff] ^ (state27 + temp1) ^ r1;
+
+        temp0 = r1 + (r2 ^ state17);
+        r2 = s2(r1);
+        r1 = s1(temp1);
+
+        int state29 = (state13 << 8) ^ MUL_ALPHA[state13 >>> 24] ^ state15 ^ (state24 >>> 8) ^ DIV_ALPHA[state24 & 0xff] ^ (state28 + temp0) ^ r1;
+
+        temp1 = r1 + (r2 ^ state18);
+        r2 = s2(r1);
+        r1 = s1(temp0);
+
+        int state30 = (state14 << 8) ^ MUL_ALPHA[state14 >>> 24] ^ state16 ^ (state25 >>> 8) ^ DIV_ALPHA[state25 & 0xff] ^ (state29 + temp1) ^ r1;
+
+        temp0 = r1 + (r2 ^ state19);
+        r2 = s2(r1);
+        r1 = s1(temp1);
+
+        int state31 = (state15 << 8) ^ MUL_ALPHA[state15 >>> 24] ^ state17 ^ (state26 >>> 8) ^ DIV_ALPHA[state26 & 0xff] ^ (state30 + temp0) ^ r1;
+
+        temp1 = r1 + (r2 ^ state20);
+        r2 = s2(r1);
+        r1 = s1(temp0);
+
+        state0 = (state16 << 8) ^ MUL_ALPHA[state16 >>> 24] ^ state18 ^ (state27 >>> 8) ^ DIV_ALPHA[state27 & 0xff] ^ (state31 + temp1) ^ r1;
+
+        temp0 = r1 + (r2 ^ state21);
+        r2 = s2(r1);
+        r1 = s1(temp1);
+
+        state1 = (state17 << 8) ^ MUL_ALPHA[state17 >>> 24] ^ state19 ^ (state28 >>> 8) ^ DIV_ALPHA[state28 & 0xff] ^ (state0 + temp0) ^ r1;
+
+        temp1 = r1 + (r2 ^ state22);
+        r2 = s2(r1);
+        r1 = s1(temp0);
+
+        state2 = (state18 << 8) ^ MUL_ALPHA[state18 >>> 24] ^ state20 ^ (state29 >>> 8) ^ DIV_ALPHA[state29 & 0xff] ^ (state1 + temp1) ^ r1;
+
+        temp0 = r1 + (r2 ^ state23);
+        r2 = s2(r1);
+        r1 = s1(temp1);
+
+        state3 = (state19 << 8) ^ MUL_ALPHA[state19 >>> 24] ^ state21 ^ (state30 >>> 8) ^ DIV_ALPHA[state30 & 0xff] ^ (state2 + temp0) ^ r1;
+
+        temp1 = r1 + (r2 ^ state24);
+        r2 = s2(r1);
+        r1 = s1(temp0);
+
+        state4 = (state20 << 8) ^ MUL_ALPHA[state20 >>> 24] ^ state22 ^ (state31 >>> 8) ^ DIV_ALPHA[state31 & 0xff] ^ (state3 + temp1) ^ r1;
+
+        temp0 = r1 + (r2 ^ state25);
+        r2 = s2(r1);
+        r1 = s1(temp1);
+
+        state5 = (state21 << 8) ^ MUL_ALPHA[state21 >>> 24] ^ state23 ^ (state0 >>> 8) ^ DIV_ALPHA[state0 & 0xff] ^ (state4 + temp0) ^ r1;
+
+        temp1 = r1 + (r2 ^ state26);
+        r2 = s2(r1);
+        r1 = s1(temp0);
+
+        state6 = (state22 << 8) ^ MUL_ALPHA[state22 >>> 24] ^ state24 ^ (state1 >>> 8) ^ DIV_ALPHA[state1 & 0xff] ^ (state5 + temp1) ^ r1;
+
+        temp0 = r1 + (r2 ^ state27);
+        r2 = s2(r1);
+        r1 = s1(temp1);
+
+        state7 = (state23 << 8) ^ MUL_ALPHA[state23 >>> 24] ^ state25 ^ (state2 >>> 8) ^ DIV_ALPHA[state2 & 0xff] ^ (state6 + temp0) ^ r1;
+
+        temp1 = r1 + (r2 ^ state28);
+        r2 = s2(r1);
+        r1 = s1(temp0);
+
+        state8 = (state24 << 8) ^ MUL_ALPHA[state24 >>> 24] ^ state26 ^ (state3 >>> 8) ^ DIV_ALPHA[state3 & 0xff] ^ (state7 + temp1) ^ r1;
+
+        temp0 = r1 + (r2 ^ state29);
+        r2 = s2(r1);
+        r1 = s1(temp1);
+
+        state9 = (state25 << 8) ^ MUL_ALPHA[state25 >>> 24] ^ state27 ^ (state4 >>> 8) ^ DIV_ALPHA[state4 & 0xff] ^ (state8 + temp0) ^ r1;
+
+        temp1 = r1 + (r2 ^ state30);
+        r2 = s2(r1);
+        r1 = s1(temp0);
+
+        state10 = (state26 << 8) ^ MUL_ALPHA[state26 >>> 24] ^ state28 ^ (state5 >>> 8) ^ DIV_ALPHA[state5 & 0xff] ^ (state9 + temp1) ^ r1;
+
+        temp0 = r1 + (r2 ^ state31);
+        r2 = s2(r1);
+        r1 = s1(temp1);
+
+        state11 = (state27 << 8) ^ MUL_ALPHA[state27 >>> 24] ^ state29 ^ (state6 >>> 8) ^ DIV_ALPHA[state6 & 0xff] ^ (state10 + temp0) ^ r1;
+
+        temp1 = r1 + (r2 ^ state0);
+        r2 = s2(r1);
+        r1 = s1(temp0);
+
+        state12 = (state28 << 8) ^ MUL_ALPHA[state28 >>> 24] ^ state30 ^ (state7 >>> 8) ^ DIV_ALPHA[state7 & 0xff] ^ (state11 + temp1) ^ r1;
+
+        temp0 = r1 + (r2 ^ state1);
+        r2 = s2(r1);
+        r1 = s1(temp1);
+
+        state13 = (state29 << 8) ^ MUL_ALPHA[state29 >>> 24] ^ state31 ^ (state8 >>> 8) ^ DIV_ALPHA[state8 & 0xff] ^ (state12 + temp0) ^ r1;
+
+        temp1 = r1 + (r2 ^ state2);
+        r2 = s2(r1);
+        r1 = s1(temp0);
+
+        state14 = (state30 << 8) ^ MUL_ALPHA[state30 >>> 24] ^ state0 ^ (state9 >>> 8) ^ DIV_ALPHA[state9 & 0xff] ^ (state13 + temp1) ^ r1;
+
+        temp0 = r1 + (r2 ^ state3);
+        r2 = s2(r1);
+        r1 = s1(temp1);
+
+        state15 = (state31 << 8) ^ MUL_ALPHA[state31 >>> 24] ^ state1 ^ (state10 >>> 8) ^ DIV_ALPHA[state10 & 0xff] ^ (state14 + temp0) ^ r1;
+
+        temp1 = r1 + (r2 ^ state4);
+        r2 = s2(r1);
+        r1 = s1(temp0);
+
+        register[0] = r1 + (r2 ^ state5);
+        register[1] = s1(temp1);
+        register[2] = s2(r1);
+
+        int v = (state0 << 8) ^ MUL_ALPHA[state0 >>> 24] ^ state2 ^ (state11 >>> 8) ^ DIV_ALPHA[state11 & 0xff];
+
+        return new int[]{
+            state1, state2, state3, state4,
+            state5, state6, state7, state8,
+            state9, state10, state11, state12,
+            state13, state14, state15, v
         };
-
-        int temp0, temp1, r2;
-
-        int state16 = (state[0] << 8) ^ MUL_ALPHA[state[0] >>> 24] ^ state[2] ^ (state[11] >>> 8) ^ DIV_ALPHA[state[11] & 0xff] ^ (state[15] + register[0]) ^ register[1];
-
-        temp0 = register[1] + (register[2] ^ state[5]);
-        r2 = s2(register[1]);
-        register[1] = s1(register[0]);
-
-        int state17 = (state[1] << 8) ^ MUL_ALPHA[state[1] >>> 24] ^ state[3] ^ (state[12] >>> 8) ^ DIV_ALPHA[state[12] & 0xff] ^ (state16 + temp0) ^ register[1];
-
-        temp1 = register[1] + (r2 ^ state[6]);
-        r2 = s2(register[1]);
-        register[1] = s1(temp0);
-
-        int state18 = (state[2] << 8) ^ MUL_ALPHA[state[2] >>> 24] ^ state[4] ^ (state[13] >>> 8) ^ DIV_ALPHA[state[13] & 0xff] ^ (state17 + temp1) ^ register[1];
-
-        temp0 = register[1] + (r2 ^ state[7]);
-        r2 = s2(register[1]);
-        register[1] = s1(temp1);
-
-        int state19 = (state[3] << 8) ^ MUL_ALPHA[state[3] >>> 24] ^ state[5] ^ (state[14] >>> 8) ^ DIV_ALPHA[state[14] & 0xff] ^ (state18 + temp0) ^ register[1];
-
-        temp1 = register[1] + (r2 ^ state[8]);
-        r2 = s2(register[1]);
-        register[1] = s1(temp0);
-
-        int state20 = (state[4] << 8) ^ MUL_ALPHA[state[4] >>> 24] ^ state[6] ^ (state[15] >>> 8) ^ DIV_ALPHA[state[15] & 0xff] ^ (state19 + temp1) ^ register[1];
-
-        temp0 = register[1] + (r2 ^ state[9]);
-        r2 = s2(register[1]);
-        register[1] = s1(temp1);
-
-        int state21 = (state[5] << 8) ^ MUL_ALPHA[state[5] >>> 24] ^ state[7] ^ (state16 >>> 8) ^ DIV_ALPHA[state16 & 0xff] ^ (state20 + temp0) ^ register[1];
-
-        temp1 = register[1] + (r2 ^ state[10]);
-        r2 = s2(register[1]);
-        register[1] = s1(temp0);
-
-        int state22 = (state[6] << 8) ^ MUL_ALPHA[state[6] >>> 24] ^ state[8] ^ (state17 >>> 8) ^ DIV_ALPHA[state17 & 0xff] ^ (state21 + temp1) ^ register[1];
-
-        temp0 = register[1] + (r2 ^ state[11]);
-        r2 = s2(register[1]);
-        register[1] = s1(temp1);
-
-        int state23 = (state[7] << 8) ^ MUL_ALPHA[state[7] >>> 24] ^ state[9] ^ (state18 >>> 8) ^ DIV_ALPHA[state18 & 0xff] ^ (state22 + temp0) ^ register[1];
-
-        temp1 = register[1] + (r2 ^ state[12]);
-        r2 = s2(register[1]);
-        register[1] = s1(temp0);
-
-        int state24 = (state[8] << 8) ^ MUL_ALPHA[state[8] >>> 24] ^ state[10] ^ (state19 >>> 8) ^ DIV_ALPHA[state19 & 0xff] ^ (state23 + temp1) ^ register[1];
-
-        temp0 = register[1] + (r2 ^ state[13]);
-        r2 = s2(register[1]);
-        register[1] = s1(temp1);
-
-        int state25 = (state[9] << 8) ^ MUL_ALPHA[state[9] >>> 24] ^ state[11] ^ (state20 >>> 8) ^ DIV_ALPHA[state20 & 0xff] ^ (state24 + temp0) ^ register[1];
-
-        temp1 = register[1] + (r2 ^ state[14]);
-        r2 = s2(register[1]);
-        register[1] = s1(temp0);
-
-        int state26 = (state[10] << 8) ^ MUL_ALPHA[state[10] >>> 24] ^ state[12] ^ (state21 >>> 8) ^ DIV_ALPHA[state21 & 0xff] ^ (state25 + temp1) ^ register[1];
-
-        temp0 = register[1] + (r2 ^ state[15]);
-        r2 = s2(register[1]);
-        register[1] = s1(temp1);
-
-        int state27 = (state[11] << 8) ^ MUL_ALPHA[state[11] >>> 24] ^ state[13] ^ (state22 >>> 8) ^ DIV_ALPHA[state22 & 0xff] ^ (state26 + temp0) ^ register[1];
-
-        temp1 = register[1] + (r2 ^ state16);
-        r2 = s2(register[1]);
-        register[1] = s1(temp0);
-
-        int state28 = (state[12] << 8) ^ MUL_ALPHA[state[12] >>> 24] ^ state[14] ^ (state23 >>> 8) ^ DIV_ALPHA[state23 & 0xff] ^ (state27 + temp1) ^ register[1];
-
-        temp0 = register[1] + (r2 ^ state17);
-        r2 = s2(register[1]);
-        register[1] = s1(temp1);
-
-        int state29 = (state[13] << 8) ^ MUL_ALPHA[state[13] >>> 24] ^ state[15] ^ (state24 >>> 8) ^ DIV_ALPHA[state24 & 0xff] ^ (state28 + temp0) ^ register[1];
-
-        temp1 = register[1] + (r2 ^ state18);
-        r2 = s2(register[1]);
-        register[1] = s1(temp0);
-
-        int state30 = (state[14] << 8) ^ MUL_ALPHA[state[14] >>> 24] ^ state16 ^ (state25 >>> 8) ^ DIV_ALPHA[state25 & 0xff] ^ (state29 + temp1) ^ register[1];
-
-        temp0 = register[1] + (r2 ^ state19);
-        r2 = s2(register[1]);
-        register[1] = s1(temp1);
-
-        int state31 = (state[15] << 8) ^ MUL_ALPHA[state[15] >>> 24] ^ state17 ^ (state26 >>> 8) ^ DIV_ALPHA[state26 & 0xff] ^ (state30 + temp0) ^ register[1];
-
-        temp1 = register[1] + (r2 ^ state20);
-        r2 = s2(register[1]);
-        register[1] = s1(temp0);
-
-        state[0] = (state16 << 8) ^ MUL_ALPHA[state16 >>> 24] ^ state18 ^ (state27 >>> 8) ^ DIV_ALPHA[state27 & 0xff] ^ (state31 + temp1) ^ register[1];
-
-        temp0 = register[1] + (r2 ^ state21);
-        r2 = s2(register[1]);
-        register[1] = s1(temp1);
-
-        state[1] = (state17 << 8) ^ MUL_ALPHA[state17 >>> 24] ^ state19 ^ (state28 >>> 8) ^ DIV_ALPHA[state28 & 0xff] ^ (state[0] + temp0) ^ register[1];
-
-        temp1 = register[1] + (r2 ^ state22);
-        r2 = s2(register[1]);
-        register[1] = s1(temp0);
-
-        state[2] = (state18 << 8) ^ MUL_ALPHA[state18 >>> 24] ^ state20 ^ (state29 >>> 8) ^ DIV_ALPHA[state29 & 0xff] ^ (state[1] + temp1) ^ register[1];
-
-        temp0 = register[1] + (r2 ^ state23);
-        r2 = s2(register[1]);
-        register[1] = s1(temp1);
-
-        state[3] = (state19 << 8) ^ MUL_ALPHA[state19 >>> 24] ^ state21 ^ (state30 >>> 8) ^ DIV_ALPHA[state30 & 0xff] ^ (state[2] + temp0) ^ register[1];
-
-        temp1 = register[1] + (r2 ^ state24);
-        r2 = s2(register[1]);
-        register[1] = s1(temp0);
-
-        state[4] = (state20 << 8) ^ MUL_ALPHA[state20 >>> 24] ^ state22 ^ (state31 >>> 8) ^ DIV_ALPHA[state31 & 0xff] ^ (state[3] + temp1) ^ register[1];
-
-        temp0 = register[1] + (r2 ^ state25);
-        r2 = s2(register[1]);
-        register[1] = s1(temp1);
-
-        state[5] = (state21 << 8) ^ MUL_ALPHA[state21 >>> 24] ^ state23 ^ (state[0] >>> 8) ^ DIV_ALPHA[state[0] & 0xff] ^ (state[4] + temp0) ^ register[1];
-
-        temp1 = register[1] + (r2 ^ state26);
-        r2 = s2(register[1]);
-        register[1] = s1(temp0);
-
-        state[6] = (state22 << 8) ^ MUL_ALPHA[state22 >>> 24] ^ state24 ^ (state[1] >>> 8) ^ DIV_ALPHA[state[1] & 0xff] ^ (state[5] + temp1) ^ register[1];
-
-        temp0 = register[1] + (r2 ^ state27);
-        r2 = s2(register[1]);
-        register[1] = s1(temp1);
-
-        state[7] = (state23 << 8) ^ MUL_ALPHA[state23 >>> 24] ^ state25 ^ (state[2] >>> 8) ^ DIV_ALPHA[state[2] & 0xff] ^ (state[6] + temp0) ^ register[1];
-
-        temp1 = register[1] + (r2 ^ state28);
-        r2 = s2(register[1]);
-        register[1] = s1(temp0);
-
-        state[8] = (state24 << 8) ^ MUL_ALPHA[state24 >>> 24] ^ state26 ^ (state[3] >>> 8) ^ DIV_ALPHA[state[3] & 0xff] ^ (state[7] + temp1) ^ register[1];
-
-        temp0 = register[1] + (r2 ^ state29);
-        r2 = s2(register[1]);
-        register[1] = s1(temp1);
-
-        state[9] = (state25 << 8) ^ MUL_ALPHA[state25 >>> 24] ^ state27 ^ (state[4] >>> 8) ^ DIV_ALPHA[state[4] & 0xff] ^ (state[8] + temp0) ^ register[1];
-
-        temp1 = register[1] + (r2 ^ state30);
-        r2 = s2(register[1]);
-        register[1] = s1(temp0);
-
-        state[10] = (state26 << 8) ^ MUL_ALPHA[state26 >>> 24] ^ state28 ^ (state[5] >>> 8) ^ DIV_ALPHA[state[5] & 0xff] ^ (state[9] + temp1) ^ register[1];
-
-        temp0 = register[1] + (r2 ^ state31);
-        r2 = s2(register[1]);
-        register[1] = s1(temp1);
-
-        state[11] = (state27 << 8) ^ MUL_ALPHA[state27 >>> 24] ^ state29 ^ (state[6] >>> 8) ^ DIV_ALPHA[state[6] & 0xff] ^ (state[10] + temp0) ^ register[1];
-
-        temp1 = register[1] + (r2 ^ state[0]);
-        r2 = s2(register[1]);
-        register[1] = s1(temp0);
-
-        state[12] = (state28 << 8) ^ MUL_ALPHA[state28 >>> 24] ^ state30 ^ (state[7] >>> 8) ^ DIV_ALPHA[state[7] & 0xff] ^ (state[11] + temp1) ^ register[1];
-
-        temp0 = register[1] + (r2 ^ state[1]);
-        r2 = s2(register[1]);
-        register[1] = s1(temp1);
-
-        state[13] = (state29 << 8) ^ MUL_ALPHA[state29 >>> 24] ^ state31 ^ (state[8] >>> 8) ^ DIV_ALPHA[state[8] & 0xff] ^ (state[12] + temp0) ^ register[1];
-
-        temp1 = register[1] + (r2 ^ state[2]);
-        r2 = s2(register[1]);
-        register[1] = s1(temp0);
-
-        state[14] = (state30 << 8) ^ MUL_ALPHA[state30 >>> 24] ^ state[0] ^ (state[9] >>> 8) ^ DIV_ALPHA[state[9] & 0xff] ^ (state[13] + temp1) ^ register[1];
-
-        temp0 = register[1] + (r2 ^ state[3]);
-        r2 = s2(register[1]);
-        register[1] = s1(temp1);
-
-        state[15] = (state31 << 8) ^ MUL_ALPHA[state31 >>> 24] ^ state[1] ^ (state[10] >>> 8) ^ DIV_ALPHA[state[10] & 0xff] ^ (state[14] + temp0) ^ register[1];
-
-        temp1 = register[1] + (r2 ^ state[4]);
-        r2 = s2(register[1]);
-        register[1] = s1(temp0);
-        
-        temp0 = register[1] + (r2 ^ state[5]);
-        register[2] = s2(register[1]);
-        register[1] = s1(temp1);
-        register[0] = temp0;
-        
-        int v = (state[0] << 8) ^ MUL_ALPHA[state[0] >>> 24] ^ state[2] ^ (state[11] >>> 8) ^ DIV_ALPHA[state[11] & 0xff];
-        System.arraycopy(state, 1, state, 0, 15);
-        state[15] = v;
-
-        return state;
 
     }
 
