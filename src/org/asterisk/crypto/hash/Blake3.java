@@ -21,7 +21,10 @@ import java.lang.foreign.MemorySegment;
 import java.lang.foreign.SegmentScope;
 import java.lang.foreign.ValueLayout;
 import org.asterisk.crypto.helper.Tools;
+import org.asterisk.crypto.interfaces.Mac;
+import org.asterisk.crypto.interfaces.Xof;
 
+import static org.asterisk.crypto.helper.Tools.load32LE;
 import static org.asterisk.crypto.helper.Tools.store32LE;
 
 /**
@@ -33,7 +36,7 @@ import static org.asterisk.crypto.helper.Tools.store32LE;
  *
  * @author Sayantan Chakraborty
  */
-public enum Blake3 {
+public enum Blake3 implements Xof, Mac {
 
     BLAKE3;
 
@@ -47,6 +50,7 @@ public enum Blake3 {
     private static final int CHUNK_END = 2;
     private static final int PARENT = 4;
     private static final int ROOT = 8;
+    private static final int KEYED_HASH = 16;
 
     private static final int[] DEFAULT_IV = {
         0x6A09E667, 0xBB67AE85, 0x3C6EF372, 0xA54FF53A, 0x510E527F, 0x9B05688C, 0x1F83D9AB, 0x5BE0CD19
@@ -165,6 +169,57 @@ public enum Blake3 {
     private static int[] parent(int[] leftChild, int[] rightChild, int[] keyWords, int flags) {
         System.arraycopy(rightChild, 0, leftChild, 8, 8);
         return compress(keyWords, leftChild, 0, BLOCK_LEN, flags | PARENT);
+    }
+
+    @Override
+    public Xof.Engine start() {
+        return new Blake3Engine(DEFAULT_IV, 0);
+    }
+
+    @Override
+    public int digestSize() {
+        return DEFAULT_HASH_LEN;
+    }
+
+    @Override
+    public int blockSize() {
+        return BLOCK_LEN;
+    }
+
+    @Override
+    public Mac.Engine start(byte[] key) {
+        var internal = new Blake3Engine(new int[]{
+            load32LE(key, 0), load32LE(key, 4), load32LE(key, 8), load32LE(key, 12),
+            load32LE(key, 16), load32LE(key, 20), load32LE(key, 24), load32LE(key, 28)
+        }, KEYED_HASH);
+
+        return new Mac.Engine() {
+            @Override
+            public void ingest(MemorySegment input) {
+                internal.ingest(input);
+            }
+
+            @Override
+            public void authenticateTo(byte[] tag, int offset, int length) {
+                internal.startDigesting();
+                internal.continueDigesting(tag, offset, length);
+            }
+
+            @Override
+            public Mac getAlgorithm() {
+                return BLAKE3;
+            }
+        };
+    }
+
+    @Override
+    public int tagLength() {
+        return DEFAULT_HASH_LEN;
+    }
+
+    @Override
+    public int keyLength() {
+        return 32;
     }
 
     private static class Node {
@@ -313,7 +368,7 @@ public enum Blake3 {
 
     }
 
-    public static class Blake3Engine {
+    public static class Blake3Engine implements Xof.Engine {
 
         private final int[][] cvStack = new int[54][];
         private int cvStackLen = 0;
@@ -348,6 +403,7 @@ public enum Blake3 {
             cvStack[cvStackLen++] = cv;
         }
 
+        @Override
         public void ingest(MemorySegment input) {
             if (out != null) {
                 throw new IllegalStateException("Cannot ingest after starting to digest!");
@@ -376,6 +432,7 @@ public enum Blake3 {
             position = (int) length;
         }
 
+        @Override
         public void startDigesting() {
             if (out != null) {
                 throw new IllegalStateException("Cannot start to digest twice!!!!");
@@ -386,8 +443,14 @@ public enum Blake3 {
             }
         }
 
-        public void digest(byte[] output, int offset, int length) {
+        @Override
+        public void continueDigesting(byte[] output, int offset, int length) {
             out.rootOutputBytes(output, offset, length);
+        }
+
+        @Override
+        public Xof getAlgorithm() {
+            return BLAKE3;
         }
     }
 
