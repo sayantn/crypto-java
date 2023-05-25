@@ -801,16 +801,16 @@ public enum Jh implements Digest {
             x3 = t;
 
             t = x6;
-            x6 = x3;
-            x3 = t;
+            x6 = x7;
+            x7 = t;
 
-            t = x2;
-            x2 = x3;
-            x3 = t;
+            t = x10;
+            x10 = x11;
+            x11 = t;
 
-            t = x2;
-            x2 = x3;
-            x3 = t;
+            t = x14;
+            x14 = x15;
+            x15 = t;
         }
 
         state[0] = x0;
@@ -837,7 +837,7 @@ public enum Jh implements Digest {
         return 64;
     }
 
-    private static abstract class JhEngine extends AbstractDigestEngine {
+    private abstract static class JhEngine extends AbstractDigestEngine {
 
         protected final long[] state;
         private final long[] data = new long[8];
