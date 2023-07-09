@@ -9,7 +9,7 @@ import java.lang.foreign.ValueLayout;
 import org.asterisk.crypto.Tested;
 import org.asterisk.crypto.helper.AbstractDigestEngine;
 import org.asterisk.crypto.helper.Tools;
-import org.asterisk.crypto.interfaces.Digest;
+import org.asterisk.crypto.Digest;
 
 /**
  *

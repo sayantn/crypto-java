@@ -9,7 +9,7 @@ import java.lang.foreign.ValueLayout;
 import org.asterisk.crypto.helper.AbstractAuthenticaterEngine;
 import org.asterisk.crypto.helper.AbstractVerifierEngine;
 import org.asterisk.crypto.helper.Tools;
-import org.asterisk.crypto.interfaces.AuthenticatedCipher;
+import org.asterisk.crypto.AuthenticatedCipher;
 import org.asterisk.crypto.lowlevel.AesPermutation;
 
 import static org.asterisk.crypto.helper.Tools.load32BE;

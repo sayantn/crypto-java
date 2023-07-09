@@ -21,7 +21,7 @@ import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
 import org.asterisk.crypto.helper.AbstractXofEngine;
 import org.asterisk.crypto.helper.Tools;
-import org.asterisk.crypto.interfaces.Xof;
+import org.asterisk.crypto.Xof;
 
 import static org.asterisk.crypto.helper.Tools.store64BE;
 import static org.asterisk.crypto.lowlevel.AsconP.ascon_p;

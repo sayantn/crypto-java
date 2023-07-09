@@ -24,7 +24,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import org.asterisk.crypto.Tested;
 import org.asterisk.crypto.helper.Tools;
-import org.asterisk.crypto.interfaces.AuthenticatedCipher;
+import org.asterisk.crypto.AuthenticatedCipher;
 
 /**
  *

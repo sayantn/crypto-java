@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import org.asterisk.crypto.Tested;
 import org.asterisk.crypto.helper.Tools;
-import org.asterisk.crypto.interfaces.Xof;
+import org.asterisk.crypto.Xof;
 
 import static org.asterisk.crypto.helper.Tools.store64LE;
 import static org.asterisk.crypto.lowlevel.KeccakP.keccak_p1600;

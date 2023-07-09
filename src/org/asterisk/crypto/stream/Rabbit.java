@@ -7,8 +7,8 @@ package org.asterisk.crypto.stream;
 import java.lang.foreign.MemorySegment;
 import org.asterisk.crypto.Tested;
 import org.asterisk.crypto.helper.AbstractStreamEncrypter;
-import org.asterisk.crypto.interfaces.Cipher;
-import org.asterisk.crypto.interfaces.StreamCipher;
+import org.asterisk.crypto.Cipher;
+import org.asterisk.crypto.StreamCipher;
 
 import static org.asterisk.crypto.helper.Tools.BIG_ENDIAN_32_BIT;
 import static org.asterisk.crypto.helper.Tools.load32BE;

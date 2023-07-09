@@ -7,7 +7,7 @@ package org.asterisk.crypto.helper;
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.SegmentScope;
 import java.util.Objects;
-import org.asterisk.crypto.interfaces.Mac;
+import org.asterisk.crypto.Mac;
 
 /**
  *

@@ -4,12 +4,12 @@
  */
 package org.asterisk.crypto.stream;
 
-import org.asterisk.crypto.interfaces.StreamCipher;
+import org.asterisk.crypto.StreamCipher;
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
 import org.asterisk.crypto.helper.AbstractStreamEncrypter;
 import org.asterisk.crypto.helper.Tools;
-import org.asterisk.crypto.interfaces.Cipher;
+import org.asterisk.crypto.Cipher;
 
 import static org.asterisk.crypto.lowlevel.AesPermutation.aesRound;
 

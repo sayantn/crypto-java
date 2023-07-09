@@ -21,8 +21,8 @@ import java.lang.foreign.MemorySegment;
 import java.lang.foreign.SegmentScope;
 import java.lang.foreign.ValueLayout;
 import org.asterisk.crypto.helper.Tools;
-import org.asterisk.crypto.interfaces.Mac;
-import org.asterisk.crypto.interfaces.Xof;
+import org.asterisk.crypto.Mac;
+import org.asterisk.crypto.Xof;
 
 import static org.asterisk.crypto.helper.Tools.load32LE;
 import static org.asterisk.crypto.helper.Tools.store32LE;

@@ -10,8 +10,8 @@ import java.util.Arrays;
 import org.asterisk.crypto.helper.AbstractDigestEngine;
 import org.asterisk.crypto.helper.AbstractMacEngine;
 import org.asterisk.crypto.helper.Tools;
-import org.asterisk.crypto.interfaces.Digest;
-import org.asterisk.crypto.interfaces.Mac;
+import org.asterisk.crypto.Digest;
+import org.asterisk.crypto.Mac;
 
 /**
  *

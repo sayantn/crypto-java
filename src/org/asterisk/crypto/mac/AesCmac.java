@@ -22,7 +22,7 @@ import java.util.function.Function;
 import org.asterisk.crypto.helper.AbstractMacEngine;
 import org.asterisk.crypto.helper.GfHelper;
 import org.asterisk.crypto.helper.Tools;
-import org.asterisk.crypto.interfaces.Mac;
+import org.asterisk.crypto.Mac;
 import org.asterisk.crypto.lowlevel.AesEncApi;
 
 /**

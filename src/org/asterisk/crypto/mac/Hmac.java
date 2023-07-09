@@ -19,8 +19,8 @@ package org.asterisk.crypto.mac;
 
 import java.lang.foreign.MemorySegment;
 import java.nio.ByteBuffer;
-import org.asterisk.crypto.interfaces.Digest;
-import org.asterisk.crypto.interfaces.Mac;
+import org.asterisk.crypto.Digest;
+import org.asterisk.crypto.Mac;
 
 /**
  *

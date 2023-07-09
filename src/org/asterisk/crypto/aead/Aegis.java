@@ -8,7 +8,7 @@ import java.lang.foreign.MemorySegment;
 import org.asterisk.crypto.Tested;
 import org.asterisk.crypto.helper.AbstractAuthenticaterEngine;
 import org.asterisk.crypto.helper.AbstractVerifierEngine;
-import org.asterisk.crypto.interfaces.AuthenticatedCipher;
+import org.asterisk.crypto.AuthenticatedCipher;
 
 import static org.asterisk.crypto.helper.Tools.BIG_ENDIAN_32_BIT;
 import static org.asterisk.crypto.helper.Tools.load32BE;

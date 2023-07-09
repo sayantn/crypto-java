@@ -10,7 +10,7 @@ import org.asterisk.crypto.Tested;
 import org.asterisk.crypto.helper.AbstractAuthenticaterEngine;
 import org.asterisk.crypto.helper.AbstractVerifierEngine;
 import org.asterisk.crypto.helper.Tools;
-import org.asterisk.crypto.interfaces.AuthenticatedCipher;
+import org.asterisk.crypto.AuthenticatedCipher;
 
 import static org.asterisk.crypto.lowlevel.AesPermutation.aesRound;
 

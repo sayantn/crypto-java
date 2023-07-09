@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package org.asterisk.crypto.interfaces;
+package org.asterisk.crypto;
 
 import java.lang.foreign.MemorySegment;
 import javax.crypto.AEADBadTagException;

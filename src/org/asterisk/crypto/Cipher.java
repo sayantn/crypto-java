@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this licens
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
-package org.asterisk.crypto.interfaces;
+package org.asterisk.crypto;
 
 import java.lang.foreign.MemorySegment;
 

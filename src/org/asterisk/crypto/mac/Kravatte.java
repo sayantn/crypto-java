@@ -8,7 +8,7 @@ import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
 import org.asterisk.crypto.helper.AbstractMacEngine;
 import org.asterisk.crypto.helper.Tools;
-import org.asterisk.crypto.interfaces.Mac;
+import org.asterisk.crypto.Mac;
 import org.asterisk.crypto.lowlevel.KeccakP;
 
 /**

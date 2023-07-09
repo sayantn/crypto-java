@@ -8,8 +8,8 @@ import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
 import org.asterisk.crypto.helper.AbstractStreamEncrypter;
 import org.asterisk.crypto.helper.Tools;
-import org.asterisk.crypto.interfaces.Cipher;
-import org.asterisk.crypto.interfaces.StreamCipher;
+import org.asterisk.crypto.Cipher;
+import org.asterisk.crypto.StreamCipher;
 
 /**
  *
@@ -640,9 +640,9 @@ public enum Snow3g implements StreamCipher {
         buffer[31] = (state14 + temp0) ^ r1 ^ state31;
 
         temp1 = r1 + (r2 ^ state4);
-        r2 = s2(r1);
-        r1 = s1(temp0);
-        r0 = temp1;
+        register[2] = s2(r1);
+        register[1] = s1(temp0);
+        register[0] = temp1;
 
         state15 = (state31 << 8) ^ MUL_ALPHA[state31 >>> 24] ^ state1 ^ (state10 >>> 8) ^ DIV_ALPHA[state10 & 0xff];
 
@@ -676,8 +676,8 @@ public enum Snow3g implements StreamCipher {
         int state8 = state0, state9 = state1 ^ Tools.load32BE(iv, 12), state10 = state2 ^ Tools.load32BE(iv, 8), state11 = state3;
         int state12 = state4 ^ Tools.load32BE(iv, 4), state13 = state5, state14 = state6, state15 = state7 ^ Tools.load32BE(iv, 0);
 
-        int r0=register[0], r1=register[1], r2=register[2];
-        
+        int r0 = register[0], r1 = register[1], r2 = register[2];
+
         int temp0, temp1;
 
         int state16 = (state0 << 8) ^ MUL_ALPHA[state0 >>> 24] ^ state2 ^ (state11 >>> 8) ^ DIV_ALPHA[state11 & 0xff] ^ (state15 + r0) ^ r1;

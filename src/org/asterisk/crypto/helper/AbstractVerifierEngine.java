@@ -6,7 +6,7 @@ package org.asterisk.crypto.helper;
 
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.SegmentScope;
-import org.asterisk.crypto.interfaces.AuthenticatedCipher;
+import org.asterisk.crypto.AuthenticatedCipher;
 
 /**
  *

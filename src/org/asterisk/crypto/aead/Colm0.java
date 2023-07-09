@@ -6,7 +6,7 @@ import java.lang.foreign.ValueLayout;
 import java.util.Objects;
 import javax.crypto.AEADBadTagException;
 import org.asterisk.crypto.helper.Tools;
-import org.asterisk.crypto.interfaces.SimpleAead;
+import org.asterisk.crypto.SimpleAead;
 import org.asterisk.crypto.lowlevel.AesDecApi;
 import org.asterisk.crypto.lowlevel.AesEncApi;
 

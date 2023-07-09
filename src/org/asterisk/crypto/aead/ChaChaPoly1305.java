@@ -20,7 +20,7 @@ package org.asterisk.crypto.aead;
 import java.lang.foreign.MemorySegment;
 import org.asterisk.crypto.Tested;
 import org.asterisk.crypto.helper.Tools;
-import org.asterisk.crypto.interfaces.AuthenticatedCipher;
+import org.asterisk.crypto.AuthenticatedCipher;
 import org.asterisk.crypto.mac.Poly1305;
 import org.asterisk.crypto.stream.ChaCha;
 

@@ -22,8 +22,8 @@ import java.lang.foreign.SegmentScope;
 import java.lang.foreign.ValueLayout;
 import org.asterisk.crypto.helper.AbstractDigestEngine;
 import org.asterisk.crypto.helper.Tools;
-import org.asterisk.crypto.interfaces.Digest;
-import org.asterisk.crypto.interfaces.Mac;
+import org.asterisk.crypto.Digest;
+import org.asterisk.crypto.Mac;
 
 /**
  *

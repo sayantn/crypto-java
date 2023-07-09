@@ -22,7 +22,7 @@ import java.lang.foreign.SegmentScope;
 import java.lang.foreign.ValueLayout;
 import java.util.Objects;
 import org.asterisk.crypto.helper.Tools;
-import org.asterisk.crypto.interfaces.Mac;
+import org.asterisk.crypto.Mac;
 
 /**
  *

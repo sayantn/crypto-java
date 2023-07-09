@@ -9,8 +9,8 @@ import java.lang.foreign.ValueLayout;
 import org.asterisk.crypto.Tested;
 import org.asterisk.crypto.helper.AbstractStreamEncrypter;
 import org.asterisk.crypto.helper.Tools;
-import org.asterisk.crypto.interfaces.Cipher;
-import org.asterisk.crypto.interfaces.StreamCipher;
+import org.asterisk.crypto.Cipher;
+import org.asterisk.crypto.StreamCipher;
 import org.asterisk.crypto.mac.Poly1305;
 
 import static org.asterisk.crypto.helper.Tools.load32LE;

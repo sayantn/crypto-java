@@ -9,7 +9,7 @@ import java.lang.foreign.SegmentScope;
 import java.lang.foreign.ValueLayout;
 import java.util.Arrays;
 import org.asterisk.crypto.helper.Tools;
-import org.asterisk.crypto.interfaces.Digest;
+import org.asterisk.crypto.Digest;
 import org.asterisk.crypto.lowlevel.KeccakP;
 
 import static org.asterisk.crypto.lowlevel.KeccakP.keccak_f1600;

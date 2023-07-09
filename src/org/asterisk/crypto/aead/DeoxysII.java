@@ -9,7 +9,7 @@ import java.lang.foreign.SegmentScope;
 import java.util.function.Function;
 import javax.crypto.AEADBadTagException;
 import org.asterisk.crypto.helper.Tools;
-import org.asterisk.crypto.interfaces.SimpleAead;
+import org.asterisk.crypto.SimpleAead;
 import org.asterisk.crypto.lowlevel.DeoxysTBC;
 
 import static org.asterisk.crypto.helper.Tools.BIG_ENDIAN_32_BIT;

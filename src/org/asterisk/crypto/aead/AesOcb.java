@@ -12,7 +12,7 @@ import org.asterisk.crypto.helper.AbstractAuthenticaterEngine;
 import org.asterisk.crypto.helper.AbstractVerifierEngine;
 import org.asterisk.crypto.helper.GfHelper;
 import org.asterisk.crypto.helper.Tools;
-import org.asterisk.crypto.interfaces.AuthenticatedCipher;
+import org.asterisk.crypto.AuthenticatedCipher;
 import org.asterisk.crypto.lowlevel.AesDecApi;
 import org.asterisk.crypto.lowlevel.AesEncApi;
 import org.asterisk.crypto.lowlevel.AesEncApi.Aes128EncApi;
