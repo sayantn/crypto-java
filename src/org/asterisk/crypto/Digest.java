@@ -20,10 +20,16 @@ import java.util.Objects;
  */
 public interface Digest {
 
+    default byte[] digest(byte[] input) {
+        var hasher = start();
+        hasher.ingest(input);
+        return hasher.digest();
+    }
+
     Engine start();
-    
+
     int digestSize();
-    
+
     int blockSize();
 
     static interface Engine {

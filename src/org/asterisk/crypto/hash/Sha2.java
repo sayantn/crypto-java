@@ -6,10 +6,10 @@ package org.asterisk.crypto.hash;
 
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
+import org.asterisk.crypto.Digest;
 import org.asterisk.crypto.Tested;
 import org.asterisk.crypto.helper.AbstractDigestEngine;
 import org.asterisk.crypto.helper.Tools;
-import org.asterisk.crypto.Digest;
 
 /**
  *
@@ -722,7 +722,7 @@ public enum Sha2 implements Digest {
         0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
     };
 
-    public static final long[] RCON_64 = {
+    private static final long[] RCON_64 = {
         0x428a2f98d728ae22L, 0x7137449123ef65cdL, 0xb5c0fbcfec4d3b2fL, 0xe9b5dba58189dbbcL,
         0x3956c25bf348b538L, 0x59f111f1b605d019L, 0x923f82a4af194f9bL, 0xab1c5ed5da6d8118L,
         0xd807aa98a3030242L, 0x12835b0145706fbeL, 0x243185be4ee4b28cL, 0x550c7dc3d5ffb4e2L,

@@ -6,10 +6,10 @@ package org.asterisk.crypto.aead;
 
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
+import org.asterisk.crypto.AuthenticatedCipher;
 import org.asterisk.crypto.helper.AbstractAuthenticaterEngine;
 import org.asterisk.crypto.helper.AbstractVerifierEngine;
 import org.asterisk.crypto.helper.Tools;
-import org.asterisk.crypto.AuthenticatedCipher;
 import org.asterisk.crypto.lowlevel.AesEncApi;
 
 /**

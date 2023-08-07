@@ -33,6 +33,4 @@ public interface StreamCipher extends Cipher {
         };
     }
 
-
-
 }

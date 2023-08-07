@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<entry key="PROFILING_POINTS">false</entry>
+<entry key="org.netbeans.modules.profiler.v2.features.MethodsFeature_SelectedMethodsMode_SELECTION_FLAG">Performance,main,([LString;)V org.asterisk.crypto.Hc128$1,encryptOneBlock,(Ljava/lang/foreign/MemorySegment;JLjava/lang/foreign/MemorySegment;J)V Performance,bench,(LEncryptEngine;)D Performance,&lt;init&gt;,()V </entry>
+<entry key="org.netbeans.modules.profiler.v2.features.MethodsFeature_SelectedClassesMode_OUTGOING_CALLS_FLAG">10</entry>
+<entry key="org.netbeans.modules.profiler.v2.features.MethodsFeature_MODE_FLAG">AllClassesMode</entry>
+<entry key="org.netbeans.modules.profiler.v2.features.MethodsFeature_SelectedClassesMode_SELECTION_FLAG">Performance,*, org.asterisk.crypto.Hc128,*, org.asterisk.crypto.helper.AbstractEncryptEngine,*, </entry>
+<entry key="ACTIVATED_FEATURES">#org.netbeans.modules.profiler.v2.features.MonitorFeature@</entry>
+</properties>
