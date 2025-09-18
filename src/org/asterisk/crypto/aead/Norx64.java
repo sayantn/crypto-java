@@ -18,7 +18,7 @@
 package org.asterisk.crypto.aead;
 
 import java.lang.foreign.MemorySegment;
-import java.lang.foreign.SegmentScope;
+import java.lang.foreign.Arena;
 import java.lang.foreign.ValueLayout;
 import java.util.Arrays;
 import java.util.Objects;
@@ -628,7 +628,7 @@ public final class Norx64 implements AuthenticatedCipher {
             k = load(key);
             state = initialise(k, iv);
             this.rate = rate;
-            buffer = MemorySegment.allocateNative(rate, SegmentScope.auto());
+            buffer = Arena.ofAuto().allocate(rate);
         }
 
         @Override
@@ -971,7 +971,7 @@ public final class Norx64 implements AuthenticatedCipher {
             k = load(key);
             state = initialise(k, iv);
             this.rate = rate;
-            buffer = MemorySegment.allocateNative(rate, SegmentScope.auto());
+            buffer = Arena.ofAuto().allocate(rate);
         }
 
         @Override

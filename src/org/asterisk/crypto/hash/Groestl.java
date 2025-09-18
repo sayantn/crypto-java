@@ -1220,6 +1220,7 @@ public enum Groestl implements Digest {
 
     }
 
+    @SuppressWarnings("unused")
     private static abstract class Groest1024Engine extends AbstractDigestEngine {
 
         private final long[] temp1 = new long[16], temp2 = new long[16], temp3 = new long[16];

@@ -6,7 +6,7 @@ package org.asterisk.crypto;
 
 import java.io.IOException;
 import java.lang.foreign.MemorySegment;
-import java.lang.foreign.SegmentScope;
+import java.lang.foreign.Arena;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileChannel.MapMode;
@@ -82,7 +82,7 @@ public interface Digest {
             try (var channel = FileChannel.open(file, StandardOpenOption.READ)) {
                 length = Math.min(length, channel.size() - offset);
                 Objects.checkFromIndexSize(offset, length, channel.size());
-                ingest(channel.map(MapMode.READ_ONLY, offset, length, SegmentScope.auto()));
+                ingest(channel.map(MapMode.READ_ONLY, offset, length, Arena.ofAuto()));
             }
             return length;
         }

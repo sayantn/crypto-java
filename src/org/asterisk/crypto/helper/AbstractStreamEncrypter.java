@@ -5,7 +5,7 @@
 package org.asterisk.crypto.helper;
 
 import java.lang.foreign.MemorySegment;
-import java.lang.foreign.SegmentScope;
+import java.lang.foreign.Arena;
 import org.asterisk.crypto.Cipher;
 
 /**
@@ -20,7 +20,7 @@ public abstract class AbstractStreamEncrypter implements Cipher.EncryptEngine {
     private final int blockSize;
 
     public AbstractStreamEncrypter(int blockSize) {
-        buffer = MemorySegment.allocateNative(blockSize, SegmentScope.auto());
+        buffer = Arena.ofAuto().allocate(blockSize);
         this.blockSize = blockSize;
     }
 

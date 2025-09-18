@@ -1,7 +1,7 @@
 package org.asterisk.crypto.aead;
 
 import java.lang.foreign.MemorySegment;
-import java.lang.foreign.SegmentScope;
+import java.lang.foreign.Arena;
 import java.lang.foreign.ValueLayout;
 import java.util.Objects;
 import javax.crypto.AEADBadTagException;
@@ -139,7 +139,7 @@ public enum Colm0 implements SimpleAead {
 
         private final AesEncApi.Aes128EncApi aes;
 
-        private final MemorySegment buffer = MemorySegment.allocateNative(16, SegmentScope.auto());
+        private final MemorySegment buffer = Arena.ofAuto().allocate(16);
         private int position = 0;
 
         private boolean ingestingAAD = true;
@@ -402,7 +402,7 @@ public enum Colm0 implements SimpleAead {
         private final AesEncApi.Aes128EncApi aes;
         private final AesDecApi.Aes128DecApi aesDec;
 
-        private final MemorySegment buffer = MemorySegment.allocateNative(16, SegmentScope.auto());
+        private final MemorySegment buffer = Arena.ofAuto().allocate(16);
         private int position = 0;
 
         private boolean ingestingAAD = true;

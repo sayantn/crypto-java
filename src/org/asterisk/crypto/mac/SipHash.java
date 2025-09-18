@@ -18,7 +18,7 @@
 package org.asterisk.crypto.mac;
 
 import java.lang.foreign.MemorySegment;
-import java.lang.foreign.SegmentScope;
+import java.lang.foreign.Arena;
 import java.lang.foreign.ValueLayout;
 import java.util.Objects;
 import org.asterisk.crypto.helper.Tools;
@@ -235,7 +235,7 @@ public enum SipHash implements Mac {
 
         private int counter = 0;
 
-        private final MemorySegment buffer = MemorySegment.allocateNative(8, SegmentScope.auto());
+        private final MemorySegment buffer = Arena.ofAuto().allocate(8);
         private int position = 0;
 
         private SipHashEngine(long k0, long k1) {

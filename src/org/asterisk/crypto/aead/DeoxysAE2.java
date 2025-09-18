@@ -18,7 +18,7 @@
 package org.asterisk.crypto.aead;
 
 import java.lang.foreign.MemorySegment;
-import java.lang.foreign.SegmentScope;
+import java.lang.foreign.Arena;
 import javax.crypto.AEADBadTagException;
 import org.asterisk.crypto.helper.Tools;
 import org.asterisk.crypto.SimpleAead;
@@ -110,7 +110,7 @@ public enum DeoxysAE2 implements SimpleAead {
 
     public static class Encrypter {
 
-        private final MemorySegment buffer = MemorySegment.allocateNative(32, SegmentScope.auto());
+        private final MemorySegment buffer = Arena.ofAuto().allocate(32);
         private int position = 0;
 
         private final int[] auth = new int[4], tweak = new int[8], data = new int[4], savednonce, savedtag = new int[4];
@@ -240,6 +240,7 @@ public enum DeoxysAE2 implements SimpleAead {
                     ingestLastBlock();
                     state = State.FIRST_PASS;
                 }
+                case FIRST_PASS -> {}
                 case SECOND_PASS ->
                     throw new IllegalStateException("First pass can be done only once");
                 case CLOSED ->
@@ -292,6 +293,7 @@ public enum DeoxysAE2 implements SimpleAead {
                     state = State.SECOND_PASS;
                     generateTag();
                 }
+                case SECOND_PASS -> {}
                 case CLOSED ->
                     throw new IllegalStateException("Cannot encrypt more than once");
             }
@@ -347,7 +349,7 @@ public enum DeoxysAE2 implements SimpleAead {
 
     public static class Decrypter {
 
-        private final MemorySegment buffer = MemorySegment.allocateNative(32, SegmentScope.auto());
+        private final MemorySegment buffer = Arena.ofAuto().allocate(32);
         private int position = 0;
 
         private final DeoxysTBC.DeoxysTBC_128_256 authCipher, cryptCipher;

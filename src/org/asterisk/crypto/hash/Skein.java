@@ -18,7 +18,7 @@
 package org.asterisk.crypto.hash;
 
 import java.lang.foreign.MemorySegment;
-import java.lang.foreign.SegmentScope;
+import java.lang.foreign.Arena;
 import java.lang.foreign.ValueLayout;
 import org.asterisk.crypto.helper.AbstractDigestEngine;
 import org.asterisk.crypto.helper.Tools;
@@ -684,7 +684,7 @@ public class Skein implements Digest, Mac {
         return new Mac.Engine() {
 
             private final int blockSize = type.blockSize();
-            private final MemorySegment buffer = MemorySegment.allocateNative(blockSize, SegmentScope.auto());
+            private final MemorySegment buffer = Arena.ofAuto().allocate(blockSize);
             private int position = 0;
 
             @Override

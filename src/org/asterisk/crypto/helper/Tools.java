@@ -17,13 +17,13 @@ import static java.nio.ByteOrder.LITTLE_ENDIAN;
  */
 public class Tools {
 
-    public static final ValueLayout.OfInt BIG_ENDIAN_32_BIT = ValueLayout.JAVA_INT.withBitAlignment(8).withOrder(BIG_ENDIAN);
+    public static final ValueLayout.OfInt BIG_ENDIAN_32_BIT = ValueLayout.JAVA_INT.withByteAlignment(1).withOrder(BIG_ENDIAN);
 
-    public static final ValueLayout.OfInt LITTLE_ENDIAN_32_BIT = ValueLayout.JAVA_INT.withBitAlignment(8).withOrder(LITTLE_ENDIAN);
+    public static final ValueLayout.OfInt LITTLE_ENDIAN_32_BIT = ValueLayout.JAVA_INT.withByteAlignment(1).withOrder(LITTLE_ENDIAN);
 
-    public static final ValueLayout.OfLong BIG_ENDIAN_64_BIT = ValueLayout.JAVA_LONG.withBitAlignment(8).withOrder(BIG_ENDIAN);
+    public static final ValueLayout.OfLong BIG_ENDIAN_64_BIT = ValueLayout.JAVA_LONG.withByteAlignment(1).withOrder(BIG_ENDIAN);
 
-    public static final ValueLayout.OfLong LITTLE_ENDIAN_64_BIT = ValueLayout.JAVA_LONG.withBitAlignment(8).withOrder(LITTLE_ENDIAN);
+    public static final ValueLayout.OfLong LITTLE_ENDIAN_64_BIT = ValueLayout.JAVA_LONG.withByteAlignment(1).withOrder(LITTLE_ENDIAN);
 
     public static boolean equals(byte[] arr1, int off1, byte[] arr2, int off2, int len) {
         Objects.checkFromIndexSize(off1, len, arr1.length);

@@ -18,7 +18,7 @@
 package org.asterisk.crypto.hash;
 
 import java.lang.foreign.MemorySegment;
-import java.lang.foreign.SegmentScope;
+import java.lang.foreign.Arena;
 import java.lang.foreign.ValueLayout;
 import org.asterisk.crypto.helper.Tools;
 import org.asterisk.crypto.Mac;
@@ -289,7 +289,7 @@ public enum Blake3 implements Xof, Mac {
 
     private static class ChunkState {
 
-        private final MemorySegment buffer = MemorySegment.allocateNative(BLOCK_LEN, SegmentScope.auto());
+        private final MemorySegment buffer = Arena.ofAuto().allocate(BLOCK_LEN);
         private int position = 0;
         private int startFlag = CHUNK_START;
 

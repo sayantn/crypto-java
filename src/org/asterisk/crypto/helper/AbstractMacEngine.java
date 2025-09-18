@@ -5,7 +5,7 @@
 package org.asterisk.crypto.helper;
 
 import java.lang.foreign.MemorySegment;
-import java.lang.foreign.SegmentScope;
+import java.lang.foreign.Arena;
 import java.util.Objects;
 import org.asterisk.crypto.Mac;
 
@@ -21,7 +21,7 @@ public abstract class AbstractMacEngine implements Mac.Engine {
     private final int blockSize;
 
     public AbstractMacEngine(int blockSize) {
-        buffer = MemorySegment.allocateNative(blockSize, SegmentScope.auto());
+        buffer = Arena.ofAuto().allocate(blockSize);
         this.blockSize = blockSize;
     }
 

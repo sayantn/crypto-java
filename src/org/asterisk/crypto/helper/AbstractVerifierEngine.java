@@ -5,7 +5,7 @@
 package org.asterisk.crypto.helper;
 
 import java.lang.foreign.MemorySegment;
-import java.lang.foreign.SegmentScope;
+import java.lang.foreign.Arena;
 import org.asterisk.crypto.AuthenticatedCipher;
 
 /**
@@ -22,13 +22,13 @@ public abstract class AbstractVerifierEngine implements AuthenticatedCipher.Decr
     private boolean ingestingAAD = true;
 
     public AbstractVerifierEngine(int blockSize) {
-        buffer = MemorySegment.allocateNative(blockSize, SegmentScope.auto());
+        buffer = Arena.ofAuto().allocate(blockSize);
         this.msgBlockSize = blockSize;
         this.aadBlockSize = blockSize;
     }
 
     public AbstractVerifierEngine(int msgBlockSize, int aadBlockSize) {
-        buffer = MemorySegment.allocateNative(Math.max(msgBlockSize, aadBlockSize), SegmentScope.auto());
+        buffer = Arena.ofAuto().allocate(Math.max(msgBlockSize, aadBlockSize));
         this.msgBlockSize = msgBlockSize;
         this.aadBlockSize = aadBlockSize;
     }
